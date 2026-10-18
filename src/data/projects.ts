@@ -2,23 +2,23 @@ import type { Project } from '../types/project';
 
 export const projects: Project[] = [
   {
-    slug: 'lorem-ipsum',
-    title: 'Lorem ipsum',
+    slug: 'proyecto-audiovisual',
+    title: 'Proyecto audiovisual',
     category: 'Video',
     media: 'video',
     year: 2026,
     cover: '/media/projects/lorem-ipsum.webp',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    description: 'Pieza audiovisual pendiente de publicación.',
     published: false,
   },
   {
-    slug: 'dolor-sit',
-    title: 'Dolor sit amet',
+    slug: 'serie-fotografica',
+    title: 'Serie fotográfica',
     category: 'Fotografía',
     media: 'photo',
     year: 2026,
     cover: '/media/projects/dolor-sit.webp',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    description: 'Serie fotográfica pendiente de publicación.',
     published: false,
   },
 ];

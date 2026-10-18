@@ -7,9 +7,14 @@ interface ProjectCarouselProps {
 
 export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const publishedProjects = projects.filter((project) => project.published);
 
-  if (projects.length === 0) {
-    return <p role="status">Lorem ipsum dolor sit amet.</p>;
+  if (publishedProjects.length === 0) {
+    return (
+      <div className="carousel-empty" role="status">
+        <p className="empty-title">Estamos preparando una selección de proyectos para compartir contigo.</p>
+      </div>
+    );
   }
 
   const showPrevious = () => {
@@ -17,24 +22,29 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
   };
 
   const showNext = () => {
-    setActiveIndex((index) => Math.min(projects.length - 1, index + 1));
+    setActiveIndex((index) => Math.min(publishedProjects.length - 1, index + 1));
   };
 
   return (
     <div className="carousel" aria-label="Selección de proyectos">
-      <button type="button" onClick={showPrevious} disabled={activeIndex === 0}>
-        Anterior
+      <button className="carousel__control" type="button" onClick={showPrevious} disabled={activeIndex === 0} aria-label="Proyecto anterior">
+        <span aria-hidden="true">←</span>
       </button>
       <article className="carousel__project">
-        <span>{projects[activeIndex].category}</span>
-        <h3>{projects[activeIndex].title}</h3>
-        {projects[activeIndex].year && <span>{projects[activeIndex].year}</span>}
+        <div className="carousel__visual" aria-hidden="true">
+          <span>{publishedProjects[activeIndex].media === 'video' ? 'PLAY' : 'AVDAN'}</span>
+        </div>
+        <div className="carousel__details">
+          <span>{publishedProjects[activeIndex].category}</span>
+          <h3>{publishedProjects[activeIndex].title}</h3>
+          {publishedProjects[activeIndex].year && <span>{publishedProjects[activeIndex].year}</span>}
+        </div>
       </article>
-      <button type="button" onClick={showNext} disabled={activeIndex === projects.length - 1}>
-        Siguiente
+      <button className="carousel__control" type="button" onClick={showNext} disabled={activeIndex === publishedProjects.length - 1} aria-label="Siguiente proyecto">
+        <span aria-hidden="true">→</span>
       </button>
-      <p aria-live="polite">
-        {activeIndex + 1} / {projects.length}
+      <p className="carousel__counter" aria-live="polite">
+        {activeIndex + 1} / {publishedProjects.length}
       </p>
     </div>
   );
