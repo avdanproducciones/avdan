@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCarousel from '../components/ProjectCarousel';
+import { projects } from '../data/projects';
+import '../styles/global.css';
+---
+<Layout title="Portafolio">
+  <section class="page">
+    <p>LOREM IPSUM · LOREM IPSUM</p>
+    <h1>Lorem ipsum<br />dolor sit.</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere, justo vitae malesuada luctus.</p>
+    <section id="trabajos">
+      <ProjectCarousel projects={projects} client:load />
+    </section>
+  </section>
+</Layout>

@@ -1,0 +1,28 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Lorem ipsum dolor sit amet." />
+    <title>{title} · AVDAN</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/" class="brand" aria-label="AVDAN inicio">AVDAN</a>
+      <nav aria-label="Navegación principal">
+        <a href="/servicios/">Servicios</a>
+        <a href="/#trabajos">Portafolio</a>
+        <a href="/sobre/">Sobre</a>
+        <a href="/contacto/">Contacto</a>
+      </nav>
+    </header>
+    <main><slot /></main>
+  </body>
+</html>

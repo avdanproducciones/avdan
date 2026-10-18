@@ -1,0 +1,36 @@
+# Dependencias
+node_modules/
+
+# Artefactos generados por Astro y la compilación
+.astro/
+dist/
+
+# Recursos privados del proyecto
+recursos/
+
+# Variables de entorno y secretos locales
+.env
+.env.*
+!.env.example
+
+# Herramientas y archivos del sistema
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs y archivos temporales
+*.log
+*.tmp
+*.temp
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Cobertura y archivos temporales de TypeScript
+coverage/
+*.tsbuildinfo
