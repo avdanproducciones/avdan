@@ -1,16 +1,62 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProjectCarousel from '../components/ProjectCarousel';
+import PortfolioSlots from '../components/PortfolioSlots.astro';
 import { projects } from '../data/projects';
 import '../styles/global.css';
 ---
 <Layout title="Portafolio">
-  <section class="page">
-    <p>LOREM IPSUM · LOREM IPSUM</p>
-    <h1>Lorem ipsum<br />dolor sit.</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere, justo vitae malesuada luctus.</p>
-    <section id="trabajos">
+  <section class="page home-page">
+    <div class="hero-feature">
+      <div class="hero-copy">
+        <h1>Ideas que se mueven.</h1>
+        <p class="intro">Creamos imágenes, historias y experiencias que conectan con las personas.</p>
+      </div>
+      <figure class="hero-image">
+        <button class="hero-image__trigger" type="button" aria-label="Expandir imagen de un matrimonio en una iglesia">
+          <img src="/media/projects/matrimonio-iglesia-79.webp" alt="Momento de un matrimonio en una iglesia" loading="eager" fetchpriority="high" />
+        </button>
+      </figure>
+    </div>
+    <a class="scroll-cue" href="#trabajos" aria-label="Bajar a trabajos destacados">
+      <span aria-hidden="true"></span>
+    </a>
+    <section class="work-section" id="trabajos">
+      <div class="section-heading">
+        <h2>Trabajos destacados</h2>
+        <p>Una selección de proyectos y colaboraciones.</p>
+      </div>
       <ProjectCarousel projects={projects} client:load />
     </section>
+    <PortfolioSlots />
   </section>
 </Layout>
+
+<dialog class="image-dialog" aria-labelledby="image-dialog-title">
+  <div class="image-dialog__content">
+    <div class="image-dialog__header">
+      <p id="image-dialog-title">Matrimonio en Iglesia <span aria-hidden="true">·</span> 79</p>
+      <button class="image-dialog__close" type="button" aria-label="Cerrar imagen ampliada">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <img src="/media/projects/matrimonio-iglesia-79.webp" alt="Momento de un matrimonio en una iglesia, ampliado" />
+  </div>
+</dialog>
+
+<script>
+  const imageTrigger = document.querySelector<HTMLButtonElement>('.hero-image__trigger');
+  const imageDialog = document.querySelector<HTMLDialogElement>('.image-dialog');
+  const imageDialogClose = document.querySelector<HTMLButtonElement>('.image-dialog__close');
+
+  if (imageTrigger && imageDialog && imageDialogClose) {
+    imageTrigger.addEventListener('click', () => imageDialog.showModal());
+    imageDialogClose.addEventListener('click', () => imageDialog.close());
+    imageDialog.addEventListener('click', (event) => {
+      const target = event.target;
+      if (target instanceof Node && !imageDialog.querySelector('.image-dialog__content')?.contains(target)) {
+        imageDialog.close();
+      }
+    });
+  }
+</script>

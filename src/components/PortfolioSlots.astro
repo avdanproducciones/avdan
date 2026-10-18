@@ -1,0 +1,33 @@
+---
+const slots = [
+  { type: 'Video destacado', size: 'large' },
+  { type: 'Fotografía', size: 'standard' },
+  { type: 'Video', size: 'standard' },
+  { type: 'Campaña', size: 'standard' },
+  { type: 'Proyecto editorial', size: 'standard' },
+];
+---
+
+<section class="portfolio-slots" aria-labelledby="portfolio-slots-title">
+  <div class="section-heading">
+    <div>
+      <h2 id="portfolio-slots-title">Trabajos seleccionados.</h2>
+    </div>
+    <p>Espacios preparados para imágenes, videos y proyectos futuros.</p>
+  </div>
+
+  <div class="portfolio-grid">
+    {slots.map((slot) => (
+      <article class:list={{ 'portfolio-slot': true, 'portfolio-slot--large': slot.size === 'large' }}>
+        <div class="portfolio-slot__frame" aria-label={`Espacio reservado para ${slot.type.toLowerCase()}`}>
+          <span class="portfolio-slot__mark" aria-hidden="true">+</span>
+          <span class="portfolio-slot__type">{slot.type}</span>
+        </div>
+        <div class="portfolio-slot__meta">
+          <span>Proyecto por agregar</span>
+          <span aria-hidden="true">↗</span>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

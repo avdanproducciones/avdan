@@ -8,6 +8,12 @@ dist/
 # Recursos privados del proyecto
 recursos/
 
+# Skills y herramientas locales de asistencia
+.agents/
+skills/
+.taste-skill/
+skills-lock.json
+
 # Variables de entorno y secretos locales
 .env
 .env.*
