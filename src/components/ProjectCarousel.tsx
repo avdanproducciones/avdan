@@ -121,13 +121,10 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
               </button>
             </header>
             <div className="category-dialog__gallery">
-              {selectedCategory.projects.map((project) => (
-                <figure className="category-dialog__item" key={project.slug}>
-                  <div className="category-dialog__placeholder" aria-hidden="true">
-                    <span>Previsualización</span>
-                  </div>
-                  <figcaption>{project.title}</figcaption>
-                </figure>
+              {Array.from({ length: Math.max(5, selectedCategory.projects.length) }).map((_, index) => (
+                <div className="category-dialog__placeholder" key={`${selectedCategory.name}-${index}`} aria-hidden="true">
+                  <span>+</span>
+                </div>
               ))}
             </div>
           </div>
