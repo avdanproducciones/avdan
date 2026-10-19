@@ -3,11 +3,10 @@ import Layout from '../layouts/Layout.astro';
 import ProjectCarousel from '../components/ProjectCarousel';
 import PortfolioSlots from '../components/PortfolioSlots.astro';
 import { projects } from '../data/projects';
-import '../styles/global.css';
 ---
 <Layout title="Portafolio">
   <section class="page home-page">
-    <div class="hero-feature">
+    <div class="hero-feature" data-reveal>
       <div class="hero-copy">
         <h1>Ideas que se mueven.</h1>
         <p class="intro">Creamos imágenes, historias y experiencias que conectan con las personas.</p>
@@ -21,7 +20,7 @@ import '../styles/global.css';
     <a class="scroll-cue" href="#trabajos" aria-label="Bajar a trabajos destacados">
       <span aria-hidden="true"></span>
     </a>
-    <section class="work-section" id="trabajos">
+    <section class="work-section" id="trabajos" data-reveal>
       <div class="section-heading">
         <h2>Trabajos destacados</h2>
       </div>
@@ -31,7 +30,7 @@ import '../styles/global.css';
   </section>
 </Layout>
 
-<dialog class="image-dialog" aria-labelledby="image-dialog-title">
+<dialog id="hero-image-dialog" class="image-dialog" aria-labelledby="image-dialog-title">
   <div class="image-dialog__content">
     <div class="image-dialog__header">
       <p id="image-dialog-title">Matrimonio en Iglesia <span aria-hidden="true"></span></p>
@@ -44,18 +43,21 @@ import '../styles/global.css';
 </dialog>
 
 <script>
-  const imageTrigger = document.querySelector<HTMLButtonElement>('.hero-image__trigger');
-  const imageDialog = document.querySelector<HTMLDialogElement>('.image-dialog');
-  const imageDialogClose = document.querySelector<HTMLButtonElement>('.image-dialog__close');
+  const setupHeroImageDialog = () => {
+    const imageTrigger = document.querySelector<HTMLButtonElement>('.hero-image__trigger');
+    const imageDialog = document.querySelector<HTMLDialogElement>('#hero-image-dialog');
+    const imageDialogClose = imageDialog?.querySelector<HTMLButtonElement>('.image-dialog__close');
 
-  if (imageTrigger && imageDialog && imageDialogClose) {
+    if (!imageTrigger || !imageDialog || !imageDialogClose || imageTrigger.dataset.dialogReady === 'true') return;
+
+    imageTrigger.dataset.dialogReady = 'true';
     imageTrigger.addEventListener('click', () => imageDialog.showModal());
     imageDialogClose.addEventListener('click', () => imageDialog.close());
     imageDialog.addEventListener('click', (event) => {
-      const target = event.target;
-      if (target instanceof Node && !imageDialog.querySelector('.image-dialog__content')?.contains(target)) {
-        imageDialog.close();
-      }
+      if (event.target === imageDialog) imageDialog.close();
     });
-  }
+  };
+
+  setupHeroImageDialog();
+  document.addEventListener('astro:page-load', setupHeroImageDialog);
 </script>

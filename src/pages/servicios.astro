@@ -1,18 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import '../styles/global.css';
 ---
 <Layout title="Servicios">
-  <section class="page interior-page">
-    <div class="hero-copy">
+  <section class="page interior-page interior-page--services">
+    <div class="hero-copy" data-reveal>
       <h1>Lo que hacemos.</h1>
       <p class="intro">Desarrollamos conceptos, piezas y experiencias audiovisuales desde la primera idea hasta la entrega final.</p>
       <a class="editorial-link" href="/contacto/">Hablemos <span aria-hidden="true">↗</span></a>
     </div>
-    <div class="service-grid">
-      <article><h2>Dirección<br />creativa</h2><p>Concepto, narrativa y dirección visual para proyectos con intención.</p></article>
-      <article><h2>Producción<br />audiovisual</h2><p>De la idea al último encuadre, cuidamos cada detalle de la producción.</p></article>
-      <article><h2>Edición y<br />postproducción</h2><p>Ritmo, color y sonido para convertir material en una historia.</p></article>
+    <div class="service-grid service-grid--dark" data-reveal>
+      <article data-reveal><h2>Dirección<br />creativa</h2><p>Concepto, narrativa y dirección visual para proyectos con intención.</p></article>
+      <article data-reveal><h2>Producción<br />audiovisual</h2><p>De la idea al último encuadre, cuidamos cada detalle de la producción.</p></article>
+      <article data-reveal><h2>Edición y<br />postproducción</h2><p>Ritmo, color y sonido para convertir material en una historia.</p></article>
     </div>
   </section>
 </Layout>
