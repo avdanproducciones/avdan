@@ -22,7 +22,7 @@ import { projects } from '../data/projects';
     </a>
     <section class="work-section" id="trabajos" data-reveal>
       <div class="section-heading">
-        <h2>Trabajos destacados</h2>
+        <h2>Categorías</h2>
       </div>
       <ProjectCarousel projects={projects} client:load />
     </section>
@@ -38,19 +38,28 @@ import { projects } from '../data/projects';
         <span aria-hidden="true">×</span>
       </button>
     </div>
-    <img src="/media/projects/matrimonio-iglesia-79.webp" alt="Momento de un matrimonio en una iglesia, ampliado" />
+    <div class="zoom-frame" data-zoom>
+      <img src="/media/projects/matrimonio-iglesia-79.webp" alt="Momento de un matrimonio en una iglesia, ampliado" />
+    </div>
   </div>
 </dialog>
 
 <script>
+  import { attachZoom, resetZoom } from '../scripts/zoom';
+
   const setupHeroImageDialog = () => {
     const imageTrigger = document.querySelector<HTMLButtonElement>('.hero-image__trigger');
     const imageDialog = document.querySelector<HTMLDialogElement>('#hero-image-dialog');
     const imageDialogClose = imageDialog?.querySelector<HTMLButtonElement>('.image-dialog__close');
+    const zoomFrame = imageDialog?.querySelector<HTMLElement>('[data-zoom]');
 
     if (!imageTrigger || !imageDialog || !imageDialogClose || imageTrigger.dataset.dialogReady === 'true') return;
 
     imageTrigger.dataset.dialogReady = 'true';
+    if (zoomFrame) {
+      attachZoom(zoomFrame, () => imageDialog.close());
+      imageDialog.addEventListener('close', () => resetZoom(zoomFrame));
+    }
     imageTrigger.addEventListener('click', () => imageDialog.showModal());
     imageDialogClose.addEventListener('click', () => imageDialog.close());
     imageDialog.addEventListener('click', (event) => {

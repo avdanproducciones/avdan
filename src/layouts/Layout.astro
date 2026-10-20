@@ -1,6 +1,8 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
+import '../styles/views.css';
+import Lightbox from '../components/Lightbox.astro';
 
 interface Props {
   title: string;
@@ -60,12 +62,13 @@ const currentPath = Astro.url.pathname;
         <small>Hecho para contar historias</small>
       </div>
     </footer>
+    <Lightbox />
   </body>
 </html>
 
 <script>
   const revealSections = () => {
-    const elements = document.querySelectorAll<HTMLElement>('[data-reveal]');
+    const elements = document.querySelectorAll<HTMLElement>('[data-reveal]:not([data-reveal-repeat])');
 
     if (!('IntersectionObserver' in window)) {
       elements.forEach((element) => element.classList.add('is-visible'));
@@ -81,9 +84,16 @@ const currentPath = Astro.url.pathname;
     }, { threshold: 0.12 });
 
     elements.forEach((element) => observer.observe(element));
+
+    // Estos bloques repiten su animación cada vez que entran en pantalla.
+    const repeat = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.target.classList.toggle('is-visible', entry.isIntersecting));
+    }, { threshold: 0.12 });
+    document.querySelectorAll<HTMLElement>('[data-reveal-repeat]').forEach((element) => repeat.observe(element));
   };
 
   document.documentElement.classList.add('reveal-enabled');
+  document.addEventListener('astro:after-swap', () => document.documentElement.classList.add('reveal-enabled'));
   revealSections();
   document.addEventListener('astro:page-load', revealSections);
 </script>

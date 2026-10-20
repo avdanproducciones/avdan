@@ -1,15 +1,98 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const tags = ['Video', 'Fotografía', 'Campañas', 'Matrimonios', 'Editorial'];
+const tags2 = ['Dirección creativa', 'Producción', 'Postproducción', 'Color', 'Sonido'];
+const principles = [
+  { title: 'Mirada', text: 'Buscamos el ángulo que nadie esperaba y lo sostenemos hasta que dice algo.' },
+  { title: 'Ritmo', text: 'Cada pieza respira a su propio tempo: cortes, pausas y movimiento con intención.' },
+  { title: 'Honestidad', text: 'Contamos lo que ocurre, sin adornos que le quiten verdad a la imagen.' },
+];
+const process = [
+  { title: 'Escuchar', text: 'Entendemos tu historia antes de encender la cámara.' },
+  { title: 'Imaginar', text: 'Convertimos la idea en una mirada y un plan.' },
+  { title: 'Filmar', text: 'Rodamos con intención, luz y movimiento.' },
+  { title: 'Entregar', text: 'Montaje, color y sonido hasta el último detalle.' },
+];
+const team = [
+  { name: 'Nombre Apellido', role: 'Dirección creativa' },
+  { name: 'Nombre Apellido', role: 'Dirección de fotografía' },
+  { name: 'Nombre Apellido', role: 'Montaje y postproducción' },
+];
 ---
 <Layout title="Sobre">
-  <section class="page interior-page interior-page--about">
+  <section class="page interior-page interior-page--about about-page">
     <div class="hero-copy" data-reveal>
       <h1>Mirar distinto.</h1>
-      <a class="editorial-link" href="/contacto/">Conversemos <span aria-hidden="true">↗</span></a>
+      <p class="intro">AVDAN explora nuevas formas de contar historias a través de la imagen y el movimiento.</p>
     </div>
-    <div class="about-copy about-copy--dark" data-reveal>
-      <p class="about-lead">AVDAN explora nuevas formas de contar historias a través de la imagen y el movimiento.</p>
-      <p>Trabajamos con marcas, personas y proyectos que buscan una mirada sensible, precisa y honesta para comunicar lo que hacen.</p>
+
+    <div class="about-collage">
+      <figure class="about-collage__photo" data-reveal="left" data-lightbox="/media/projects/matrimonio-iglesia-79.webp" data-lightbox-title="Matrimonio en iglesia" role="button" tabindex="0" aria-label="Ampliar imagen de un matrimonio en una iglesia">
+        <img src="/media/projects/matrimonio-iglesia-79.webp" alt="Momento de un matrimonio en una iglesia" loading="lazy" />
+      </figure>
+      <div class="about-collage__frame about-collage__frame--a" data-reveal="right" aria-hidden="true"><span>+</span></div>
+      <div class="about-collage__frame about-collage__frame--b" data-reveal aria-hidden="true"><span>+</span></div>
+      <p class="about-collage__quote" data-reveal>Trabajamos con marcas, personas y proyectos que buscan una mirada sensible, precisa y honesta para comunicar lo que hacen.</p>
     </div>
   </section>
-</Layout>
+
+  <section class="about-process">
+    <div class="about-process__head" data-reveal>
+      <h2>Cómo trabajamos.</h2>
+      <p class="about-process__rec"><span aria-hidden="true"></span>En cámara</p>
+    </div>
+    <div class="camera">
+      <div class="camera__strip">
+        <ol class="camera__frames">
+          {process.map((step) => (
+            <li class="camera__frame" data-reveal>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </li>
+          ))}
+        </ol>
+        <div class="camera__viewfinder" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      {[...tags, ...tags, ...tags, ...tags].map((word) => <span>{word}</span>)}
+    </div>
+    <div class="marquee__track marquee__track--reverse">
+      {[...tags2, ...tags2, ...tags2, ...tags2].map((word) => <span>{word}</span>)}
+    </div>
+  </div>
+
+  <section class="page about-principles">
+    <h2 data-reveal>Lo que nos mueve.</h2>
+    <div class="about-principles__row">
+      {principles.map((item, index) => (
+        <article class="principle" data-reveal style={`--delay:${index * 90}ms`}>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+  <section class="about-process about-team">
+    <div class="about-process__head" data-reveal>
+      <h2>Las personas detrás.</h2>
+      <p class="about-process__rec"><span aria-hidden="true"></span>En escena</p>
+    </div>
+    <div class="camera">
+      <div class="camera__strip">
+        <div class="about-team__row">
+          {team.map((member, index) => (
+            <figure class="member" data-reveal style={`--delay:${index * 90}ms`}>
+              <div class="member__portrait" data-lightbox="" data-lightbox-title={member.name} role="button" tabindex="0" aria-label={`Ver ${member.name}, ${member.role}`}><span aria-hidden="true">+</span></div>
+              <figcaption><strong>{member.name}</strong><span>{member.role}</span></figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </div>
+    <a class="editorial-link about-team__cta" href="/contacto/" data-reveal>Conversemos <span aria-hidden="true">↗</span></a>
+  </section></Layout>

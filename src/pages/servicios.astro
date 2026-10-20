@@ -8,10 +8,30 @@ import Layout from '../layouts/Layout.astro';
       <p class="intro">Desarrollamos conceptos, piezas y experiencias audiovisuales desde la primera idea hasta la entrega final.</p>
       <a class="editorial-link" href="/contacto/">Hablemos <span aria-hidden="true">↗</span></a>
     </div>
-    <div class="service-grid service-grid--dark" data-reveal>
-      <article data-reveal><h2>Dirección<br />creativa</h2><p>Concepto, narrativa y dirección visual para proyectos con intención.</p></article>
-      <article data-reveal><h2>Producción<br />audiovisual</h2><p>De la idea al último encuadre, cuidamos cada detalle de la producción.</p></article>
-      <article data-reveal><h2>Edición y<br />postproducción</h2><p>Ritmo, color y sonido para convertir material en una historia.</p></article>
+    <a class="scroll-cue" href="#servicios-lista" aria-label="Bajar a los servicios"><span aria-hidden="true"></span></a>
+    <div class="service-path" id="servicios-lista">
+      <article class="service-step" data-reveal data-reveal-repeat>
+        <div class="service-step__title" data-from="left"><h2>Dirección<br />creativa</h2></div>
+        <div class="service-step__body" data-from="right">
+          <p>Concepto, narrativa y dirección visual para proyectos con intención.</p>
+          <ul><li>Desarrollo de concepto</li><li>Guion y storyboard</li><li>Dirección de arte</li></ul>
+        </div>
+      </article>
+      <article class="service-step" data-reveal data-reveal-repeat>
+        <div class="service-step__title" data-from="right"><h2>Producción<br />audiovisual</h2></div>
+        <div class="service-step__body" data-from="left">
+          <p>De la idea al último encuadre, cuidamos cada detalle de la producción.</p>
+          <ul><li>Video y fotografía</li><li>Cobertura de eventos</li><li>Campañas de marca</li></ul>
+        </div>
+      </article>
+      <article class="service-step" data-reveal data-reveal-repeat>
+        <div class="service-step__title" data-from="left"><h2>Edición y<br />postproducción</h2></div>
+        <div class="service-step__body" data-from="right">
+          <p>Ritmo, color y sonido para convertir material en una historia.</p>
+          <ul><li>Montaje y ritmo</li><li>Corrección de color</li><li>Diseño sonoro</li></ul>
+        </div>
+      </article>
+      <a class="editorial-link service-path__cta" href="/contacto/" data-reveal>Cuéntanos tu proyecto <span aria-hidden="true">↗</span></a>
     </div>
   </section>
 </Layout>
