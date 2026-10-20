@@ -8,9 +8,28 @@ import Layout from '../layouts/Layout.astro';
       <p class="intro">Cuéntanos sobre tu próximo proyecto. Nos encantará escucharte.</p>
       <a class="editorial-link" href="mailto:avdan.producciones@gmail.com">Escribir un correo <span aria-hidden="true">↗</span></a>
     </div>
-    <div class="contact-panel" data-reveal>
-      <p class="contact-panel__lead">Una idea puede empezar con una imagen, una conversación o una pregunta.</p>
-      <a href="mailto:avdan.producciones@gmail.com">avdan.producciones@gmail.com <span aria-hidden="true">↗</span></a>
+    <div class="social-previews">
+      <a class="social-card social-card--instagram" href="#" data-reveal="left" aria-label="Ver el perfil de Instagram de AVDAN">
+        <div class="social-card__head">
+          <span class="social-card__avatar" aria-hidden="true">A</span>
+          <span><strong>@avdan</strong><small>Instagram</small></span>
+        </div>
+        <div class="social-card__grid" aria-hidden="true">
+          <span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span>
+        </div>
+        <span class="social-card__cta">Ver perfil <span aria-hidden="true">↗</span></span>
+      </a>
+      <a class="social-card social-card--youtube" href="#" data-reveal="right" style="--delay:120ms" aria-label="Ver el canal de YouTube de AVDAN">
+        <div class="social-card__head">
+          <span class="social-card__avatar" aria-hidden="true">A</span>
+          <span><strong>AVDAN</strong><small>YouTube</small></span>
+        </div>
+        <div class="social-card__video" aria-hidden="true"><span class="social-card__play"></span></div>
+        <div class="social-card__lines" aria-hidden="true"><span></span><span></span></div>
+        <span class="social-card__cta">Ver canal <span aria-hidden="true">↗</span></span>
+      </a>
     </div>
+
+    <a class="editorial-link contact-whatsapp" href="#" data-reveal>Escribir por WhatsApp <span aria-hidden="true">↗</span></a>
   </section>
 </Layout>
