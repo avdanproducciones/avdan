@@ -30,10 +30,10 @@ const currentPath = Astro.url.pathname;
         <a class:list={{ active: currentPath === '/sobre/' }} href="/sobre/">Acerca de</a>
         <a class:list={{ active: currentPath === '/contacto/' }} href="/contacto/">Contacto</a>
       </nav>
-      <i class="bulb bulb--ceiling" style="--x: 22%; --cord: 22px; --d: -2s" aria-hidden="true"></i>
-      <i class="bulb bulb--ceiling" style="--x: 38%; --cord: 14px; --d: -1s" aria-hidden="true"></i>
-      <i class="bulb bulb--ceiling" style="--x: 55%; --cord: 34px; --d: -4s" aria-hidden="true"></i>
+      <i class="bulb bulb--ceiling" style="--x: 30%; --cord: 20px; --d: -2s" aria-hidden="true"></i>
+      <i class="bulb bulb--ceiling" style="--x: 62%; --cord: 30px; --d: -4s" aria-hidden="true"></i>
     </header>
+    <div class="darkroom-light" aria-hidden="true"></div>
     <main transition:animate="fade"><slot /></main>
     <footer class="site-footer">
       <div class="footer-intro">

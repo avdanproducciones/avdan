@@ -198,10 +198,9 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
       )}
 
       {selectedItem && selectedCategory && typeof document !== 'undefined' && createPortal(
-        <div className="item-dialog" role="dialog" aria-modal="true" aria-labelledby="item-dialog-title" onClick={() => setSelectedItem(null)}>
+        <div className="item-dialog" role="dialog" aria-modal="true" aria-label={selectedItem.title} onClick={() => setSelectedItem(null)}>
           <div className="item-dialog__content" onClick={(event) => event.stopPropagation()}>
             <div className="image-dialog__header">
-              <p id="item-dialog-title">{selectedItem.title}</p>
               <button className="image-dialog__close" type="button" onClick={() => setSelectedItem(null)} aria-label="Cerrar trabajo">
                 <span aria-hidden="true">×</span>
               </button>

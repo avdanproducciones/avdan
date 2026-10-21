@@ -6,7 +6,6 @@ import { projects } from '../data/projects';
 ---
 <Layout title="Portafolio">
   <section class="page home-page">
-    <div class="darkroom-light" aria-hidden="true"></div>
     <div class="hero-feature" data-reveal>
       <div class="hero-copy">
         <h1>Ideas que se mueven<span class="rec-dot" aria-hidden="true"></span></h1>
@@ -29,7 +28,6 @@ import { projects } from '../data/projects';
       <div class="section-heading">
         <h2>Categorías</h2>
         <i class="bulb" style="--x: 88%; --cord: 22px; --d: -2s" aria-hidden="true"></i>
-        <i class="bulb" style="--x: 55%; --cord: 14px; --d: -4s" aria-hidden="true"></i>
       </div>
       <ProjectCarousel projects={projects} client:load />
     </section>
@@ -37,10 +35,9 @@ import { projects } from '../data/projects';
   </section>
 </Layout>
 
-<dialog id="hero-image-dialog" class="image-dialog" aria-labelledby="image-dialog-title">
-  <div class="image-dialog__content">
-    <div class="image-dialog__header">
-      <p id="image-dialog-title">Matrimonio en Iglesia <span aria-hidden="true"></span></p>
+<dialog id="hero-image-dialog" class="image-dialog" aria-label="Matrimonio en iglesia">
+ <div class="image-dialog__content">
+   <div class="image-dialog__header">
       <button class="image-dialog__close" type="button" aria-label="Cerrar imagen ampliada">
         <span aria-hidden="true">×</span>
       </button>
