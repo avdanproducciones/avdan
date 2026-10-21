@@ -53,7 +53,6 @@ const videos = [
       <h2 id="video-title">Videos seleccionados.</h2>
     </div>
     <i class="bulb" style="--x: 80%; --cord: 24px; --d: -2.5s" aria-hidden="true"></i>
-    <i class="bulb" style="--x: 52%; --cord: 16px; --d: -5s" aria-hidden="true"></i>
   </div>
 
   <div class="portfolio-grid">
@@ -76,7 +75,6 @@ const videos = [
   <dialog class="image-dialog portfolio-slot-dialog" data-group="photo" id={`photo-${index}`} aria-label={photo.title}>
     <div class="image-dialog__content">
       <div class="image-dialog__header">
-        <p>{photo.title}</p>
         <button class="image-dialog__close" type="button" aria-label={`Cerrar ${photo.title}`}>
           <span aria-hidden="true">×</span>
         </button>
@@ -96,7 +94,6 @@ const videos = [
   <dialog class="image-dialog portfolio-slot-dialog" data-group="video" id={`video-${index}`} aria-label={video.title}>
     <div class="image-dialog__content">
       <div class="image-dialog__header">
-        <p>{video.title}</p>
         <button class="image-dialog__close" type="button" aria-label={`Cerrar ${video.title.toLowerCase()}`}>
           <span aria-hidden="true">×</span>
         </button>

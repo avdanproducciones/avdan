@@ -1,16 +1,20 @@
 :root {
+  --room: #0a0a09;
+  --film: #1c1a18;
+  --hole: #c4c3b6;
+  --safelight: #d6341f;
   --ink: #000000;
   --paper: #c4c3b6;
-  --muted: #595855;
-  --line: #dfdcd5;
-  --dark: #000000;
-  --accent: #000000;
+  --muted: #8a867c;
+  --line: #2c2a27;
+  --dark: #0a0a09;
+  --accent: #d6341f;
   --bone: #e7e5e4;
   --chalk: #ebebeb;
-  --graphite: #595855;
+  --graphite: #2c2a27;
   font-family: Arial, Helvetica, sans-serif;
-  color: var(--ink);
-  background: var(--paper);
+  color: var(--bone);
+  background: var(--room);
 }
 
 * { box-sizing: border-box; }
@@ -19,8 +23,8 @@ html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display
 * { scrollbar-width: none; }
 html:has(dialog[open]), html:has(.category-dialog), html:has(.item-dialog) { overflow: hidden; }
 dialog, .category-dialog, .item-dialog { overscroll-behavior: contain; }
-body { margin: 0; min-width: 320px; }
-body, main { background: var(--paper); }
+body { color: var(--bone); margin: 0; min-width: 320px; }
+body, main { background: var(--room); }
 html.reveal-enabled [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.75,.25,1); }
 html.reveal-enabled [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .35s; }
@@ -29,7 +33,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-o
 
 .site-header {
   align-items: center;
-  background: var(--paper);
+  background: transparent;
   display: flex;
   justify-content: space-between;
   margin: 0 auto;

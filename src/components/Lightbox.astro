@@ -1,9 +1,8 @@
 ---
 ---
-<dialog id="lightbox" class="image-dialog" aria-labelledby="lightbox-title">
-  <div class="image-dialog__content">
-    <div class="image-dialog__header">
-      <p id="lightbox-title"></p>
+<dialog id="lightbox" class="image-dialog" aria-label="Imagen ampliada">
+ <div class="image-dialog__content">
+   <div class="image-dialog__header">
       <button class="image-dialog__close" type="button" aria-label="Cerrar">
         <span aria-hidden="true">×</span>
       </button>
@@ -24,7 +23,6 @@
     const open = (trigger: HTMLElement) => {
       const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
       if (!dialog) return;
-      const title = dialog.querySelector<HTMLElement>('#lightbox-title')!;
       const frame = dialog.querySelector<HTMLElement>('[data-lightbox-image]')!;
       const video = dialog.querySelector<HTMLVideoElement>('[data-lightbox-video]')!;
       const placeholder = dialog.querySelector<HTMLElement>('[data-lightbox-placeholder]')!;
@@ -32,7 +30,6 @@
       const src = trigger.dataset.lightbox ?? '';
       const kind = trigger.dataset.lightboxType ?? 'image';
 
-      title.textContent = trigger.dataset.lightboxTitle ?? '';
       frame.hidden = !(src && kind === 'image');
       video.hidden = !(src && kind === 'video');
       placeholder.hidden = Boolean(src);
