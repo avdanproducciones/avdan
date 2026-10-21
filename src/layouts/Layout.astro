@@ -2,6 +2,7 @@
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import '../styles/views.css';
+import '../styles/film.css';
 import Lightbox from '../components/Lightbox.astro';
 
 interface Props {
@@ -29,6 +30,9 @@ const currentPath = Astro.url.pathname;
         <a class:list={{ active: currentPath === '/sobre/' }} href="/sobre/">Acerca de</a>
         <a class:list={{ active: currentPath === '/contacto/' }} href="/contacto/">Contacto</a>
       </nav>
+      <i class="bulb bulb--ceiling" style="--x: 22%; --cord: 22px; --d: -2s" aria-hidden="true"></i>
+      <i class="bulb bulb--ceiling" style="--x: 38%; --cord: 14px; --d: -1s" aria-hidden="true"></i>
+      <i class="bulb bulb--ceiling" style="--x: 55%; --cord: 34px; --d: -4s" aria-hidden="true"></i>
     </header>
     <main transition:animate="fade"><slot /></main>
     <footer class="site-footer">
@@ -44,7 +48,7 @@ const currentPath = Astro.url.pathname;
         <p class="footer-label">También puedes encontrarnos en</p>
         <nav class="footer-social" aria-label="Redes sociales">
           <a href="#" aria-label="Instagram">
-            <svg class="social-mark" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.4" cy="6.7" r="1" class="social-mark__fill" /></svg>
+            <svg class="social-mark social-mark--instagram" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="ig-gradient" gradientUnits="userSpaceOnUse" x1="3" y1="21" x2="21" y2="3"><stop offset="0" stop-color="#feda75" /><stop offset=".3" stop-color="#fa7e1e" /><stop offset=".55" stop-color="#d62976" /><stop offset=".8" stop-color="#962fbf" /><stop offset="1" stop-color="#4f5bd5" /></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.4" cy="6.7" r="1" class="social-mark__fill" /></svg>
             <span>Instagram</span><span aria-hidden="true">↗</span>
           </a>
           <a href="#" aria-label="YouTube">

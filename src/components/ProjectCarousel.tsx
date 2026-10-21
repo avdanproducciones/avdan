@@ -75,6 +75,7 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategory | null>(null);
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [direction, setDirection] = useState<'next' | 'previous'>('next');
+  const [slides, setSlides] = useState(0);
   const categories = buildCategories(projects);
 
   useEffect(() => {
@@ -82,9 +83,13 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
 
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-        if (!selectedItem) return;
-        const items = selectedCategory.items;
         const step = event.key === 'ArrowRight' ? 1 : -1;
+        if (!selectedItem) {
+          const index = categories.findIndex((category) => category.name === selectedCategory.name);
+          setSelectedCategory(categories[(index + step + categories.length) % categories.length]);
+          return;
+        }
+        const items = selectedCategory.items;
         const current = items.findIndex((item) => item.id === selectedItem.id);
         setSelectedItem(items[(current + step + items.length) % items.length]);
         return;
@@ -106,18 +111,27 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
     );
   }
 
-  const visibleCategories = categories.slice(0, Math.min(3, categories.length)).map((_, offset) => {
-    return categories[(startIndex + offset) % categories.length];
-  });
+  // Con 5 tarjetas (una extra a cada lado, recortadas) la tira se desliza de verdad entre posiciones.
+  const slots = categories.length >= 5 ? [-1, 0, 1, 2, 3] : categories.slice(0, Math.min(3, categories.length)).map((_, offset) => offset);
+  const visibleCategories = slots.map((slot) => categories[(((startIndex + slot) % categories.length) + categories.length) % categories.length]);
+  const looped = slots.length === 5;
 
   const showPrevious = () => {
     setDirection('previous');
+    setSlides((count) => count + 1);
     setStartIndex((index) => (index - 1 + categories.length) % categories.length);
   };
 
   const showNext = () => {
     setDirection('next');
+    setSlides((count) => count + 1);
     setStartIndex((index) => (index + 1) % categories.length);
+  };
+
+  const moveCategory = (step: number) => {
+    if (!selectedCategory) return;
+    const current = categories.findIndex((category) => category.name === selectedCategory.name);
+    setSelectedCategory(categories[(current + step + categories.length) % categories.length]);
   };
 
   const moveItem = (step: number) => {
@@ -129,36 +143,38 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
 
   return (
     <>
-      <div className={`carousel carousel--categories carousel--${direction}`} aria-label="Categorías de trabajos">
+      <div className={`carousel carousel--categories${slides > 0 ? ` carousel--${direction}` : ''}`} aria-label="Categorías de trabajos">
         <button className="carousel__control carousel__control--previous" type="button" onClick={showPrevious} aria-label="Categoría anterior">
           <span aria-hidden="true">‹</span>
         </button>
         <div className="carousel__track">
-          {visibleCategories.map((category) => (
+          <div className={`carousel__strip${looped ? ' carousel__strip--looped' : ''}`} key={slides}>
+          {visibleCategories.map((category, position) => (
             <button
               className="category-card"
               type="button"
-              key={category.name}
+              key={`${position}-${category.name}`}
+              tabIndex={looped && (position === 0 || position === 4) ? -1 : undefined}
               onClick={() => setSelectedCategory(category)}
               aria-label={`Abrir galería de ${category.name}`}
             >
               <span className="category-card__preview" aria-hidden="true">
+                {category.items[0]?.src && <img src={category.items[0].src} alt="" loading="lazy" decoding="async" />}
                 <span>+</span>
               </span>
               <span className="category-card__name">{category.name}</span>
             </button>
           ))}
+          </div>
         </div>
         <button className="carousel__control carousel__control--next" type="button" onClick={showNext} aria-label="Siguiente categoría">
           <span aria-hidden="true">›</span>
         </button>
-        <p className="carousel__counter" aria-live="polite">
-          {startIndex + 1} / {categories.length}
-        </p>
       </div>
 
       {selectedCategory && typeof document !== 'undefined' && createPortal(
         <div className="category-dialog" role="dialog" aria-modal="true" aria-labelledby="category-dialog-title" onClick={() => setSelectedCategory(null)}>
+          <button className="item-dialog__nav category-dialog__side" type="button" onClick={(event) => { event.stopPropagation(); moveCategory(-1); }} aria-label="Categoría anterior"><span aria-hidden="true">‹</span></button>
           <div className="category-dialog__content" onClick={(event) => event.stopPropagation()}>
             <header className="category-dialog__header">
               <h3 id="category-dialog-title">{selectedCategory.name}</h3>
@@ -170,12 +186,13 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
               {selectedCategory.items.map((item) => (
                 <button className="category-dialog__item" type="button" key={item.id} onClick={() => setSelectedItem(item)} aria-label={`Abrir ${item.title}`}>
                   <span className="category-dialog__placeholder" aria-hidden="true">
-                    {item.src ? <img src={item.src} alt="" /> : <span>+</span>}
+                    {item.src ? <img src={item.src} alt="" loading="lazy" decoding="async" /> : <span>+</span>}
                   </span>
                 </button>
               ))}
             </div>
           </div>
+          <button className="item-dialog__nav category-dialog__side" type="button" onClick={(event) => { event.stopPropagation(); moveCategory(1); }} aria-label="Categoría siguiente"><span aria-hidden="true">›</span></button>
         </div>,
         document.body,
       )}
