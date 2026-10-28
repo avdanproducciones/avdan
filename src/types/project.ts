@@ -12,4 +12,5 @@ export interface Project {
   youtubeId?: string;
   credits?: string[];
   published: boolean;
+  preview?: boolean;
 }
