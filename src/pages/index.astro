@@ -5,72 +5,94 @@ import PortfolioSlots from '../components/PortfolioSlots.astro';
 import { projects } from '../data/projects';
 ---
 <Layout title="Portafolio">
-  <section class="page home-page">
-    <div class="hero-feature" data-reveal>
-      <div class="hero-copy">
-        <h1>Ideas que se mueven<span class="rec-dot" aria-hidden="true"></span></h1>
-        <p class="intro">Creamos imágenes, historias y experiencias que conectan con las personas.</p>
-      </div>
-      <figure class="hero-image">
-        <button class="hero-image__trigger" type="button" aria-label="Expandir imagen de un matrimonio en una iglesia">
-          <img src="/media/projects/matrimonio-iglesia-79.webp" alt="Momento de un matrimonio en una iglesia" loading="eager" fetchpriority="high" />
-        </button>
-        <span class="click-hint" aria-hidden="true">
-          <span class="click-hint__text">clickéame</span>
-          <svg class="click-hint__arrow" viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path class="click-hint__line" pathLength="1" d="M3 56C3 46 8 38 16 32C25 26 34 30 30 37C26 43 15 36 20 27C26 17 44 10 74 8"/><path class="click-hint__head" d="M66 3L75 8L66 13"/></svg>
-        </span>
-      </figure>
+  <section class="hero-video" aria-label="Video introductorio">
+    <div class="hero-video__frame">
+      <video
+        class="hero-video__player"
+        src="/media/video/promo-festival-gastronomico.mp4"
+        controls
+        autoplay
+        playsinline
+        preload="auto"
+      >
+        Tu navegador no puede reproducir este video.
+      </video>
+      <button class="hero-video__sound" type="button" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" /><path d="m17 9 4 6M21 9l-4 6" /></svg>
+        Toca para ver con sonido
+      </button>
     </div>
-    <a class="scroll-cue" href="#trabajos" aria-label="Bajar a trabajos destacados">
+  </section>
+  <section class="page home-page">
+    <a class="scroll-cue" href="#seleccion" aria-label="Bajar a la seleccion de trabajos">
       <span aria-hidden="true"></span>
     </a>
-    <section class="work-section" id="trabajos" data-reveal>
-      <div class="section-heading">
-        <h2>Categorías</h2>
-        <i class="bulb" style="--x: 88%; --cord: 22px; --d: -2s" aria-hidden="true"></i>
-      </div>
-      <ProjectCarousel projects={projects} client:load />
-    </section>
     <PortfolioSlots />
+    <section class="work-section" id="categorias">
+      <div class="section-heading section-heading--center" data-reveal>
+        <h2>Categorias</h2>
+      </div>
+      <div data-reveal style="--delay:120ms">
+        <ProjectCarousel projects={projects} client:load />
+      </div>
+    </section>
   </section>
 </Layout>
 
-<dialog id="hero-image-dialog" class="image-dialog" aria-label="Matrimonio en iglesia">
- <div class="image-dialog__content">
-   <div class="image-dialog__header">
-      <button class="image-dialog__close" type="button" aria-label="Cerrar imagen ampliada">
-        <span aria-hidden="true">×</span>
-      </button>
-    </div>
-    <div class="zoom-frame" data-zoom>
-      <img src="/media/projects/matrimonio-iglesia-79.webp" alt="Momento de un matrimonio en una iglesia, ampliado" />
-    </div>
-  </div>
-</dialog>
-
 <script>
-  import { attachZoom, resetZoom } from '../scripts/zoom';
+  // Los navegadores bloquean el audio automatico en la primera visita directa. Se intenta con sonido
+  // y, si lo bloquean, arranca en silencio y se activa el sonido con la primera interaccion del usuario.
+  let autoMuted = false;
 
-  const setupHeroImageDialog = () => {
-    const imageTrigger = document.querySelector<HTMLButtonElement>('.hero-image__trigger');
-    const imageDialog = document.querySelector<HTMLDialogElement>('#hero-image-dialog');
-    const imageDialogClose = imageDialog?.querySelector<HTMLButtonElement>('.image-dialog__close');
-    const zoomFrame = imageDialog?.querySelector<HTMLElement>('[data-zoom]');
+  const getVideo = () => document.querySelector<HTMLVideoElement>('.hero-video__player');
+  const getHint = () => document.querySelector<HTMLButtonElement>('.hero-video__sound');
 
-    if (!imageTrigger || !imageDialog || !imageDialogClose || imageTrigger.dataset.dialogReady === 'true') return;
-
-    imageTrigger.dataset.dialogReady = 'true';
-    if (zoomFrame) {
-      attachZoom(zoomFrame, () => imageDialog.close());
-      imageDialog.addEventListener('close', () => resetZoom(zoomFrame));
-    }
-    imageTrigger.addEventListener('click', () => imageDialog.showModal());
-    imageDialogClose.addEventListener('click', () => imageDialog.close());
-    imageDialog.addEventListener('click', (event) => {
-      if (event.target === imageDialog) imageDialog.close();
-    });
+  const enableSound = () => {
+    const video = getVideo();
+    if (!video || !autoMuted) return;
+    autoMuted = false;
+    video.currentTime = 0;
+    video.muted = false;
+    video.play().catch(() => {});
+    const hint = getHint();
+    if (hint) hint.hidden = true;
   };
 
-  setupHeroImageDialog();
-  document.addEventListener('astro:page-load', setupHeroImageDialog);
+  const playIntro = async () => {
+    const video = getVideo();
+    const hint = getHint();
+    if (!video) return;
+    autoMuted = false;
+    if (hint) hint.hidden = true;
+    video.currentTime = 0;
+    video.muted = false;
+    try {
+      await video.play();
+    } catch {
+      autoMuted = true;
+      video.muted = true;
+      video.play().catch(() => {});
+      if (hint) hint.hidden = false;
+    }
+  };
+
+  const unlock = (event: Event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest?.('.hero-video__player')) {
+      autoMuted = false;
+      return;
+    }
+    enableSound();
+  };
+
+  ['pointerdown', 'keydown', 'touchend'].forEach((name) => document.addEventListener(name, unlock, { capture: true }));
+  document.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('.hero-video__sound')) enableSound();
+  });
+  document.addEventListener('astro:page-load', () => {
+    if (getVideo()) playIntro();
+  });
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) playIntro();
+  });
 </script>

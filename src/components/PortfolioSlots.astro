@@ -1,15 +1,15 @@
 ---
 const photos = [
-  { title: 'Celebración en la caleta', src: '/media/projects/festivales-02.webp' },
-  { title: 'Concierto en vivo', src: '/media/projects/conciertos-02.webp' },
-  { title: 'Rueda alemana', src: '/media/projects/danza-02.webp' },
-  { title: 'Concierto sinfónico', src: '/media/projects/orquesta-02.webp' },
-  { title: 'Baile frente al mar', src: '/media/projects/matrimonios-02.webp' },
-  { title: 'Retrato junto al mar', src: '/media/projects/matrimonios-03.webp' },
-  { title: 'Cantante en escena', src: '/media/projects/conciertos-06.webp' },
-  { title: 'Botes y banderas', src: '/media/projects/festivales-04.webp' },
-  { title: 'Danza sobre patines', src: '/media/projects/danza-05.webp' },
-  { title: 'Sección de cellos', src: '/media/projects/orquesta-04.webp' },
+  { title: 'Fiesta San Pedro', src: '/media/projects/eventos-20.webp' },
+  { title: '1° Festival de Jazz', src: '/media/projects/eventos-05.webp' },
+  { title: 'Invierno en Escena', src: '/media/projects/eventos-26.webp' },
+  { title: '70 Aniversario Orquesta', src: '/media/projects/eventos-07.webp' },
+  { title: 'Matrimonio en iglesia', src: '/media/projects/matrimonios-09.webp' },
+  { title: 'Matrimonio en iglesia', src: '/media/projects/matrimonios-12.webp' },
+  { title: 'Fiesta Chilenidad', src: '/media/projects/eventos-15.webp' },
+  { title: 'Fiesta San Pedro', src: '/media/projects/eventos-22.webp' },
+  { title: 'Invierno en Escena', src: '/media/projects/eventos-30.webp' },
+  { title: '70 Aniversario Orquesta', src: '/media/projects/eventos-09.webp' },
 ];
 const strings = [photos.slice(0, 5), photos.slice(5, 10)];
 const videos = [
@@ -19,18 +19,16 @@ const videos = [
 ];
 ---
 
-<section class="portfolio-slots garland-section" aria-labelledby="garland-title" data-reveal>
-  <div class="section-heading">
-    <div>
-      <h2 id="garland-title">Trabajos seleccionados.</h2>
-    </div>
-    <i class="bulb" style="--x: 58%; --cord: 20px; --d: -3s" aria-hidden="true"></i>
+<section class="portfolio-slots garland-section" id="seleccion" aria-labelledby="garland-title">
+  <div class="section-heading section-heading--center" data-reveal>
+    <i class="bulb" style="--x: 12%; --cord: 20px; --d: -3s" aria-hidden="true"></i>
+    <h2 id="garland-title">Seleccion</h2>
     <p class="darkroom-sign" aria-hidden="true"><i></i>Revelando…</p>
   </div>
 
   <div class="garland-scroll">
     {strings.map((row, rowIndex) => (
-      <div class="garland" style={`--row:${rowIndex}`}>
+      <div class="garland" style={`--row:${rowIndex}`} data-reveal>
         <svg class="garland__thread" aria-hidden="true">
           <path d="" fill="none" />
         </svg>
@@ -47,24 +45,20 @@ const videos = [
   </div>
 </section>
 
-<section class="portfolio-slots video-section" aria-labelledby="video-title" data-reveal>
-  <div class="section-heading">
-    <div>
-      <h2 id="video-title">Videos seleccionados.</h2>
-    </div>
-    <i class="bulb" style="--x: 80%; --cord: 24px; --d: -2.5s" aria-hidden="true"></i>
+<section class="portfolio-slots video-section" aria-labelledby="video-title">
+  <div class="section-heading section-heading--center" data-reveal>
+    <h2 id="video-title">Seleccion audiovisual</h2>
   </div>
 
   <div class="portfolio-grid">
     {videos.map((video, index) => (
-      <article class:list={{ 'portfolio-slot': true, 'portfolio-slot--video': true, 'portfolio-slot--large': video.size === 'large' }}>
+      <article class:list={{ 'portfolio-slot': true, 'portfolio-slot--video': true, 'portfolio-slot--large': video.size === 'large' }} data-reveal style={`--delay:${index * 120}ms`}>
         <button class="portfolio-slot__trigger" type="button" aria-label={`Abrir ${video.title.toLowerCase()}`} data-slot-dialog={`video-${index}`}>
           <span class="portfolio-slot__frame" aria-hidden="true">
             <span class="portfolio-slot__window" data-timecode="00:00:00:00">
               <span class="portfolio-slot__mark">▶</span>
             </span>
           </span>
-          <span class="portfolio-slot__caption">{video.title}</span>
         </button>
       </article>
     ))}
@@ -100,7 +94,7 @@ const videos = [
       </div>
       <div class="item-dialog__stage">
         <button class="item-dialog__nav item-dialog__nav--previous" type="button" data-slot-step="-1" aria-label="Video anterior"><span aria-hidden="true">‹</span></button>
-        <div class="portfolio-slot-dialog__preview" aria-label={`Previsualización de ${video.title.toLowerCase()}`}>
+        <div class="portfolio-slot-dialog__preview" aria-label={`Previsualizacion de ${video.title.toLowerCase()}`}>
           <span aria-hidden="true">▶</span>
         </div>
         <button class="item-dialog__nav item-dialog__nav--next" type="button" data-slot-step="1" aria-label="Video siguiente"><span aria-hidden="true">›</span></button>
@@ -174,7 +168,7 @@ const videos = [
     });
   }
 
-  // El hilo y las pinzas comparten la misma parábola, calculada en píxeles reales.
+  // El hilo y las pinzas comparten la misma parabola, calculada en pixeles reales.
   const hangPhotos = () => {
     document.querySelectorAll<HTMLElement>('.garland').forEach((garland) => {
       const width = garland.getBoundingClientRect().width;
@@ -194,7 +188,7 @@ const videos = [
         item.style.setProperty('--drop', `${curveY(x).toFixed(1)}px`);
       });
       // Corrige cualquier desfase real entre el hilo y la parte superior de cada foto.
-      // Extremos un poco más arriba (tocan el hilo) y centrales un poco más abajo.
+      // Extremos un poco mas arriba (tocan el hilo) y centrales un poco mas abajo.
       items.forEach((item) => {
         const itemBox = item.getBoundingClientRect();
         const x = Math.min(Math.max(itemBox.left + itemBox.width / 2 - origin, 0), width);

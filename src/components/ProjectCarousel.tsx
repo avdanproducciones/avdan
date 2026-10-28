@@ -12,6 +12,7 @@ interface GalleryItem {
   title: string;
   media: ProjectMedia;
   src?: string;
+  preview?: boolean;
 }
 
 interface ProjectCategory {
@@ -21,20 +22,20 @@ interface ProjectCategory {
 
 const DEMO_CATEGORIES: Array<{ name: string; media: ProjectMedia }> = [
   { name: 'Video', media: 'video' },
-  { name: 'Fotografía', media: 'photo' },
-  { name: 'Campañas', media: 'video' },
+  { name: 'Fotografia', media: 'photo' },
+  { name: 'Campanas', media: 'video' },
   { name: 'Matrimonios', media: 'photo' },
   { name: 'Editorial', media: 'photo' },
 ];
 const DEMO_ITEMS_PER_CATEGORY = 6;
-const WEDDING_IMAGE = '/media/projects/matrimonio-iglesia-79.webp';
+const WEDDING_IMAGE = '/media/projects/matrimonios-14.webp';
 
 const buildCategories = (projects: Project[]): ProjectCategory[] => {
   const published = projects.filter((project) => project.published);
 
   if (published.length > 0) {
     return published.reduce<ProjectCategory[]>((result, project) => {
-      const item: GalleryItem = { id: project.slug, title: project.title, media: project.media, src: project.cover || undefined };
+      const item: GalleryItem = { id: project.slug, title: project.title, media: project.media, src: project.cover || undefined, preview: project.preview };
       const existing = result.find((category) => category.name === project.category);
 
       if (existing) existing.items.push(item);
@@ -76,6 +77,17 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [direction, setDirection] = useState<'next' | 'previous'>('next');
   const [slides, setSlides] = useState(0);
+  const [swipeHint, setSwipeHint] = useState(false);
+  const dialogContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!selectedCategory) return;
+    const node = dialogContentRef.current;
+    if (node) {
+      node.scrollTop = 0;
+      setSwipeHint(selectedCategory.items.length > 6 && node.scrollHeight > node.clientHeight + 8);
+    }
+  }, [selectedCategory]);
   const categories = buildCategories(projects);
 
   useEffect(() => {
@@ -106,7 +118,7 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
   if (categories.length === 0) {
     return (
       <div className="carousel-empty" role="status">
-        <p className="empty-title">Estamos preparando una selección de categorías para compartir contigo.</p>
+        <p className="empty-title">Estamos preparando una seleccion de categorias para compartir contigo.</p>
       </div>
     );
   }
@@ -141,12 +153,16 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
     setSelectedItem(items[(current + step + items.length) % items.length]);
   };
 
+  const isStatic = categories.length <= 3;
+
   return (
     <>
-      <div className={`carousel carousel--categories${slides > 0 ? ` carousel--${direction}` : ''}`} aria-label="Categorías de trabajos">
-        <button className="carousel__control carousel__control--previous" type="button" onClick={showPrevious} aria-label="Categoría anterior">
-          <span aria-hidden="true">‹</span>
-        </button>
+      <div className={`carousel carousel--categories${isStatic ? ' carousel--static' : ''}${slides > 0 ? ` carousel--${direction}` : ''}`} aria-label="Categorias de trabajos">
+        {!isStatic && (
+          <button className="carousel__control carousel__control--previous" type="button" onClick={showPrevious} aria-label="Categoria anterior">
+            <span aria-hidden="true">‹</span>
+          </button>
+        )}
         <div className="carousel__track">
           <div className={`carousel__strip${looped ? ' carousel__strip--looped' : ''}`} key={slides}>
           {visibleCategories.map((category, position) => (
@@ -156,10 +172,13 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
               key={`${position}-${category.name}`}
               tabIndex={looped && (position === 0 || position === 4) ? -1 : undefined}
               onClick={() => setSelectedCategory(category)}
-              aria-label={`Abrir galería de ${category.name}`}
+              aria-label={`Abrir galeria de ${category.name}`}
             >
               <span className="category-card__preview" aria-hidden="true">
-                {category.items[0]?.src && <img src={category.items[0].src} alt="" loading="lazy" decoding="async" />}
+                {(() => {
+                  const cover = category.items.find((item) => item.preview)?.src ?? category.items[0]?.src;
+                  return cover && <img src={cover} alt="" loading="lazy" decoding="async" />;
+                })()}
                 <span>+</span>
               </span>
               <span className="category-card__name">{category.name}</span>
@@ -167,18 +186,20 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
           ))}
           </div>
         </div>
-        <button className="carousel__control carousel__control--next" type="button" onClick={showNext} aria-label="Siguiente categoría">
-          <span aria-hidden="true">›</span>
-        </button>
+        {!isStatic && (
+          <button className="carousel__control carousel__control--next" type="button" onClick={showNext} aria-label="Siguiente categoria">
+            <span aria-hidden="true">›</span>
+          </button>
+        )}
       </div>
 
       {selectedCategory && typeof document !== 'undefined' && createPortal(
         <div className="category-dialog" role="dialog" aria-modal="true" aria-labelledby="category-dialog-title" onClick={() => setSelectedCategory(null)}>
-          <button className="item-dialog__nav category-dialog__side" type="button" onClick={(event) => { event.stopPropagation(); moveCategory(-1); }} aria-label="Categoría anterior"><span aria-hidden="true">‹</span></button>
-          <div className="category-dialog__content" onClick={(event) => event.stopPropagation()}>
+          <button className="item-dialog__nav category-dialog__side" type="button" onClick={(event) => { event.stopPropagation(); moveCategory(-1); }} aria-label="Categoria anterior"><span aria-hidden="true">‹</span></button>
+          <div className="category-dialog__content" ref={dialogContentRef} onScroll={() => swipeHint && setSwipeHint(false)} onClick={(event) => event.stopPropagation()}>
             <header className="category-dialog__header">
               <h3 id="category-dialog-title">{selectedCategory.name}</h3>
-              <button className="category-dialog__close" type="button" onClick={() => { setSelectedItem(null); setSelectedCategory(null); }} aria-label="Cerrar galería">
+              <button className="category-dialog__close" type="button" onClick={() => { setSelectedItem(null); setSelectedCategory(null); }} aria-label="Cerrar galeria">
                 <span aria-hidden="true">×</span>
               </button>
             </header>
@@ -192,7 +213,13 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
               ))}
             </div>
           </div>
-          <button className="item-dialog__nav category-dialog__side" type="button" onClick={(event) => { event.stopPropagation(); moveCategory(1); }} aria-label="Categoría siguiente"><span aria-hidden="true">›</span></button>
+          {swipeHint && (
+            <div className="category-dialog__swipe" aria-hidden="true">
+              <span className="category-dialog__mouse"><em></em></span>
+              <b>Desliza</b>
+            </div>
+          )}
+          <button className="item-dialog__nav category-dialog__side" type="button" onClick={(event) => { event.stopPropagation(); moveCategory(1); }} aria-label="Categoria siguiente"><span aria-hidden="true">›</span></button>
         </div>,
         document.body,
       )}
