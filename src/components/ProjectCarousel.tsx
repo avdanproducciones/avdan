@@ -23,7 +23,7 @@ interface ProjectCategory {
 const DEMO_CATEGORIES: Array<{ name: string; media: ProjectMedia }> = [
   { name: 'Video', media: 'video' },
   { name: 'Fotografia', media: 'photo' },
-  { name: 'Campanas', media: 'video' },
+  { name: 'Campañas', media: 'video' },
   { name: 'Matrimonios', media: 'photo' },
   { name: 'Editorial', media: 'photo' },
 ];
@@ -68,6 +68,17 @@ function ZoomImage({ src, alt, onOutside }: { src: string; alt: string; onOutsid
     <div className="zoom-frame" ref={frameRef}>
       <img src={src} alt={alt} />
     </div>
+  );
+}
+
+function GalleryImage({ src, lazy }: { src: string; lazy: boolean }) {
+  const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
+
+  return (
+    <span className={`category-dialog__image category-dialog__image--${status}`}>
+      {status === 'error' && <span className="category-dialog__image-error">No se pudo cargar la imagen</span>}
+      <img src={src} alt="" loading={lazy ? 'lazy' : 'eager'} decoding="async" onLoad={() => setStatus('loaded')} onError={() => setStatus('error')} />
+    </span>
   );
 }
 
@@ -118,7 +129,7 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
   if (categories.length === 0) {
     return (
       <div className="carousel-empty" role="status">
-        <p className="empty-title">Estamos preparando una seleccion de categorias para compartir contigo.</p>
+        <p className="empty-title">Estamos preparando una seleccion de trabajos para compartir contigo.</p>
       </div>
     );
   }
@@ -203,11 +214,11 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
                 <span aria-hidden="true">×</span>
               </button>
             </header>
-            <div className="category-dialog__gallery">
-              {selectedCategory.items.map((item) => (
+            <div className="category-dialog__gallery" key={selectedCategory.name}>
+              {selectedCategory.items.map((item, index) => (
                 <button className="category-dialog__item" type="button" key={item.id} onClick={() => setSelectedItem(item)} aria-label={`Abrir ${item.title}`}>
                   <span className="category-dialog__placeholder" aria-hidden="true">
-                    {item.src ? <img src={item.src} alt="" loading="lazy" decoding="async" /> : <span>+</span>}
+                    {item.src ? <GalleryImage src={item.src} lazy={index >= 6} /> : <span>+</span>}
                   </span>
                 </button>
               ))}

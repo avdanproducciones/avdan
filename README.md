@@ -16,6 +16,10 @@ Sitio web estático para AVDAN, desarrollado con Astro, TypeScript y React.
 - React
 - npm
 
+## Tipografías
+
+El sitio usa Akira Expanded para titulares y Montserrat para texto. Montserrat se sirve localmente desde `public/fonts/` y se distribuye bajo la licencia incluida en `public/fonts/montserrat-OFL.txt`.
+
 ## Requisitos
 
 - Node.js `22.22.0` o superior

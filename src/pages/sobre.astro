@@ -1,89 +1,35 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const tags = ['Video', 'Fotografia', 'Campanas', 'Matrimonios', 'Editorial'];
-const tags2 = ['Direccion creativa', 'Produccion', 'Postproduccion', 'Color', 'Sonido'];
-const principles = [
-  { title: 'Mirada', text: 'Buscamos el angulo que nadie esperaba y lo sostenemos hasta que dice algo.' },
-  { title: 'Ritmo', text: 'Cada pieza respira a su propio tempo: cortes, pausas y movimiento con intencion.' },
-  { title: 'Honestidad', text: 'Contamos lo que ocurre, sin adornos que le quiten verdad a la imagen.' },
-];
-const process = [
-  { title: 'Escuchar', text: 'Entendemos tu historia antes de encender la camara.' },
-  { title: 'Imaginar', text: 'Convertimos la idea en una mirada y un plan.' },
-  { title: 'Filmar', text: 'Rodamos con intencion, luz y movimiento.' },
-  { title: 'Entregar', text: 'Montaje, color y sonido hasta el ultimo detalle.' },
-];
-const team = [
-  { name: 'Nombre Apellido', role: 'Direccion creativa' },
-  { name: 'Nombre Apellido', role: 'Direccion de fotografia' },
-  { name: 'Nombre Apellido', role: 'Montaje y postproduccion' },
-];
 ---
-<Layout title="Sobre">
+<Layout title="Acerca de">
   <section class="page interior-page interior-page--about about-page">
-    <div class="hero-copy" data-reveal>
-      <h1>Mirar distinto.</h1>
-      <p class="intro">AVDAN explora nuevas formas de contar historias a traves de la imagen y el movimiento.</p>
+    <div class="hero-copy about-hero" data-reveal>
+      <h1><span class="idea-highlight">Tus ideas</span>, nuestra vision audiovisual.</h1>
     </div>
-  </section>
-
-  <section class="about-process">
-    <div class="about-process__head" data-reveal>
-      <h2>Como trabajamos.</h2>
-      <p class="about-process__rec"><span aria-hidden="true"></span>En camara</p>
-    </div>
-    <div class="camera">
-      <div class="camera__strip">
-        <ol class="camera__frames">
-          {process.map((step) => (
-            <li class="camera__frame" data-reveal>
-              <h3>{step.title}</h3>
-              <p>{step.text}</p>
-            </li>
-          ))}
-        </ol>
-        <div class="camera__viewfinder" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>
+    <div class="about-story">
+      <figure class="about-story__photo" data-reveal="left">
+        <button class="about-photo-trigger" type="button" data-lightbox="/media/projects/matrimonios-14.webp" data-lightbox-title="Matrimonio en iglesia" aria-label="Ampliar foto de matrimonio">
+          <img src="/media/projects/matrimonios-14.webp" alt="Un matrimonio fotografiado por AVDAN" loading="lazy" decoding="async" />
+        </button>
+      </figure>
+      <div class="about-story__copy" data-reveal="right">
+        <p class="about-story__lead">En <span class="idea-highlight">AVDAN</span> creemos que cada proyecto tiene algo unico que comunicar.</p>
+        <p>Por eso, nuestro trabajo comienza escuchando <span class="idea-highlight">tus ideas</span>, comprendiendo tus objetivos y encontrando la mejor manera de llevarlos a la realidad a traves de la fotografia y la produccion audiovisual.</p>
+        <p>Nos involucramos en cada etapa del proceso, desde la planificacion hasta la entrega final, cuidando los detalles y buscando siempre un resultado que responda a tus expectativas. Trabajamos con compromiso, creatividad y profesionalismo, adaptandonos a las necesidades de cada cliente para crear contenido visual que comunique, emocione y destaque.</p>
       </div>
     </div>
   </section>
 
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee__track">
-      {[...tags, ...tags, ...tags, ...tags].map((word) => <span>{word}</span>)}
+  <section class="page about-closing">
+    <div data-reveal>
+      <p><span class="idea-highlight">Tu idea</span> es el comienzo. En AVDAN, nos encargamos de darle vida.</p>
+      <a class="editorial-link" href="/contacto/"><span>Cuentanos <span class="idea-highlight">tu idea</span></span> <span aria-hidden="true">↗</span></a>
     </div>
-    <div class="marquee__track marquee__track--reverse">
-      {[...tags2, ...tags2, ...tags2, ...tags2].map((word) => <span>{word}</span>)}
-    </div>
-  </div>
-
-  <section class="page about-principles">
-    <h2 data-reveal>Lo que nos mueve.</h2>
-    <div class="about-principles__row">
-      {principles.map((item, index) => (
-        <article class="principle" data-reveal style={`--delay:${index * 90}ms`}>
-          <h3>{item.title}</h3>
-          <p>{item.text}</p>
-        </article>
-      ))}
-    </div>
+    <figure data-reveal="right">
+      <button class="about-photo-trigger" type="button" data-lightbox="/media/projects/sesiones-04.webp" data-lightbox-title="Sesion retrato" aria-label="Ampliar foto de sesion retrato">
+        <img src="/media/projects/sesiones-04.webp" alt="Retrato fotografiado por AVDAN" loading="lazy" decoding="async" />
+      </button>
+    </figure>
   </section>
-  <section class="about-process about-team">
-    <div class="about-process__head" data-reveal>
-      <h2>Las personas detras.</h2>
-      <p class="about-process__rec"><span aria-hidden="true"></span>En escena</p>
-    </div>
-    <div class="camera">
-      <div class="camera__strip">
-        <div class="about-team__row">
-          {team.map((member, index) => (
-            <figure class="member" data-reveal style={`--delay:${index * 90}ms`}>
-              <div class="member__portrait" data-lightbox="" data-lightbox-title={member.name} role="button" tabindex="0" aria-label={`Ver ${member.name}, ${member.role}`}><span aria-hidden="true">+</span></div>
-              <figcaption><strong>{member.name}</strong><span>{member.role}</span></figcaption>
-            </figure>
-          ))}
-        </div>
-      </div>
-    </div>
-    <a class="editorial-link about-team__cta" href="/contacto/" data-reveal>Conversemos <span aria-hidden="true">↗</span></a>
-  </section></Layout>
+</Layout>

@@ -58,6 +58,14 @@
     });
 
     document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        const dialog = document.querySelector<HTMLDialogElement>('#lightbox[open]');
+        if (dialog) {
+          event.preventDefault();
+          dialog.close();
+        }
+        return;
+      }
       if ((event.key === 'Enter' || event.key === ' ') && (event.target as HTMLElement).matches?.('[data-lightbox][role="button"]')) {
         event.preventDefault();
         (event.target as HTMLElement).click();

@@ -1,47 +1,68 @@
 ---
 const photos = [
-  { title: 'Fiesta San Pedro', src: '/media/projects/eventos-20.webp' },
-  { title: '1° Festival de Jazz', src: '/media/projects/eventos-05.webp' },
-  { title: 'Invierno en Escena', src: '/media/projects/eventos-26.webp' },
-  { title: '70 Aniversario Orquesta', src: '/media/projects/eventos-07.webp' },
-  { title: 'Matrimonio en iglesia', src: '/media/projects/matrimonios-09.webp' },
-  { title: 'Matrimonio en iglesia', src: '/media/projects/matrimonios-12.webp' },
-  { title: 'Fiesta Chilenidad', src: '/media/projects/eventos-15.webp' },
-  { title: 'Fiesta San Pedro', src: '/media/projects/eventos-22.webp' },
-  { title: 'Invierno en Escena', src: '/media/projects/eventos-30.webp' },
-  { title: '70 Aniversario Orquesta', src: '/media/projects/eventos-09.webp' },
+  { title: "Fiesta San Pedro", src: "/media/projects/eventos-20.webp" },
+  { title: "1° Festival de Jazz", src: "/media/projects/eventos-05.webp" },
+  { title: "Invierno en Escena", src: "/media/projects/eventos-26.webp" },
+  { title: "70 Aniversario Orquesta", src: "/media/projects/eventos-07.webp" },
+  {
+    title: "Matrimonio en iglesia",
+    src: "/media/projects/matrimonios-09.webp",
+  },
+  {
+    title: "Matrimonio en iglesia",
+    src: "/media/projects/matrimonios-12.webp",
+  },
+  { title: "Fiesta Chilenidad", src: "/media/projects/eventos-15.webp" },
+  { title: "Fiesta San Pedro", src: "/media/projects/eventos-22.webp" },
+  { title: "Invierno en Escena", src: "/media/projects/eventos-30.webp" },
+  { title: "70 Aniversario Orquesta", src: "/media/projects/eventos-09.webp" },
 ];
 const strings = [photos.slice(0, 5), photos.slice(5, 10)];
 const videos = [
-  { title: 'Video destacado', size: 'large' },
-  { title: 'Video 2', size: 'standard' },
-  { title: 'Video 3', size: 'standard' },
+  { title: "Video destacado", size: "large" },
+  { title: "Video 2", size: "standard" },
+  { title: "Video 3", size: "standard" },
 ];
 ---
 
-<section class="portfolio-slots garland-section" id="seleccion" aria-labelledby="garland-title">
+<section
+  class="portfolio-slots garland-section"
+  id="seleccion"
+  aria-labelledby="garland-title"
+>
   <div class="section-heading section-heading--center" data-reveal>
-    <i class="bulb" style="--x: 12%; --cord: 20px; --d: -3s" aria-hidden="true"></i>
+    <i class="bulb" style="--x: 12%; --cord: 20px; --d: -3s" aria-hidden="true"
+    ></i>
     <h2 id="garland-title">Seleccion</h2>
     <p class="darkroom-sign" aria-hidden="true"><i></i>Revelando…</p>
   </div>
 
   <div class="garland-scroll">
-    {strings.map((row, rowIndex) => (
-      <div class="garland" style={`--row:${rowIndex}`} data-reveal>
-        <svg class="garland__thread" aria-hidden="true">
-          <path d="" fill="none" />
-        </svg>
-        {row.map((photo, index) => (
-          <button class="garland__item" type="button" style={`--i:${index}`} aria-label={`Abrir ${photo.title}`} data-slot-dialog={`photo-${rowIndex * 5 + index}`}>
-            <span class="garland__swing">
-              <span class="garland__pin" aria-hidden="true"></span>
-              <span class="garland__photo"><img src={photo.src} alt="" loading="lazy" decoding="async" /></span>
-            </span>
-          </button>
-        ))}
-      </div>
-    ))}
+    {
+      strings.map((row, rowIndex) => (
+        <div class="garland" style={`--row:${rowIndex}`} data-reveal>
+          <svg class="garland__thread" aria-hidden="true">
+            <path d="" fill="none" />
+          </svg>
+          {row.map((photo, index) => (
+            <button
+              class="garland__item"
+              type="button"
+              style={`--i:${index}`}
+              aria-label={`Abrir ${photo.title}`}
+              data-slot-dialog={`photo-${rowIndex * 5 + index}`}
+            >
+              <span class="garland__swing">
+                <span class="garland__pin" aria-hidden="true" />
+                <span class="garland__photo">
+                  <img src={photo.src} alt="" loading="lazy" decoding="async" />
+                </span>
+              </span>
+            </button>
+          ))}
+        </div>
+      ))
+    }
   </div>
 </section>
 
@@ -51,89 +72,171 @@ const videos = [
   </div>
 
   <div class="portfolio-grid">
-    {videos.map((video, index) => (
-      <article class:list={{ 'portfolio-slot': true, 'portfolio-slot--video': true, 'portfolio-slot--large': video.size === 'large' }} data-reveal style={`--delay:${index * 120}ms`}>
-        <button class="portfolio-slot__trigger" type="button" aria-label={`Abrir ${video.title.toLowerCase()}`} data-slot-dialog={`video-${index}`}>
-          <span class="portfolio-slot__frame" aria-hidden="true">
-            <span class="portfolio-slot__window" data-timecode="00:00:00:00">
-              <span class="portfolio-slot__mark">▶</span>
+    {
+      videos.map((video, index) => (
+        <article
+          class:list={{
+            "portfolio-slot": true,
+            "portfolio-slot--video": true,
+            "portfolio-slot--large": video.size === "large",
+          }}
+          data-reveal
+          style={`--delay:${index * 120}ms`}
+        >
+          <button
+            class="portfolio-slot__trigger"
+            type="button"
+            aria-label={`Abrir ${video.title.toLowerCase()}`}
+            data-slot-dialog={`video-${index}`}
+          >
+            <span class="portfolio-slot__frame" aria-hidden="true">
+              <span class="portfolio-slot__window" data-timecode="00:00:00:00">
+                <span class="portfolio-slot__mark">▶</span>
+              </span>
             </span>
-          </span>
-        </button>
-      </article>
-    ))}
+          </button>
+        </article>
+      ))
+    }
   </div>
 </section>
 
-{photos.map((photo, index) => (
-  <dialog class="image-dialog portfolio-slot-dialog" data-group="photo" id={`photo-${index}`} aria-label={photo.title}>
-    <div class="image-dialog__content">
-      <div class="image-dialog__header">
-        <button class="image-dialog__close" type="button" aria-label={`Cerrar ${photo.title}`}>
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="item-dialog__stage">
-        <button class="item-dialog__nav item-dialog__nav--previous" type="button" data-slot-step="-1" aria-label="Trabajo anterior"><span aria-hidden="true">‹</span></button>
-        <div class="zoom-frame" data-zoom>
-          <img src={photo.src} alt={photo.title} />
+{
+  photos.map((photo, index) => (
+    <dialog
+      class="image-dialog portfolio-slot-dialog"
+      data-group="photo"
+      id={`photo-${index}`}
+      aria-label={photo.title}
+    >
+      <div class="image-dialog__content">
+        <div class="image-dialog__header">
+          <button
+            class="image-dialog__close"
+            type="button"
+            aria-label={`Cerrar ${photo.title}`}
+          >
+            <span aria-hidden="true">×</span>
+          </button>
         </div>
-        <button class="item-dialog__nav item-dialog__nav--next" type="button" data-slot-step="1" aria-label="Trabajo siguiente"><span aria-hidden="true">›</span></button>
+        <div class="item-dialog__stage">
+          <button
+            class="item-dialog__nav item-dialog__nav--previous"
+            type="button"
+            data-slot-step="-1"
+            aria-label="Trabajo anterior"
+          >
+            <span aria-hidden="true">‹</span>
+          </button>
+          <div class="zoom-frame" data-zoom>
+            <img src={photo.src} alt={photo.title} />
+          </div>
+          <button
+            class="item-dialog__nav item-dialog__nav--next"
+            type="button"
+            data-slot-step="1"
+            aria-label="Trabajo siguiente"
+          >
+            <span aria-hidden="true">›</span>
+          </button>
+        </div>
       </div>
-    </div>
-  </dialog>
-))}
+    </dialog>
+  ))
+}
 
-{videos.map((video, index) => (
-  <dialog class="image-dialog portfolio-slot-dialog" data-group="video" id={`video-${index}`} aria-label={video.title}>
-    <div class="image-dialog__content">
-      <div class="image-dialog__header">
-        <button class="image-dialog__close" type="button" aria-label={`Cerrar ${video.title.toLowerCase()}`}>
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="item-dialog__stage">
-        <button class="item-dialog__nav item-dialog__nav--previous" type="button" data-slot-step="-1" aria-label="Video anterior"><span aria-hidden="true">‹</span></button>
-        <div class="portfolio-slot-dialog__preview" aria-label={`Previsualizacion de ${video.title.toLowerCase()}`}>
-          <span aria-hidden="true">▶</span>
+{
+  videos.map((video, index) => (
+    <dialog
+      class="image-dialog portfolio-slot-dialog"
+      data-group="video"
+      id={`video-${index}`}
+      aria-label={video.title}
+    >
+      <div class="image-dialog__content">
+        <div class="image-dialog__header">
+          <button
+            class="image-dialog__close"
+            type="button"
+            aria-label={`Cerrar ${video.title.toLowerCase()}`}
+          >
+            <span aria-hidden="true">×</span>
+          </button>
         </div>
-        <button class="item-dialog__nav item-dialog__nav--next" type="button" data-slot-step="1" aria-label="Video siguiente"><span aria-hidden="true">›</span></button>
+        <div class="item-dialog__stage">
+          <button
+            class="item-dialog__nav item-dialog__nav--previous"
+            type="button"
+            data-slot-step="-1"
+            aria-label="Video anterior"
+          >
+            <span aria-hidden="true">‹</span>
+          </button>
+          <div
+            class="portfolio-slot-dialog__preview"
+            aria-label={`Previsualizacion de ${video.title.toLowerCase()}`}
+          >
+            <span aria-hidden="true">▶</span>
+          </div>
+          <button
+            class="item-dialog__nav item-dialog__nav--next"
+            type="button"
+            data-slot-step="1"
+            aria-label="Video siguiente"
+          >
+            <span aria-hidden="true">›</span>
+          </button>
+        </div>
       </div>
-    </div>
-  </dialog>
-))}
+    </dialog>
+  ))
+}
 
 <script>
-  import { attachZoom, resetZoom } from '../scripts/zoom';
+  import { attachZoom, resetZoom } from "../scripts/zoom";
 
   const setupPortfolioSlotDialogs = () => {
-    document.querySelectorAll<HTMLButtonElement>('[data-slot-dialog]').forEach((trigger) => {
-      const dialogId = trigger.dataset.slotDialog;
-      const dialog = dialogId ? document.getElementById(dialogId) as HTMLDialogElement | null : null;
-      const close = dialog?.querySelector<HTMLButtonElement>('.image-dialog__close');
+    document
+      .querySelectorAll<HTMLButtonElement>("[data-slot-dialog]")
+      .forEach((trigger) => {
+        const dialogId = trigger.dataset.slotDialog;
+        const dialog = dialogId
+          ? (document.getElementById(dialogId) as HTMLDialogElement | null)
+          : null;
+        const close = dialog?.querySelector<HTMLButtonElement>(
+          ".image-dialog__close",
+        );
 
-      if (!dialog || !close || trigger.dataset.dialogReady === 'true') return;
+        if (!dialog || !close || trigger.dataset.dialogReady === "true") return;
 
-      trigger.dataset.dialogReady = 'true';
-      const zoomFrame = dialog.querySelector<HTMLElement>('[data-zoom]');
-      if (zoomFrame) {
-        attachZoom(zoomFrame, () => dialog.close());
-        dialog.addEventListener('close', () => resetZoom(zoomFrame));
-      }
-      trigger.addEventListener('click', () => dialog.showModal());
-      close.addEventListener('click', () => dialog.close());
-      dialog.addEventListener('click', (event) => {
-        if (event.target === dialog) dialog.close();
+        trigger.dataset.dialogReady = "true";
+        const zoomFrame = dialog.querySelector<HTMLElement>("[data-zoom]");
+        if (zoomFrame) {
+          attachZoom(zoomFrame, () => dialog.close());
+          dialog.addEventListener("close", () => resetZoom(zoomFrame));
+        }
+        trigger.addEventListener("click", () => dialog.showModal());
+        close.addEventListener("click", () => dialog.close());
+        dialog.addEventListener("click", (event) => {
+          if (event.target === dialog) dialog.close();
+        });
+        dialog
+          .querySelectorAll<HTMLButtonElement>("[data-slot-step]")
+          .forEach((button) => {
+            button.addEventListener("click", () =>
+              stepSlot(dialog, Number(button.dataset.slotStep)),
+            );
+          });
       });
-      dialog.querySelectorAll<HTMLButtonElement>('[data-slot-step]').forEach((button) => {
-        button.addEventListener('click', () => stepSlot(dialog, Number(button.dataset.slotStep)));
-      });
-    });
   };
 
   // Cambia de trabajo dentro del mismo grupo (fotos o videos) sin dejar de mostrar el popup.
   const stepSlot = (current: HTMLDialogElement, step: number) => {
-    const dialogs = Array.from(document.querySelectorAll<HTMLDialogElement>(`.portfolio-slot-dialog[data-group="${current.dataset.group}"]`));
+    const dialogs = Array.from(
+      document.querySelectorAll<HTMLDialogElement>(
+        `.portfolio-slot-dialog[data-group="${current.dataset.group}"]`,
+      ),
+    );
     const index = dialogs.indexOf(current);
     const next = dialogs[(index + step + dialogs.length) % dialogs.length];
     if (!next || next === current) return;
@@ -143,70 +246,98 @@ const videos = [
 
   // Las fotos del tendedero se "revelan" al entrar en pantalla.
   const setupDevelop = () => {
-    const items = document.querySelectorAll<HTMLElement>('.garland__item:not([data-develop])');
-    if (!items.length || !('IntersectionObserver' in window)) return;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-developed');
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: 0.25 });
+    const items = document.querySelectorAll<HTMLElement>(
+      ".garland__item:not([data-develop])",
+    );
+    if (!items.length || !("IntersectionObserver" in window)) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-developed");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.25 },
+    );
     items.forEach((item) => {
-      item.dataset.develop = 'true';
-      item.classList.add('is-developing');
+      item.dataset.develop = "true";
+      item.classList.add("is-developing");
       observer.observe(item);
     });
   };
 
   if (!(window as any).__slotKeysReady) {
     (window as any).__slotKeysReady = true;
-    document.addEventListener('keydown', (event) => {
-      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-      const open = document.querySelector<HTMLDialogElement>('.portfolio-slot-dialog[open]');
-      if (open) stepSlot(open, event.key === 'ArrowRight' ? 1 : -1);
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+      const open = document.querySelector<HTMLDialogElement>(
+        ".portfolio-slot-dialog[open]",
+      );
+      if (open) stepSlot(open, event.key === "ArrowRight" ? 1 : -1);
     });
   }
 
   // El hilo y las pinzas comparten la misma parabola, calculada en pixeles reales.
   const hangPhotos = () => {
-    document.querySelectorAll<HTMLElement>('.garland').forEach((garland) => {
+    document.querySelectorAll<HTMLElement>(".garland").forEach((garland) => {
       const width = garland.getBoundingClientRect().width;
       if (!width) return;
       const sag = 44;
       const reach = 2400;
       const slope = (4 * sag) / width;
       const curveY = (x: number) => 4 + 4 * sag * (x / width) * (1 - x / width);
-      const path = garland.querySelector('.garland__thread path');
-      path?.setAttribute('d', `M${-reach} ${4 - slope * reach} L0 4 Q${width / 2} ${4 + 2 * sag} ${width} 4 L${width + reach} ${4 - slope * reach}`);
+      const path = garland.querySelector(".garland__thread path");
+      path?.setAttribute(
+        "d",
+        `M${-reach} ${4 - slope * reach} L0 4 Q${width / 2} ${4 + 2 * sag} ${width} 4 L${width + reach} ${4 - slope * reach}`,
+      );
       const origin = garland.getBoundingClientRect().left;
-      const svgTop = garland.querySelector('.garland__thread')!.getBoundingClientRect().top;
-      const items = [...garland.querySelectorAll<HTMLElement>('.garland__item')];
+      const svgTop = garland
+        .querySelector(".garland__thread")!
+        .getBoundingClientRect().top;
+      const items = [
+        ...garland.querySelectorAll<HTMLElement>(".garland__item"),
+      ];
       items.forEach((item) => {
         const itemBox = item.getBoundingClientRect();
-        const x = Math.min(Math.max(itemBox.left + itemBox.width / 2 - origin, 0), width);
-        item.style.setProperty('--drop', `${curveY(x).toFixed(1)}px`);
+        const x = Math.min(
+          Math.max(itemBox.left + itemBox.width / 2 - origin, 0),
+          width,
+        );
+        item.style.setProperty("--drop", `${curveY(x).toFixed(1)}px`);
       });
       // Corrige cualquier desfase real entre el hilo y la parte superior de cada foto.
       // Extremos un poco mas arriba (tocan el hilo) y centrales un poco mas abajo.
       items.forEach((item) => {
         const itemBox = item.getBoundingClientRect();
-        const x = Math.min(Math.max(itemBox.left + itemBox.width / 2 - origin, 0), width);
+        const x = Math.min(
+          Math.max(itemBox.left + itemBox.width / 2 - origin, 0),
+          width,
+        );
         const error = itemBox.top - svgTop - curveY(x);
-        if (Math.abs(error) > 0.5) item.style.setProperty('--drop', `${(curveY(x) - error).toFixed(1)}px`);
+        if (Math.abs(error) > 0.5)
+          item.style.setProperty(
+            "--drop",
+            `${(curveY(x) - error).toFixed(1)}px`,
+          );
       });
       const nudge = [-20, 0, 6, 0, -20];
       items.forEach((item, index) => {
-        const current = parseFloat(item.style.getPropertyValue('--drop'));
-        item.style.setProperty('--drop', `${(current + (nudge[index] ?? 0)).toFixed(1)}px`);
+        const current = parseFloat(item.style.getPropertyValue("--drop"));
+        item.style.setProperty(
+          "--drop",
+          `${(current + (nudge[index] ?? 0)).toFixed(1)}px`,
+        );
       });
     });
   };
-  const hangObserver = 'ResizeObserver' in window ? new ResizeObserver(() => hangPhotos()) : null;
+  const hangObserver =
+    "ResizeObserver" in window ? new ResizeObserver(() => hangPhotos()) : null;
   if (!(window as any).__hangReady) {
     (window as any).__hangReady = true;
-    window.addEventListener('resize', hangPhotos);
-    window.addEventListener('load', hangPhotos);
+    window.addEventListener("resize", hangPhotos);
+    window.addEventListener("load", hangPhotos);
     document.fonts?.ready.then(hangPhotos);
   }
 
@@ -214,8 +345,10 @@ const videos = [
     setupPortfolioSlotDialogs();
     setupDevelop();
     hangPhotos();
-    document.querySelectorAll('.garland').forEach((garland) => hangObserver?.observe(garland));
+    document
+      .querySelectorAll(".garland")
+      .forEach((garland) => hangObserver?.observe(garland));
   };
   init();
-  document.addEventListener('astro:page-load', init);
+  document.addEventListener("astro:page-load", init);
 </script>
