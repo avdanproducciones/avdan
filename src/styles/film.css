@@ -150,6 +150,8 @@ a:focus-visible, button:focus-visible { outline-color: var(--bone); }
 .footer-label, .footer-bottom small, .footer-email span, .footer-cta span { color: var(--room); }
 .footer-bottom { background: #ececec; }
 .footer-email:hover, .footer-cta:hover, .footer-social a:hover { color: var(--safelight); }
+.idea-highlight, h1 .idea-highlight, .editorial-link .idea-highlight, .site-footer .idea-highlight, .service-step__body .idea-highlight { color: var(--safelight); }
+.editorial-link:has(.idea-highlight):hover { color: var(--bone); }
 
 @media (max-width: 900px) {
   .home-page .hero-image { margin: 0 auto; }
@@ -237,9 +239,10 @@ body { overflow-x: clip; }
 .service-step::after { content: none; animation: none; }
 
 /* Video introductorio a pantalla completa (sin navbar), con marco */
-.hero-video { background: var(--room); height: calc(100svh - var(--header-h)); min-height: 360px; padding: clamp(10px, 1.6vw, 24px); }
-.hero-video__frame { background: #000; position: relative; border: 2px solid rgba(231, 229, 228, .55); box-shadow: 0 0 0 clamp(6px, .8vw, 12px) var(--film), 0 20px 60px rgba(0, 0, 0, .6); height: 100%; overflow: hidden; width: 100%; }
+.hero-video { background: var(--room); display: flex; flex-direction: column; height: calc(100svh - var(--header-h)); min-height: 240px; padding: clamp(10px, 1.6vw, 24px) clamp(10px, 1.6vw, 24px) 0; }
+.hero-video__frame { background: #000; position: relative; border: 2px solid rgba(231, 229, 228, .55); box-shadow: 0 0 0 clamp(6px, .8vw, 12px) var(--film), 0 20px 60px rgba(0, 0, 0, .6); flex: 1 1 0; min-height: 0; overflow: hidden; width: 100%; }
 .hero-video__player { background: #000; display: block; height: 100%; object-fit: contain; width: 100%; }
+.hero-video .scroll-cue { flex: 0 0 56px; margin: 0; width: 100%; }
 .home-page { padding-top: 0; }
 .home-page .scroll-cue { margin-top: 28px; }
 
@@ -280,8 +283,14 @@ dialog[open].image-dialog .image-dialog__content,
 dialog[open].image-dialog::backdrop { animation: popup-fade .4s ease both; }
 .category-dialog::before, .item-dialog { animation: popup-fade .4s ease both; }
 .category-dialog__side { animation: popup-fade .6s ease .1s both; }
+.category-dialog__gallery { animation: popup-in .55s cubic-bezier(.16, 1, .3, 1) both; }
+.category-dialog__image { display: block; height: 100%; position: relative; width: 100%; }
+.category-dialog__image img { opacity: 0; transition: opacity .55s ease; }
+.category-dialog__image--loaded img { opacity: 1; }
+.category-dialog__image-error { align-items: center; display: flex; font-family: var(--font-text); font-size: 14px; height: 100%; justify-content: center; padding: 12px; text-align: center; }
 @media (prefers-reduced-motion: reduce) {
-  dialog[open].image-dialog .image-dialog__content, .category-dialog__content, .item-dialog__content, dialog[open].image-dialog::backdrop, .category-dialog::before, .item-dialog, .category-dialog__side { animation: none; }
+  dialog[open].image-dialog .image-dialog__content, .category-dialog__content, .category-dialog__gallery, .item-dialog__content, dialog[open].image-dialog::backdrop, .category-dialog::before, .item-dialog, .category-dialog__side { animation: none; }
+  .category-dialog__image img { transition: none; }
   .scroll-top { transition: none; }
 }.garland-section .section-heading.section-heading--center, .portfolio-slots .section-heading.section-heading--center, .work-section .section-heading.section-heading--center { justify-content: center; text-align: center; }
 
@@ -323,7 +332,7 @@ html.reveal-enabled [data-reveal].is-visible { transform: none; }
 /* Video: si el navegador bloquea el audio, un velo invita a tocar para verlo con sonido */
 .hero-video__sound {
   background: rgba(0, 0, 0, .45); border-radius: 0; bottom: 0; flex-direction: column; font-size: clamp(14px, 1.6vw, 22px);
-  gap: 14px; inset: 0; justify-content: center; left: 0; right: 0; top: 0; padding: 0; width: 100%; height: calc(100% - 64px);
+  gap: 14px; inset: 0; justify-content: center; padding: 0; width: 100%; height: 100%;
 }
 .hero-video__sound svg { height: 44px; width: 44px; }
 /* Logo sin animacion al pasar el cursor */
