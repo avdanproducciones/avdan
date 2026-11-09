@@ -276,6 +276,18 @@ body { overflow-x: clip; }
 .scroll-top:hover { background: #ef4a32; transform: translateY(-4px); }
 .scroll-top svg { fill: none; height: 22px; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.4; width: 22px; }
 @media (max-width: 700px) { .scroll-top { bottom: 16px; height: 46px; right: 16px; width: 46px; } }
+.floating-whatsapp { align-items: center; background: #25d366; border-radius: 50%; bottom: max(24px, env(safe-area-inset-bottom)); color: #102b1a; display: flex; height: 56px; justify-content: center; position: fixed; right: max(24px, env(safe-area-inset-right)); transition: transform .2s ease, background .2s ease; width: 56px; z-index: 30; }
+.floating-whatsapp:hover { background: #40e27b; transform: translateY(-4px); }
+.floating-whatsapp:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.floating-whatsapp svg { fill: none; height: 32px; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; width: 32px; }
+.floating-whatsapp__fill { fill: currentColor; stroke: none; }
+html:has(dialog[open], [role="dialog"][aria-modal="true"]) .floating-whatsapp { display: none; }
+.scroll-top { bottom: max(96px, calc(env(safe-area-inset-bottom) + 72px)); }
+@media (max-width: 700px) {
+  .floating-whatsapp { bottom: max(16px, env(safe-area-inset-bottom)); right: max(16px, env(safe-area-inset-right)); }
+  .scroll-top { bottom: max(88px, calc(env(safe-area-inset-bottom) + 72px)); }
+}
+@media (prefers-reduced-motion: reduce) { .floating-whatsapp { transition: none; } .floating-whatsapp:hover { transform: none; } }
 
 /* AnimaciA³n suave y moderna para todos los popups */
 @keyframes popup-in { from { opacity: 0; transform: translateY(28px) scale(.94); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }

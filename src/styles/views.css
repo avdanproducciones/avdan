@@ -137,28 +137,36 @@ html.reveal-enabled .service-step.is-visible .service-step__body li:nth-child(3)
 .about-team__cta { margin-top: 90px; }
 .about-collage__photo[data-lightbox] { cursor: zoom-in; }
 
-/* Contacto: tarjetas oscuras de redes */
+/* Contacto: copias de redes sobre papel fotografico */
 .social-previews { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); margin-top: 70px; }
 .social-card { min-width: 0; }
-.social-card { background: var(--film); color: var(--bone); display: grid; gap: 20px; padding: 28px; position: relative; transition: transform .35s cubic-bezier(.2,.75,.25,1), background .25s ease; }
+.social-card { background: var(--bone); color: var(--room); display: grid; gap: 20px; padding: 28px 28px 48px; position: relative; transition: transform .35s cubic-bezier(.2,.75,.25,1), background .25s ease, color .25s ease; }
 .social-card::before { background: #b98a55; border-radius: 3px; content: ''; height: 36px; left: 50%; margin-left: -6px; position: absolute; top: -12px; width: 12px; }
-.social-card--instagram { transform: rotate(-1.2deg); }
+.social-card--instagram { --instagram-gradient: linear-gradient(45deg, #feda75 0%, #fa7e1e 30%, #d62976 55%, #962fbf 80%, #4f5bd5 100%); transform: rotate(-1.2deg); }
 .social-card--youtube { margin-top: 48px; transform: rotate(1.2deg); }
-.social-card:hover { background: var(--safelight); transform: translateY(-8px) rotate(0); }
+.social-card:hover, .social-card:focus-visible { color: #fff; transform: translateY(-8px) rotate(0); }
+.social-card--instagram:hover, .social-card--instagram:focus-visible { background-image: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), var(--instagram-gradient); }
+.social-card--youtube:hover, .social-card--youtube:focus-visible { background: #c00; }
 .social-card__head { align-items: center; display: flex; gap: 14px; }
 .social-card__head strong { display: block; font-size: 14px; }
 .social-card__head small { font-size: 11px; opacity: .75; }
-.social-card__avatar { align-items: center; background: var(--bone); border-radius: 50%; color: var(--room); display: inline-flex; font-family: var(--font); font-size: 13px; height: 48px; justify-content: center; width: 48px; }
+.social-card__avatar { align-items: center; background: #000; border-radius: 50%; color: #fff; display: inline-flex; flex: 0 0 48px; height: 48px; justify-content: center; width: 48px; }
+.social-card--instagram .social-card__avatar { background: var(--instagram-gradient); }
+.social-card--youtube .social-card__avatar { background: #fff; }
+.social-card__avatar svg { fill: none; height: 28px; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; width: 28px; }
+.social-card__avatar-fill { fill: currentColor; stroke: none; }
+.social-card--youtube .social-card__avatar svg { color: #ff0000; fill: currentColor; stroke: none; }
+.social-card--youtube .social-card__avatar-fill { fill: #fff; }
+.social-card:hover .social-card__head small, .social-card:focus-visible .social-card__head small { opacity: 1; }
 .social-card__grid { display: grid; gap: 6px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.social-card__grid span { align-items: center; aspect-ratio: 1; background: #2c2a27; display: flex; font-size: 22px; font-weight: 200; justify-content: center; transition: transform .3s ease; }
+.social-card__grid span { align-items: center; aspect-ratio: 1; background: #2c2a27; color: var(--bone); display: flex; font-size: 22px; font-weight: 200; justify-content: center; transition: transform .3s ease; }
 .social-card:hover .social-card__grid span:nth-child(odd) { transform: translateY(-4px); }
 .social-card:hover .social-card__grid span:nth-child(even) { transform: translateY(4px); }
-.social-card__video { align-items: center; aspect-ratio: 16 / 9; background: var(--room); display: flex; justify-content: center; }
-.social-card__play { border-color: transparent transparent transparent var(--bone); border-style: solid; border-width: 18px 0 18px 30px; height: 0; transition: transform .3s ease; width: 0; }
+.social-card__video { align-items: center; aspect-ratio: 16 / 9; background: var(--room); display: flex; justify-content: center; overflow: hidden; position: relative; }
+.social-card__video img { height: 100%; inset: 0; object-fit: cover; position: absolute; width: 100%; }
+.social-card__play { border-color: transparent transparent transparent var(--bone); border-style: solid; border-width: 18px 0 18px 30px; filter: drop-shadow(0 1px 5px #000); height: 0; position: relative; transition: transform .3s ease; width: 0; }
 .social-card:hover .social-card__play { transform: scale(1.15); }
-.social-card__lines { display: grid; gap: 8px; }
-.social-card__lines span { background: #2c2a27; height: 12px; }
-.social-card__lines span:last-child { width: 55%; }
+.social-card__video-title { font-size: 16px; }
 .social-card__cta { font-family: var(--font); font-size: 14px; }
 .contact-whatsapp { margin-top: 90px; }
 
