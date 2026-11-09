@@ -1,61 +1,241 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+
+const services = [
+  {
+    title: "EVENTOS",
+    headline: [
+      { text: "Más que registrar un evento, " },
+      { text: "contamos", highlight: true },
+      { text: " lo que sucede en él." },
+    ],
+    offerings: [
+      "COBERTURA AUDIOVISUAL",
+      "REGISTRO FOTOGRÁFICO Y VIDEO",
+      "RESÚMENES Y CÁPSULAS",
+    ],
+  },
+  {
+    title: "MATRIMONIOS",
+    headline: [
+      { text: "Historias", highlight: true },
+      { text: " que merecen ser recordadas tal como se vivieron." },
+    ],
+    offerings: [
+      "FOTOGRAFÍA DE MATRIMONIO",
+      "VIDEO CINEMATOGRÁFICO",
+      "REGISTRO DE CEREMONIA Y CELEBRACIÓN",
+    ],
+  },
+  {
+    title: "PUBLICIDAD",
+    headline: [
+      { text: "Tu negocio", highlight: true },
+      { text: " tiene algo que ofrecer. Hagamos que se note." },
+    ],
+    offerings: [
+      "CONCEPTO CREATIVO",
+      "VIDEOS PUBLICITARIOS",
+      "CONTENIDO PARA REDES SOCIALES",
+    ],
+  },
+  {
+    title: "FOTOGRAFÍA",
+    headline: [
+      { text: "Cada imagen " },
+      { text: "comunica", highlight: true },
+      { text: " algo. Hagamos que " },
+      { text: "comunique", highlight: true },
+      { text: " lo que buscas." },
+    ],
+    offerings: [
+      "FOTOGRAFÍA DE PRODUCTOS",
+      "RETRATOS Y SESIONES",
+      "FOTOGRAFÍA COMERCIAL",
+    ],
+  },
+  {
+    title: "DRONE Y FOTOGRAFÍA AÉREA",
+    headline: [
+      { text: "Hay " },
+      { text: "perspectivas", highlight: true },
+      { text: " que solo se descubren desde el aire." },
+    ],
+    offerings: [
+      "FOTOGRAFÍA AÉREA",
+      "VIDEO CON DRONE",
+      "PLANOS Y TOMAS AÉREAS",
+    ],
+  },
+  {
+    title: "EDICIÓN Y POSTPRODUCCIÓN",
+    headline: [
+      { text: "El material cobra " },
+      { text: "sentido", highlight: true },
+      { text: " cuando cada pieza encuentra su lugar." },
+    ],
+    offerings: [
+      "MONTAJE AUDIOVISUAL",
+      "CORRECCIÓN Y GRADACIÓN DE COLOR",
+      "EDICIÓN Y DISEÑO SONORO",
+    ],
+  },
+  {
+    title: "DOCUMENTALES",
+    headline: [
+      { text: "Las " },
+      { text: "historias reales", highlight: true },
+      { text: " merecen ser " },
+      { text: "contadas", highlight: true },
+      { text: " con otra mirada." },
+    ],
+    offerings: [
+      "INVESTIGACIÓN Y GUIÓN",
+      "ENTREVISTAS Y TESTIMONIOS",
+      "NARRATIVA DOCUMENTAL",
+    ],
+  },
+];
+
+const editingImages = [
+  {
+    src: "/media/servicios/edicion-1.webp",
+    alt: "Línea de tiempo y panel de color en Adobe Premiere Pro",
+    title: "Montaje y color en Premiere Pro",
+    caption: "Montaje y color",
+  },
+  {
+    src: "/media/servicios/edicion-2.webp",
+    alt: "Árbol de nodos y curvas de color en DaVinci Resolve",
+    title: "Gradación de color con nodos en DaVinci Resolve",
+    caption: "Gradación con nodos",
+  },
+  {
+    src: "/media/servicios/edicion-3.webp",
+    alt: "Corrección primaria de color sobre un retrato en DaVinci Resolve",
+    title: "Corrección primaria en DaVinci Resolve",
+    caption: "Corrección primaria",
+  },
+];
 ---
+
 <Layout title="Servicios">
   <section class="page interior-page interior-page--services">
     <div class="services-hero">
-    <div class="hero-copy" data-reveal>
-      <h1>De <span class="idea-highlight">tu idea</span> a la imagen.</h1>
-      <p class="intro">Creamos fotografia y contenido audiovisual que comunica, emociona y destaca, desde la planificacion hasta la entrega final.</p>
-      <a class="editorial-link" href="/contacto/"><span>Cuentanos <span class="idea-highlight">tu idea</span></span> <span aria-hidden="true">↗</span></a>
+      <div class="hero-copy" data-reveal>
+        <h1>De <span class="idea-highlight">tu idea</span> a la imagen.</h1>
+        <p class="intro">
+          Creamos fotografía y contenido audiovisual que comunica, emociona y
+          destaca, desde la planificación hasta la entrega final.
+        </p>
+        <a class="editorial-link" href="/contacto/">
+          <span>Cuentanos <span class="idea-highlight">tu idea</span></span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <button
+        class="edit-showcase__item services-hero__compare"
+        data-reveal="right"
+        style="--delay:200ms"
+        type="button"
+        data-lightbox="/media/servicios/edicion-comparacion.webp"
+        data-lightbox-title="Comparación de color: material original y exportado"
+      >
+        <img
+          src="/media/servicios/edicion-comparacion.webp"
+          alt="Comparación de color entre el material original y el exportado"
+          loading="lazy"
+          decoding="async"
+        />
+        <span>Corrección de color · antes y después</span>
+      </button>
     </div>
-    <button class="edit-showcase__item services-hero__compare" data-reveal="right" style="--delay:200ms" type="button" data-lightbox="/media/servicios/edicion-comparacion.webp" data-lightbox-title="Comparacion de color: material original y exportado">
-          <img src="/media/servicios/edicion-comparacion.webp" alt="Comparacion de color entre el material original y el exportado" loading="lazy" decoding="async" />
-          <span>Correccion de color · antes y despues</span>
-        </button>
-    </div>
-    <a class="scroll-cue" href="#servicios-lista" aria-label="Bajar a los servicios"><span aria-hidden="true"></span></a>
+    <a
+      class="scroll-cue"
+      href="#servicios-lista"
+      aria-label="Bajar a los servicios"><span aria-hidden="true"></span></a
+    >
     <div class="service-path" id="servicios-lista">
-      <article class="service-step" data-reveal data-reveal-repeat>
-        <div class="service-step__title" data-from="left"><h2>Direccion<br />creativa</h2></div>
-        <div class="service-step__body" data-from="right">
-          <p>Escuchamos <span class="idea-highlight">tu idea</span> y definimos como comunicarla a traves de una propuesta visual.</p>
-          <ul><li>Desarrollo de concepto</li><li>Guion y storyboard</li></ul>
-        </div>
-      </article>
-      <div class="service-image">
-        <button class="edit-showcase__item" data-reveal type="button" data-lightbox="/media/servicios/edicion-1.webp" data-lightbox-title="Montaje y color en Premiere Pro">
-          <img src="/media/servicios/edicion-1.webp" alt="Linea de tiempo y panel de color en Premiere Pro" loading="lazy" decoding="async" />
-          <span>Montaje y color</span>
-        </button>
-      </div>
-      <article class="service-step" data-reveal data-reveal-repeat>
-        <div class="service-step__title" data-from="right"><h2>Produccion<br />audiovisual</h2></div>
-        <div class="service-step__body" data-from="left">
-          <p>Adaptamos la fotografia y el video a tu proyecto, cuidando cada detalle de la produccion.</p>
-          <ul><li>Video y fotografia</li><li>Cobertura de eventos</li><li>Campañas de marca</li></ul>
-        </div>
-      </article>
-      <div class="service-image">
-        <button class="edit-showcase__item" data-reveal type="button" data-lightbox="/media/servicios/edicion-2.webp" data-lightbox-title="Gradacion de color con nodos en DaVinci Resolve">
-          <img src="/media/servicios/edicion-2.webp" alt="Arbol de nodos y curvas de color en DaVinci Resolve" loading="lazy" decoding="async" />
-          <span>Gradacion con nodos</span>
-        </button>
-      </div>
-      <article class="service-step" data-reveal data-reveal-repeat>
-        <div class="service-step__title" data-from="left"><h2>Edicion y<br />postproduccion</h2></div>
-        <div class="service-step__body" data-from="right">
-          <p>Montaje, color y sonido para dar forma al contenido y cuidar el resultado final.</p>
-          <ul><li>Montaje y ritmo</li><li>Correccion de color</li><li>Diseño sonoro</li></ul>
-        </div>
-      </article>
-      <div class="service-image">
-        <button class="edit-showcase__item" data-reveal type="button" data-lightbox="/media/servicios/edicion-3.webp" data-lightbox-title="Correccion primaria en DaVinci Resolve">
-          <img src="/media/servicios/edicion-3.webp" alt="Correccion primaria de color sobre un retrato" loading="lazy" decoding="async" />
-          <span>Correccion primaria</span>
-        </button>
-      </div>
-      <a class="editorial-link service-path__cta" href="/contacto/" data-reveal><span>Cuentanos <span class="idea-highlight">tu idea</span></span> <span aria-hidden="true">↗</span></a>
+      <h2 class="service-path__heading">SERVICIOS</h2>
+      {
+        services.map((service) => (
+          <article class="service-step" data-reveal>
+            <div class="service-step__title" data-from="left">
+              <h2>{service.title}</h2>
+            </div>
+            <div class="service-step__body" data-from="right">
+              <h3>
+                {service.headline.map((part) =>
+                  part.highlight ? (
+                    <span class="idea-highlight">{part.text}</span>
+                  ) : (
+                    part.text
+                  ),
+                )}
+              </h3>
+              <ul>
+                {service.offerings.map((offering) => <li>{offering}</li>)}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
     </div>
+
+    <section class="service-tech-stack" aria-labelledby="tech-stack-title">
+      <div class="service-tech-stack__heading">
+        <h2 id="tech-stack-title">TechStack</h2>
+        <div class="service-tech-stack__tools" aria-label="Tecnologías utilizadas">
+          <div class="service-tech-stack__tool">
+            <svg
+              class="service-tech-stack__premiere"
+              viewBox="0 0 64 64"
+              role="img"
+              aria-labelledby="premiere-logo-title"
+            >
+              <title id="premiere-logo-title">Adobe Premiere Pro</title>
+              <rect x="3" y="3" width="58" height="58" rx="8" />
+              <path d="M18 45V19h10c7 0 11 4 11 10s-4 10-11 10h-4v6h-6Zm6-12h4c3 0 5-1 5-4s-2-4-5-4h-4v8Zm17 12V28h6v3c1-2 3-4 6-4v6c-4 0-6 2-6 5v7h-6Z" />
+            </svg>
+            <span>Adobe Premiere Pro</span>
+          </div>
+          <div class="service-tech-stack__tool">
+            <svg
+              class="service-tech-stack__resolve"
+              viewBox="0 0 64 64"
+              role="img"
+              aria-labelledby="resolve-logo-title"
+            >
+              <title id="resolve-logo-title">DaVinci Resolve</title>
+              <circle cx="32" cy="18" r="13" />
+              <circle cx="20" cy="39" r="13" />
+              <circle cx="44" cy="39" r="13" />
+              <circle cx="32" cy="32" r="8" />
+            </svg>
+            <span>DaVinci Resolve</span>
+          </div>
+        </div>
+      </div>
+      <div class="service-tech-stack__gallery">
+        {
+          editingImages.map((image) => (
+            <button
+              class="edit-showcase__item service-tech-stack__image"
+              data-reveal
+              type="button"
+              data-lightbox={image.src}
+              data-lightbox-title={image.title}
+            >
+              <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+              <span>{image.caption}</span>
+            </button>
+          ))
+        }
+      </div>
+    </section>
+    <a class="editorial-link service-path__cta" href="/contacto/" data-reveal>
+      <span>Cuentanos <span class="idea-highlight">tu idea</span></span>
+      <span aria-hidden="true">↗</span>
+    </a>
   </section>
 </Layout>
