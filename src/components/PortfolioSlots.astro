@@ -19,9 +19,8 @@ const photos = [
 ];
 const strings = [photos.slice(0, 5), photos.slice(5, 10)];
 const videos = [
-  { title: "Video destacado", size: "large" },
-  { title: "Video 2", size: "standard" },
-  { title: "Video 3", size: "standard" },
+  { title: "Memorias del Mar", youtubeId: "hcbyyc0O8Ng", size: "large" },
+  { title: "SPOT T.G", youtubeId: "ttPV0iTUSW8", size: "standard" },
 ];
 ---
 
@@ -91,9 +90,16 @@ const videos = [
           >
             <span class="portfolio-slot__frame" aria-hidden="true">
               <span class="portfolio-slot__window" data-timecode="00:00:00:00">
+                <img
+                  src={`https://i.ytimg.com/vi/${video.youtubeId}/maxresdefault.jpg`}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
                 <span class="portfolio-slot__mark">▶</span>
               </span>
             </span>
+            <span class="portfolio-slot__caption">{video.title}</span>
           </button>
         </article>
       ))
@@ -176,7 +182,13 @@ const videos = [
             class="portfolio-slot-dialog__preview"
             aria-label={`Previsualizacion de ${video.title.toLowerCase()}`}
           >
-            <span aria-hidden="true">▶</span>
+            <iframe
+              title={video.title}
+              data-youtube-id={video.youtubeId}
+              allow="autoplay; encrypted-media; picture-in-picture"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
           </div>
           <button
             class="item-dialog__nav item-dialog__nav--next"
@@ -194,6 +206,23 @@ const videos = [
 
 <script>
   import { attachZoom, resetZoom } from "../scripts/zoom";
+
+  const loadVideo = (dialog: HTMLDialogElement) => {
+    const iframe = dialog.querySelector<HTMLIFrameElement>(
+      "iframe[data-youtube-id]",
+    );
+    const videoId = iframe?.dataset.youtubeId;
+    if (iframe && videoId) {
+      iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0`;
+    }
+  };
+
+  const stopVideo = (dialog: HTMLDialogElement) => {
+    const iframe = dialog.querySelector<HTMLIFrameElement>(
+      "iframe[data-youtube-id]",
+    );
+    iframe?.removeAttribute("src");
+  };
 
   const setupPortfolioSlotDialogs = () => {
     document
@@ -215,7 +244,11 @@ const videos = [
           attachZoom(zoomFrame, () => dialog.close());
           dialog.addEventListener("close", () => resetZoom(zoomFrame));
         }
-        trigger.addEventListener("click", () => dialog.showModal());
+        trigger.addEventListener("click", () => {
+          loadVideo(dialog);
+          dialog.showModal();
+        });
+        dialog.addEventListener("close", () => stopVideo(dialog));
         close.addEventListener("click", () => dialog.close());
         dialog.addEventListener("click", (event) => {
           if (event.target === dialog) dialog.close();
@@ -241,6 +274,7 @@ const videos = [
     const next = dialogs[(index + step + dialogs.length) % dialogs.length];
     if (!next || next === current) return;
     current.close();
+    loadVideo(next);
     next.showModal();
   };
 

@@ -197,6 +197,7 @@ h1 em, .footer-title em { font-style: normal; }
 .portfolio-slot__trigger:hover .portfolio-slot__mark { transform: scale(1.14) rotate(90deg); }
 .portfolio-slot__mark { transition: transform .35s ease; }
 .portfolio-slot-dialog__preview { align-items: center; background: var(--bone); color: var(--ink); display: flex; flex: 1; justify-content: center; min-height: 0; }
+.portfolio-slot-dialog__preview iframe { border: 0; height: 100%; width: 100%; }
 .portfolio-slot-dialog__preview span { font-size: 34px; font-weight: 200; }
 
 .contact-email { align-items: center; border-bottom: 2px solid var(--ink); display: inline-flex; font-family: var(--font); font-size: clamp(14px, 2.32vw, 31px); gap: 28px; margin-top: 110px; padding: 0 0 14px; transition: border-color .2s ease, color .2s ease, gap .2s ease; }
