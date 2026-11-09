@@ -351,10 +351,28 @@ html.reveal-enabled [data-reveal].is-visible { transform: none; }
 .scroll-top:hover svg { animation-duration: .9s; }
 @keyframes scroll-top-float { 0%, 100% { transform: translateY(3px); } 50% { transform: translateY(-3px); } }
 @media (prefers-reduced-motion: reduce) { .scroll-top svg { animation: none; } }
-/* Servicios: imagen intercalada entre cada servicio */
-.service-image { margin: 0 auto 70px; max-width: 760px; position: relative; z-index: 1; }
-.service-image .edit-showcase__item { width: 100%; }
-.service-image .edit-showcase__item img { aspect-ratio: 16 / 9; }
+/* Servicios: capturas de edición y herramientas utilizadas */
+.service-tech-stack { margin-top: clamp(100px, 13vw, 170px); }
+.service-tech-stack__heading { align-items: center; display: flex; flex-wrap: wrap; gap: 28px; justify-content: space-between; margin-bottom: 36px; }
+.service-tech-stack__heading h2 { font-family: var(--font); font-size: clamp(27px, 3.48vw, 48px); font-weight: 400; letter-spacing: .02em; line-height: 1.05; margin: 0; }
+.service-tech-stack__tools { align-items: center; display: flex; flex-wrap: wrap; gap: clamp(20px, 4vw, 56px); }
+.service-tech-stack__tool { align-items: center; display: flex; font-size: 15px; gap: 12px; }
+.service-tech-stack__tool svg { flex: 0 0 52px; height: 52px; width: 52px; }
+.service-tech-stack__premiere rect { fill: #00005b; }
+.service-tech-stack__premiere path { fill: #9999ff; }
+.service-tech-stack__resolve circle:nth-of-type(1) { fill: #2681c8; }
+.service-tech-stack__resolve circle:nth-of-type(2) { fill: #ef6c35; }
+.service-tech-stack__resolve circle:nth-of-type(3) { fill: #d93035; }
+.service-tech-stack__resolve circle:nth-of-type(4) { fill: var(--room); }
+.service-tech-stack__gallery { display: grid; gap: 24px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.service-tech-stack__image { width: 100%; }
+.service-tech-stack__image img { aspect-ratio: 16 / 9; width: 100%; }
+@media (max-width: 900px) { .service-tech-stack__gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) {
+  .service-tech-stack__gallery { grid-template-columns: 1fr; }
+  .service-tech-stack__tool { font-size: 13px; }
+  .service-tech-stack__tool svg { flex-basis: 44px; height: 44px; width: 44px; }
+}
 
 /* Flecha de subir: solo la flecha, sin fondo ni encuadre */
 .scroll-top, .scroll-top:hover { background: none; border: 0; box-shadow: none; color: var(--safelight); height: 48px; width: 48px; }
