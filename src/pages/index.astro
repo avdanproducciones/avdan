@@ -5,18 +5,16 @@ import PortfolioSlots from '../components/PortfolioSlots.astro';
 import { projects } from '../data/projects';
 ---
 <Layout title="Portafolio">
-  <section class="hero-video" aria-label="Video introductorio">
+  <section class="hero-video" aria-label="Video destacado: Memorias del Mar">
     <div class="hero-video__frame">
-      <video
+      <iframe
         class="hero-video__player"
-        src="/media/video/promo-festival-gastronomico.mp4"
-        controls
-        autoplay
-        playsinline
-        preload="auto"
-      >
-        Tu navegador no puede reproducir este video.
-      </video>
+        src="https://www.youtube-nocookie.com/embed/hcbyyc0O8Ng?autoplay=1&amp;mute=1&amp;playsinline=1&amp;rel=0&amp;enablejsapi=1"
+        title="Memorias del Mar | AVDAN"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      ></iframe>
       <button class="hero-video__sound" type="button" hidden>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" /><path d="m17 9 4 6M21 9l-4 6" /></svg>
         Toca para ver con sonido
@@ -40,59 +38,131 @@ import { projects } from '../data/projects';
 </Layout>
 
 <script>
-  // Los navegadores bloquean el audio automatico en la primera visita directa. Se intenta con sonido
-  // y, si lo bloquean, arranca en silencio y se activa el sonido con la primera interaccion del usuario.
-  let autoMuted = false;
+  interface YouTubePlayer {
+    unMute(): void;
+    seekTo(seconds: number, allowSeekAhead: boolean): void;
+    playVideo(): void;
+    pauseVideo(): void;
+    destroy(): void;
+  }
 
-  const getVideo = () => document.querySelector<HTMLVideoElement>('.hero-video__player');
-  const getHint = () => document.querySelector<HTMLButtonElement>('.hero-video__sound');
+  interface YouTubeApi {
+    Player: new (
+      element: HTMLIFrameElement,
+      options: { events: { onReady: () => void } },
+    ) => YouTubePlayer;
+  }
 
-  const enableSound = () => {
-    const video = getVideo();
-    if (!video || !autoMuted) return;
-    autoMuted = false;
-    video.currentTime = 0;
-    video.muted = false;
-    video.play().catch(() => {});
-    const hint = getHint();
-    if (hint) hint.hidden = true;
-  };
-
-  const playIntro = async () => {
-    const video = getVideo();
-    const hint = getHint();
-    if (!video) return;
-    autoMuted = false;
-    if (hint) hint.hidden = true;
-    video.currentTime = 0;
-    video.muted = false;
-    try {
-      await video.play();
-    } catch {
-      autoMuted = true;
-      video.muted = true;
-      video.play().catch(() => {});
-      if (hint) hint.hidden = false;
+  declare global {
+    interface Window {
+      YT?: YouTubeApi;
+      onYouTubeIframeAPIReady?: () => void;
     }
-  };
+  }
 
-  const unlock = (event: Event) => {
-    const target = event.target as HTMLElement | null;
-    if (target?.closest?.('.hero-video__player')) {
-      autoMuted = false;
+  let apiPromise: Promise<YouTubeApi> | undefined;
+  let player: YouTubePlayer | undefined;
+  let playerReady = false;
+  let apiFailed = false;
+  let pausePending = false;
+
+  const pauseHeroVideo = () => {
+    if (player && playerReady) {
+      player.pauseVideo();
       return;
     }
-    enableSound();
+
+    pausePending = true;
+    if (apiFailed) {
+      const iframe = document.querySelector<HTMLIFrameElement>('.hero-video__player');
+      if (!iframe) return;
+      const url = new URL(iframe.src);
+      url.searchParams.set('autoplay', '0');
+      iframe.src = url.toString();
+    }
   };
 
-  ['pointerdown', 'keydown', 'touchend'].forEach((name) => document.addEventListener(name, unlock, { capture: true }));
-  document.addEventListener('click', (event) => {
-    if ((event.target as HTMLElement).closest('.hero-video__sound')) enableSound();
+  const openDialogs = new Set<Element>();
+  const dialogObserver = new MutationObserver(() => {
+    const dialogs = new Set(document.querySelectorAll('dialog[open], [role="dialog"][aria-modal="true"]'));
+    if ([...dialogs].some((dialog) => !openDialogs.has(dialog))) pauseHeroVideo();
+    openDialogs.clear();
+    dialogs.forEach((dialog) => openDialogs.add(dialog));
   });
-  document.addEventListener('astro:page-load', () => {
-    if (getVideo()) playIntro();
+  dialogObserver.observe(document.body, {
+    subtree: true,
+    childList: true,
+    attributes: true,
+    attributeFilter: ['open', 'role', 'aria-modal'],
   });
-  window.addEventListener('pageshow', (event) => {
-    if (event.persisted) playIntro();
+
+  const loadYouTubeApi = () => {
+    if (window.YT?.Player) return Promise.resolve(window.YT);
+    if (apiPromise) return apiPromise;
+
+    apiPromise = new Promise<YouTubeApi>((resolve, reject) => {
+      const previousReady = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        previousReady?.();
+        if (window.YT?.Player) resolve(window.YT);
+        else reject(new Error('La API de YouTube no esta disponible.'));
+      };
+
+      const script = document.createElement('script');
+      script.src = 'https://www.youtube.com/iframe_api';
+      script.onerror = () => reject(new Error('No se pudo cargar la API de YouTube.'));
+      document.head.appendChild(script);
+    }).catch((error: unknown) => {
+      apiPromise = undefined;
+      throw error;
+    });
+
+    return apiPromise;
+  };
+
+  const setupHeroVideo = async () => {
+    const iframe = document.querySelector<HTMLIFrameElement>('.hero-video__player');
+    const button = document.querySelector<HTMLButtonElement>('.hero-video__sound');
+    if (!iframe || !button) return;
+
+    try {
+      const api = await loadYouTubeApi();
+      if (!iframe.isConnected || player) return;
+      apiFailed = false;
+      player = new api.Player(iframe, {
+        events: {
+          onReady: () => {
+            playerReady = true;
+            if (pausePending) {
+              player?.pauseVideo();
+              pausePending = false;
+            }
+            button.hidden = false;
+          },
+        },
+      });
+      button.addEventListener('click', () => {
+        if (!player) return;
+        player.unMute();
+        player.seekTo(0, true);
+        player.playVideo();
+        button.hidden = true;
+      });
+    } catch (error) {
+      if (!iframe.isConnected) return;
+      console.error('No se pudo activar el control de sonido del video:', error);
+      apiFailed = true;
+      if (pausePending) pauseHeroVideo();
+    }
+  };
+
+  setupHeroVideo();
+  document.addEventListener('astro:page-load', setupHeroVideo);
+  document.addEventListener('astro:before-swap', () => {
+    player?.destroy();
+    player = undefined;
+    playerReady = false;
+    apiFailed = false;
+    pausePending = false;
   });
 </script>

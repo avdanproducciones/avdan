@@ -241,7 +241,10 @@ body { overflow-x: clip; }
 /* Video introductorio a pantalla completa (sin navbar), con marco */
 .hero-video { background: var(--room); display: flex; flex-direction: column; height: calc(100svh - var(--header-h)); min-height: 240px; padding: clamp(10px, 1.6vw, 24px) clamp(10px, 1.6vw, 24px) 0; }
 .hero-video__frame { background: #000; position: relative; border: 2px solid rgba(231, 229, 228, .55); box-shadow: 0 0 0 clamp(6px, .8vw, 12px) var(--film), 0 20px 60px rgba(0, 0, 0, .6); flex: 1 1 0; min-height: 0; overflow: hidden; width: 100%; }
-.hero-video__player { background: #000; display: block; height: 100%; object-fit: contain; width: 100%; }
+.hero-video__player { background: #000; border: 0; display: block; height: 100%; width: 100%; }
+.hero-video__sound { align-items: center; background: rgba(0, 0, 0, .45); border: 0; color: #fff; cursor: pointer; display: flex; flex-direction: column; font: inherit; font-size: clamp(14px, 1.6vw, 22px); gap: 14px; height: 100%; inset: 0; justify-content: center; padding: 0; position: absolute; width: 100%; }
+.hero-video__sound[hidden] { display: none; }
+.hero-video__sound svg { fill: none; height: 44px; stroke: currentColor; stroke-width: 2; width: 44px; }
 .hero-video .scroll-cue { flex: 0 0 56px; margin: 0; width: 100%; }
 .home-page { padding-top: 0; }
 .home-page .scroll-cue { margin-top: 28px; }
@@ -297,13 +300,6 @@ dialog[open].image-dialog::backdrop { animation: popup-fade .4s ease both; }
 /* ApariciA³n progresiva al hacer scroll */
 html.reveal-enabled [data-reveal=''] { transform: translateY(56px) scale(.97); transition: opacity .9s ease var(--delay, 0ms), transform .9s cubic-bezier(.2,.75,.25,1) var(--delay, 0ms); }
 html.reveal-enabled [data-reveal].is-visible { transform: none; }
-.hero-video__sound {
-  align-items: center; background: #d6341f; border: 0; border-radius: 999px; bottom: 64px; color: #fff; cursor: pointer;
-  display: inline-flex; font: inherit; font-size: .8rem; gap: 8px; letter-spacing: .08em; padding: 10px 18px;
-  position: absolute; right: 24px; text-transform: uppercase; z-index: 3; animation: popup-fade .5s ease both;
-}
-.hero-video__sound[hidden] { display: none; }
-.hero-video__sound svg { fill: none; height: 18px; stroke: currentColor; stroke-width: 2; width: 18px; }
 @media (prefers-reduced-motion: reduce) {
   html.reveal-enabled [data-reveal=''] { transform: none; }
 }
@@ -329,12 +325,6 @@ html.reveal-enabled [data-reveal].is-visible { transform: none; }
 @keyframes swipe-wheel { 0% { opacity: 0; transform: translateY(-2px); } 25% { opacity: 1; } 80% { opacity: 0; transform: translateY(8px); } 100% { opacity: 0; transform: translateY(8px); } }
 @media (prefers-reduced-motion: reduce) { .category-dialog__mouse em { animation: none; } }
 
-/* Video: si el navegador bloquea el audio, un velo invita a tocar para verlo con sonido */
-.hero-video__sound {
-  background: rgba(0, 0, 0, .45); border-radius: 0; bottom: 0; flex-direction: column; font-size: clamp(14px, 1.6vw, 22px);
-  gap: 14px; inset: 0; justify-content: center; padding: 0; width: 100%; height: 100%;
-}
-.hero-video__sound svg { height: 44px; width: 44px; }
 /* Logo sin animacion al pasar el cursor */
 .brand:hover .brand__logo, .brand:focus-visible .brand__logo { filter: none; transform: none; }
 .brand__logo { transition: none; }
