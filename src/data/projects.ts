@@ -46,7 +46,10 @@ export const projects: Project[] = [
   photo('Eventos', 'eventos-29', 'Invierno en Escena 2026'),
   photo('Eventos', 'eventos-30', 'Invierno en Escena 2026'),
   photo('Eventos', 'eventos-31', 'Invierno en Escena 2026'),
-  photo('Eventos', 'eventos-32', 'Sigrid Alegria'),
+  photo('Eventos', 'eventos-32', 'Sigrid Alegría'),
+  photo('Eventos', 'eventos-33', 'Evento deportivo'),
+  photo('Eventos', 'eventos-34', 'Evento deportivo'),
+  photo('Eventos', 'eventos-35', 'Evento deportivo'),
 
   photo('Matrimonios', 'matrimonios-01', 'Evento Matrimonio'),
   photo('Matrimonios', 'matrimonios-02', 'Evento Matrimonio'),
