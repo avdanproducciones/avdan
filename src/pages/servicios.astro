@@ -61,11 +61,7 @@ const services = [
       { text: "perspectivas", highlight: true },
       { text: " que solo se descubren desde el aire." },
     ],
-    offerings: [
-      "FOTOGRAFÍA AÉREA",
-      "VIDEO CON DRONE",
-      "PLANOS Y TOMAS AÉREAS",
-    ],
+    offerings: ["FOTOGRAFÍA AÉREA", "VIDEO CON DRONE", "PLANOS Y TOMAS AÉREAS"],
   },
   {
     title: "EDICIÓN Y POSTPRODUCCIÓN",
@@ -174,7 +170,9 @@ const editingImages = [
                 )}
               </h3>
               <ul>
-                {service.offerings.map((offering) => <li>{offering}</li>)}
+                {service.offerings.map((offering) => (
+                  <li>{offering}</li>
+                ))}
               </ul>
             </div>
           </article>
@@ -185,7 +183,23 @@ const editingImages = [
     <section class="service-tech-stack" aria-labelledby="tech-stack-title">
       <div class="service-tech-stack__heading">
         <h2 id="tech-stack-title">TechStack</h2>
-        <div class="service-tech-stack__tools" aria-label="Tecnologías utilizadas">
+        <div
+          class="service-tech-stack__tools"
+          aria-label="Tecnologías utilizadas"
+        >
+          <div class="service-tech-stack__tool">
+            <svg
+              class="service-tech-stack__photoshop"
+              viewBox="0 0 64 64"
+              role="img"
+              aria-labelledby="photoshop-logo-title"
+            >
+              <title id="photoshop-logo-title">Adobe Photoshop</title>
+              <rect x="3" y="3" width="58" height="58" rx="8"></rect>
+              <text x="32" y="41" text-anchor="middle">Ps</text>
+            </svg>
+            <span>Photoshop</span>
+          </div>
           <div class="service-tech-stack__tool">
             <svg
               class="service-tech-stack__premiere"
@@ -194,10 +208,12 @@ const editingImages = [
               aria-labelledby="premiere-logo-title"
             >
               <title id="premiere-logo-title">Adobe Premiere Pro</title>
-              <rect x="3" y="3" width="58" height="58" rx="8" />
-              <path d="M18 45V19h10c7 0 11 4 11 10s-4 10-11 10h-4v6h-6Zm6-12h4c3 0 5-1 5-4s-2-4-5-4h-4v8Zm17 12V28h6v3c1-2 3-4 6-4v6c-4 0-6 2-6 5v7h-6Z" />
+              <rect x="3" y="3" width="58" height="58" rx="8"></rect>
+              <path
+                d="M18 45V19h10c7 0 11 4 11 10s-4 10-11 10h-4v6h-6Zm6-12h4c3 0 5-1 5-4s-2-4-5-4h-4v8Zm17 12V28h6v3c1-2 3-4 6-4v6c-4 0-6 2-6 5v7h-6Z"
+              ></path>
             </svg>
-            <span>Adobe Premiere Pro</span>
+            <span>Premiere Pro</span>
           </div>
           <div class="service-tech-stack__tool">
             <svg
@@ -207,12 +223,38 @@ const editingImages = [
               aria-labelledby="resolve-logo-title"
             >
               <title id="resolve-logo-title">DaVinci Resolve</title>
-              <circle cx="32" cy="18" r="13" />
-              <circle cx="20" cy="39" r="13" />
-              <circle cx="44" cy="39" r="13" />
-              <circle cx="32" cy="32" r="8" />
+              <circle cx="32" cy="18" r="13"></circle>
+              <circle cx="20" cy="39" r="13"></circle>
+              <circle cx="44" cy="39" r="13"></circle>
+              <circle cx="32" cy="32" r="8"></circle>
             </svg>
             <span>DaVinci Resolve</span>
+          </div>
+          <div class="service-tech-stack__tool">
+            <svg
+              class="service-tech-stack__lightroom"
+              viewBox="0 0 64 64"
+              role="img"
+              aria-labelledby="lightroom-logo-title"
+            >
+              <title id="lightroom-logo-title">Adobe Lightroom</title>
+              <rect x="3" y="3" width="58" height="58" rx="8"></rect>
+              <text x="32" y="41" text-anchor="middle">Lr</text>
+            </svg>
+            <span>Lightroom</span>
+          </div>
+          <div class="service-tech-stack__tool">
+            <svg
+              class="service-tech-stack__after-effects"
+              viewBox="0 0 64 64"
+              role="img"
+              aria-labelledby="after-effects-logo-title"
+            >
+              <title id="after-effects-logo-title">Adobe After Effects</title>
+              <rect x="3" y="3" width="58" height="58" rx="8"></rect>
+              <text x="32" y="41" text-anchor="middle">Ae</text>
+            </svg>
+            <span>After Effects</span>
           </div>
         </div>
       </div>
@@ -226,7 +268,12 @@ const editingImages = [
               data-lightbox={image.src}
               data-lightbox-title={image.title}
             >
-              <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+              <img
+                src={image.src}
+                alt={image.alt}
+                loading="lazy"
+                decoding="async"
+              />
               <span>{image.caption}</span>
             </button>
           ))
@@ -239,3 +286,9 @@ const editingImages = [
     </a>
   </section>
 </Layout>
+
+<style>
+  .service-tech-stack__gallery {
+    margin-top: clamp(24px, 3vw, 40px);
+  }
+</style>

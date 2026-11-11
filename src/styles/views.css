@@ -158,10 +158,10 @@ html.reveal-enabled .service-step.is-visible .service-step__body li:nth-child(3)
 .social-card--youtube .social-card__avatar svg { color: #ff0000; fill: currentColor; stroke: none; }
 .social-card--youtube .social-card__avatar-fill { fill: #fff; }
 .social-card:hover .social-card__head small, .social-card:focus-visible .social-card__head small { opacity: 1; }
-.social-card__grid { display: grid; gap: 6px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.social-card__grid span { align-items: center; aspect-ratio: 1; background: #2c2a27; color: var(--bone); display: flex; font-size: 22px; font-weight: 200; justify-content: center; transition: transform .3s ease; }
-.social-card:hover .social-card__grid span:nth-child(odd) { transform: translateY(-4px); }
-.social-card:hover .social-card__grid span:nth-child(even) { transform: translateY(4px); }
+.social-card__grid { display: grid; gap: 4px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.social-card__grid span { aspect-ratio: 1; background: #2c2a27; display: block; overflow: hidden; }
+.social-card__grid img { height: 100%; object-fit: cover; transition: transform .3s ease; width: 100%; }
+.social-card:hover .social-card__grid img, .social-card:focus-visible .social-card__grid img { transform: scale(1.06); }
 .social-card__video { align-items: center; aspect-ratio: 16 / 9; background: var(--room); display: flex; justify-content: center; overflow: hidden; position: relative; }
 .social-card__video img { height: 100%; inset: 0; object-fit: cover; position: absolute; width: 100%; }
 .social-card__play { border-color: transparent transparent transparent var(--bone); border-style: solid; border-width: 18px 0 18px 30px; filter: drop-shadow(0 1px 5px #000); height: 0; position: relative; transition: transform .3s ease; width: 0; }
@@ -169,6 +169,7 @@ html.reveal-enabled .service-step.is-visible .service-step__body li:nth-child(3)
 .social-card__video-title { font-size: 16px; }
 .social-card__cta { font-family: var(--font); font-size: 14px; }
 .contact-whatsapp { margin-top: 90px; }
+.editorial-link.contact-whatsapp:hover, .editorial-link.contact-whatsapp:focus-visible { border-color: #25d366; color: #25d366; }
 
 @media (max-width: 900px) {
   .service-step { grid-template-columns: 1fr; margin-bottom: 40px; padding-left: 28px; }

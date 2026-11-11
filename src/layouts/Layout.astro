@@ -1,9 +1,9 @@
 ---
-import { ClientRouter } from 'astro:transitions';
-import '../styles/global.css';
-import '../styles/views.css';
-import '../styles/film.css';
-import Lightbox from '../components/Lightbox.astro';
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+import "../styles/views.css";
+import "../styles/film.css";
+import Lightbox from "../components/Lightbox.astro";
 
 interface Props {
   title: string;
@@ -12,51 +12,138 @@ interface Props {
 const { title } = Astro.props;
 const currentPath = Astro.url.pathname;
 ---
+
 <!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="AVDAN da vida a tus ideas a traves de la fotografia y la produccion audiovisual." />
+    <meta
+      name="description"
+      content="AVDAN da vida a tus ideas a traves de la fotografia y la produccion audiovisual."
+    />
     <title>{title} · AVDAN</title>
     <ClientRouter />
   </head>
   <body>
     <header class="site-header">
       <div class="site-header__inner">
-        <a href="/" class="brand" aria-label="AVDAN, inicio"><img class="brand__logo" src="/logo-avdan.svg" alt="AVDAN" width="119" height="84" /></a>
+        <a href="/" class="brand" aria-label="AVDAN, inicio"
+          ><img
+            class="brand__logo"
+            src="/logo-avdan.svg"
+            alt="AVDAN"
+            width="119"
+            height="84"
+          /></a
+        >
         <nav aria-label="Navegacion principal">
-          <a class:list={{ active: currentPath === '/' }} href="/">Portafolio</a>
-          <a class:list={{ active: currentPath === '/servicios/' }} href="/servicios/">Servicios</a>
-          <a class:list={{ active: currentPath === '/sobre/' }} href="/sobre/">Acerca de</a>
-          <a class:list={{ active: currentPath === '/contacto/' }} href="/contacto/">Contacto</a>
+          <a class:list={{ active: currentPath === "/" }} href="/">Portafolio</a
+          >
+          <a
+            class:list={{ active: currentPath === "/servicios/" }}
+            href="/servicios/">Servicios</a
+          >
+          <a class:list={{ active: currentPath === "/sobre/" }} href="/sobre/"
+            >Acerca de</a
+          >
+          <a
+            class:list={{ active: currentPath === "/contacto/" }}
+            href="/contacto/">Contacto</a
+          >
         </nav>
       </div>
     </header>
     <div class="darkroom-light" aria-hidden="true"></div>
     <main transition:animate="fade"><slot /></main>
+
     <footer class="site-footer">
       <div class="footer-intro" data-reveal>
-        <p class="footer-title">Demosle vida<br />a <span class="idea-highlight">tu idea</span></p>
+        <p class="footer-title">
+          Demosle vida<br />a <span class="idea-highlight">tu idea</span>
+        </p>
       </div>
       <div class="footer-contact" data-reveal style="--delay:120ms">
         <p class="footer-label">Contacto</p>
-        <a class="footer-cta" href="/contacto/">Cuentanos sobre tu proyecto <span aria-hidden="true">↗</span></a>
-        <a class="footer-email" href="mailto:avdan.producciones@gmail.com">avdan.producciones@gmail.com <span aria-hidden="true">↗</span></a>
+        <a class="footer-cta" href="/contacto/"
+          >Cuentanos sobre tu proyecto <span aria-hidden="true">↗</span></a
+        >
+        <a class="footer-email" href="mailto:avdan.producciones@gmail.com"
+          >avdan.producciones@gmail.com <span aria-hidden="true">↗</span></a
+        >
       </div>
       <div class="footer-external" data-reveal style="--delay:240ms">
         <p class="footer-label">Redes sociales</p>
         <nav class="footer-social" aria-label="Redes sociales">
-          <a href="#" aria-label="Instagram">
-            <svg class="social-mark social-mark--instagram" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="ig-gradient" gradientUnits="userSpaceOnUse" x1="3" y1="21" x2="21" y2="3"><stop offset="0" stop-color="#feda75" /><stop offset=".3" stop-color="#fa7e1e" /><stop offset=".55" stop-color="#d62976" /><stop offset=".8" stop-color="#962fbf" /><stop offset="1" stop-color="#4f5bd5" /></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.4" cy="6.7" r="1" class="social-mark__fill" /></svg>
+          <a
+            class="footer-social__instagram"
+            href="https://www.instagram.com/avdan.prod/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <svg
+              class="social-mark social-mark--instagram"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              ><defs
+                ><linearGradient
+                  id="ig-gradient"
+                  gradientUnits="userSpaceOnUse"
+                  x1="3"
+                  y1="21"
+                  x2="21"
+                  y2="3"
+                  ><stop offset="0" stop-color="#feda75"></stop><stop
+                    offset=".3"
+                    stop-color="#fa7e1e"></stop><stop
+                    offset=".55"
+                    stop-color="#d62976"></stop><stop
+                    offset=".8"
+                    stop-color="#962fbf"></stop><stop
+                    offset="1"
+                    stop-color="#4f5bd5"></stop></linearGradient
+                ></defs
+              ><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle
+                cx="12"
+                cy="12"
+                r="4.2"></circle><circle
+                cx="17.4"
+                cy="6.7"
+                r="1"
+                class="social-mark__fill"></circle></svg
+            >
             <span>Instagram</span><span aria-hidden="true">↗</span>
           </a>
-          <a href="https://www.youtube.com/channel/UCySStgJVu23f-DTDuiiPX9Q" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-            <svg class="social-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8.2a2.8 2.8 0 0 0-2-2C17.2 5.7 12 5.7 12 5.7s-5.2 0-7 .5a2.8 2.8 0 0 0-2 2A29 29 0 0 0 2.5 12 29 29 0 0 0 3 15.8a2.8 2.8 0 0 0 2 2c1.8.5 7 .5 7 .5s5.2 0 7-.5a2.8 2.8 0 0 0 2-2 29 29 0 0 0 .5-3.8 29 29 0 0 0-.5-3.8Z" /><path d="m10 9 5 3-5 3V9Z" class="social-mark__fill" /></svg>
+          <a
+            class="footer-social__youtube"
+            href="https://www.youtube.com/channel/UCySStgJVu23f-DTDuiiPX9Q"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="YouTube"
+          >
+            <svg class="social-mark" viewBox="0 0 24 24" aria-hidden="true"
+              ><path
+                d="M21 8.2a2.8 2.8 0 0 0-2-2C17.2 5.7 12 5.7 12 5.7s-5.2 0-7 .5a2.8 2.8 0 0 0-2 2A29 29 0 0 0 2.5 12 29 29 0 0 0 3 15.8a2.8 2.8 0 0 0 2 2c1.8.5 7 .5 7 .5s5.2 0 7-.5a2.8 2.8 0 0 0 2-2 29 29 0 0 0 .5-3.8 29 29 0 0 0-.5-3.8Z"
+              ></path><path d="m10 9 5 3-5 3V9Z" class="social-mark__fill"
+              ></path></svg
+            >
             <span>YouTube</span><span aria-hidden="true">↗</span>
           </a>
-          <a href="https://wa.me/56921882471" target="_blank" rel="noopener" aria-label="WhatsApp">
-            <svg class="social-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.7-4.1A8.5 8.5 0 1 1 20.5 11.5Z" /><path d="M8.2 8.5c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.7c.1.2 0 .4-.1.6l-.5.6c.7 1.3 1.7 2.2 3 2.8l.5-.5c.2-.2.4-.2.6-.1l1.6.7c.3.1.4.3.3.6-.2.8-.8 1.4-1.6 1.5-1.3.1-3.2-.8-4.7-2.2-1.4-1.3-2.3-3.1-2.2-4.4.1-.5.4-1 .7-1.3Z" class="social-mark__fill" /></svg>
+          <a
+            class="footer-social__whatsapp"
+            href="https://wa.me/56921882471"
+            target="_blank"
+            rel="noopener"
+            aria-label="WhatsApp"
+          >
+            <svg class="social-mark" viewBox="0 0 24 24" aria-hidden="true"
+              ><path
+                d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.7-4.1A8.5 8.5 0 1 1 20.5 11.5Z"
+              ></path><path
+                d="M8.2 8.5c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.7c.1.2 0 .4-.1.6l-.5.6c.7 1.3 1.7 2.2 3 2.8l.5-.5c.2-.2.4-.2.6-.1l1.6.7c.3.1.4.3.3.6-.2.8-.8 1.4-1.6 1.5-1.3.1-3.2-.8-4.7-2.2-1.4-1.3-2.3-3.1-2.2-4.4.1-.5.4-1 .7-1.3Z"
+                class="social-mark__fill"></path></svg
+            >
             <span>WhatsApp</span><span aria-hidden="true">↗</span>
           </a>
         </nav>
@@ -66,10 +153,24 @@ const currentPath = Astro.url.pathname;
       </div>
     </footer>
     <button class="scroll-top" type="button" aria-label="Volver arriba" hidden>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 11l7-7 7 7" /></svg>
+      <svg viewBox="0 0 24 24" aria-hidden="true"
+        ><path d="M12 19V5M5 11l7-7 7 7"></path></svg
+      >
     </button>
-    <a class="floating-whatsapp" href="https://wa.me/56921882471" target="_blank" rel="noopener noreferrer" aria-label="Escribir a AVDAN por WhatsApp">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.7-4.1A8.5 8.5 0 1 1 20.5 11.5Z" /><path d="M8.2 8.5c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.7c.1.2 0 .4-.1.6l-.5.6c.7 1.3 1.7 2.2 3 2.8l.5-.5c.2-.2.4-.2.6-.1l1.6.7c.3.1.4.3.3.6-.2.8-.8 1.4-1.6 1.5-1.3.1-3.2-.8-4.7-2.2-1.4-1.3-2.3-3.1-2.2-4.4.1-.5.4-1 .7-1.3Z" class="floating-whatsapp__fill" /></svg>
+    <a
+      class="floating-whatsapp"
+      href="https://wa.me/56921882471"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Escribir a AVDAN por WhatsApp"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true"
+        ><path
+          d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.7-4.1A8.5 8.5 0 1 1 20.5 11.5Z"
+        ></path><path
+          d="M8.2 8.5c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.7c.1.2 0 .4-.1.6l-.5.6c.7 1.3 1.7 2.2 3 2.8l.5-.5c.2-.2.4-.2.6-.1l1.6.7c.3.1.4.3.3.6-.2.8-.8 1.4-1.6 1.5-1.3.1-3.2-.8-4.7-2.2-1.4-1.3-2.3-3.1-2.2-4.4.1-.5.4-1 .7-1.3Z"
+          class="floating-whatsapp__fill"></path></svg
+      >
     </a>
     <Lightbox />
   </body>
@@ -77,53 +178,75 @@ const currentPath = Astro.url.pathname;
 
 <script>
   const revealSections = () => {
-    const elements = document.querySelectorAll<HTMLElement>('[data-reveal]:not([data-reveal-repeat])');
+    const elements = document.querySelectorAll<HTMLElement>(
+      "[data-reveal]:not([data-reveal-repeat])",
+    );
 
-    if (!('IntersectionObserver' in window)) {
-      elements.forEach((element) => element.classList.add('is-visible'));
+    if (!("IntersectionObserver" in window)) {
+      elements.forEach((element) => element.classList.add("is-visible"));
       return;
     }
 
-    const observer = new IntersectionObserver((entries, currentObserver) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        currentObserver.unobserve(entry.target);
-      });
-    }, { threshold: 0.12 });
+    const observer = new IntersectionObserver(
+      (entries, currentObserver) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          currentObserver.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12 },
+    );
 
     elements.forEach((element) => observer.observe(element));
 
     // Estos bloques repiten su animacion cada vez que entran en pantalla.
-    const repeat = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => entry.target.classList.toggle('is-visible', entry.isIntersecting));
-    }, { threshold: 0.12 });
-    document.querySelectorAll<HTMLElement>('[data-reveal-repeat]').forEach((element) => repeat.observe(element));
+    const repeat = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) =>
+          entry.target.classList.toggle("is-visible", entry.isIntersecting),
+        );
+      },
+      { threshold: 0.12 },
+    );
+    document
+      .querySelectorAll<HTMLElement>("[data-reveal-repeat]")
+      .forEach((element) => repeat.observe(element));
   };
 
-  document.documentElement.classList.add('reveal-enabled');
-  document.addEventListener('astro:after-swap', () => document.documentElement.classList.add('reveal-enabled'));
+  document.documentElement.classList.add("reveal-enabled");
+  document.addEventListener("astro:after-swap", () =>
+    document.documentElement.classList.add("reveal-enabled"),
+  );
   revealSections();
-  document.addEventListener('astro:page-load', revealSections);
+  document.addEventListener("astro:page-load", revealSections);
 
   const syncHeaderHeight = () => {
-    const header = document.querySelector<HTMLElement>('.site-header');
-    if (header) document.documentElement.style.setProperty('--header-h', `${header.offsetHeight}px`);
+    const header = document.querySelector<HTMLElement>(".site-header");
+    if (header)
+      document.documentElement.style.setProperty(
+        "--header-h",
+        `${header.offsetHeight}px`,
+      );
   };
 
   let lastScrollY = window.scrollY;
   let scrollAnchor = lastScrollY;
   const updateHeader = () => {
-    const header = document.querySelector<HTMLElement>('.site-header');
+    const header = document.querySelector<HTMLElement>(".site-header");
     if (!header) return;
     const currentScrollY = Math.max(0, window.scrollY);
     if (currentScrollY <= 0) {
-      header.classList.remove('is-hidden');
+      header.classList.remove("is-hidden");
       scrollAnchor = currentScrollY;
     } else {
-      if ((currentScrollY - lastScrollY) * (lastScrollY - scrollAnchor) < 0) scrollAnchor = lastScrollY;
+      if ((currentScrollY - lastScrollY) * (lastScrollY - scrollAnchor) < 0)
+        scrollAnchor = lastScrollY;
       if (Math.abs(currentScrollY - scrollAnchor) >= 8) {
-        header.classList.toggle('is-hidden', currentScrollY > scrollAnchor && currentScrollY > header.offsetHeight);
+        header.classList.toggle(
+          "is-hidden",
+          currentScrollY > scrollAnchor && currentScrollY > header.offsetHeight,
+        );
         scrollAnchor = currentScrollY;
       }
     }
@@ -131,24 +254,30 @@ const currentPath = Astro.url.pathname;
   };
 
   const updateScrollTop = () => {
-    const button = document.querySelector<HTMLButtonElement>('.scroll-top');
+    const button = document.querySelector<HTMLButtonElement>(".scroll-top");
     if (!button) return;
     const visible = window.scrollY > 400;
     button.hidden = false;
-    button.classList.toggle('is-visible', visible);
+    button.classList.toggle("is-visible", visible);
     button.tabIndex = visible ? 0 : -1;
   };
 
   // El script se carga una sola vez; el boton se vuelve a enlazar tras cada navegacion.
-  window.addEventListener('scroll', updateScrollTop, { passive: true });
-  window.addEventListener('scroll', updateHeader, { passive: true });
-  window.addEventListener('resize', syncHeaderHeight);
-  document.addEventListener('astro:page-load', () => {
+  window.addEventListener("scroll", updateScrollTop, { passive: true });
+  window.addEventListener("scroll", updateHeader, { passive: true });
+  window.addEventListener("resize", syncHeaderHeight);
+  document.addEventListener("astro:page-load", () => {
     syncHeaderHeight();
     lastScrollY = window.scrollY;
     scrollAnchor = lastScrollY;
-    document.querySelector<HTMLElement>('.site-header')?.classList.remove('is-hidden');
+    document
+      .querySelector<HTMLElement>(".site-header")
+      ?.classList.remove("is-hidden");
     updateScrollTop();
-    document.querySelector<HTMLButtonElement>('.scroll-top')?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    document
+      .querySelector<HTMLButtonElement>(".scroll-top")
+      ?.addEventListener("click", () =>
+        window.scrollTo({ top: 0, behavior: "smooth" }),
+      );
   });
 </script>
