@@ -4,17 +4,22 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout title="Contacto">
   <section class="page interior-page contact-page interior-page--contact">
-    <div class="hero-copy" data-reveal>
-      <h1><span class="idea-highlight">Tu idea</span> comienza aqui.</h1>
-      <p class="intro">
-        Cuentanos que quieres comunicar. Estamos listos para escucharte y darle
-        vida a tu proyecto.
-      </p>
-      <a class="editorial-link" href="mailto:avdan.producciones@gmail.com"
-        >Escribir un correo <span aria-hidden="true">↗</span></a
-      >
+    <div class="interior-hero">
+      <div class="hero-copy" data-reveal>
+        <h1><span class="idea-highlight">Tu idea</span> comienza aqui.</h1>
+        <p class="intro">
+          Cuentanos que quieres comunicar. Estamos listos para escucharte y darle
+          vida a tu proyecto.
+        </p>
+        <a class="editorial-link" href="mailto:avdan.producciones@gmail.com"
+          >Escribir un correo <span aria-hidden="true">↗</span></a
+        >
+      </div>
+      <a class="scroll-cue" href="#redes-sociales" aria-label="Bajar a las redes sociales">
+        <span aria-hidden="true"></span>
+      </a>
     </div>
-    <div class="social-previews">
+    <div class="social-previews" id="redes-sociales">
       <a
         class="social-card social-card--instagram"
         href="https://www.instagram.com/avdan.prod/"
@@ -128,13 +133,5 @@ import Layout from "../layouts/Layout.astro";
         >
       </a>
     </div>
-
-    <a
-      class="editorial-link contact-whatsapp"
-      href="https://wa.me/56921882471"
-      target="_blank"
-      rel="noopener"
-      data-reveal>Escribir por WhatsApp <span aria-hidden="true">↗</span></a
-    >
   </section>
 </Layout>
