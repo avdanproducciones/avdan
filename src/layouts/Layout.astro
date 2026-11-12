@@ -22,7 +22,7 @@ const currentPath = Astro.url.pathname;
       name="description"
       content="AVDAN da vida a tus ideas a traves de la fotografia y la produccion audiovisual."
     />
-    <title>{title} · AVDAN</title>
+    <title>{title}AVDAN</title>
     <ClientRouter />
   </head>
   <body>
@@ -154,15 +154,20 @@ const currentPath = Astro.url.pathname;
     </footer>
     <button class="scroll-top" type="button" aria-label="Volver arriba" hidden>
       <svg viewBox="0 0 24 24" aria-hidden="true"
-        ><path d="M12 19V5M5 11l7-7 7 7"></path></svg
+        ><path d="M5 15l7-7 7 7"></path></svg
       >
     </button>
     <a
-      class="floating-whatsapp"
+      class:list={[
+        "floating-whatsapp",
+        { "is-hidden": currentPath === "/" || currentPath === "/contacto/" },
+      ]}
       href="https://wa.me/56921882471"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escribir a AVDAN por WhatsApp"
+      aria-hidden={currentPath === "/" || currentPath === "/contacto/" ? "true" : undefined}
+      tabindex={currentPath === "/" || currentPath === "/contacto/" ? -1 : undefined}
     >
       <svg viewBox="0 0 24 24" aria-hidden="true"
         ><path
@@ -255,17 +260,30 @@ const currentPath = Astro.url.pathname;
 
   const updateScrollTop = () => {
     const button = document.querySelector<HTMLButtonElement>(".scroll-top");
-    if (!button) return;
-    const visible = window.scrollY > 400;
-    button.hidden = false;
-    button.classList.toggle("is-visible", visible);
-    button.tabIndex = visible ? 0 : -1;
+    const whatsapp = document.querySelector<HTMLAnchorElement>(".floating-whatsapp");
+    const footer = document.querySelector<HTMLElement>(".site-footer");
+    const footerVisible = footer ? footer.getBoundingClientRect().top < window.innerHeight : false;
+    const scrolled = window.scrollY > 400;
+    if (button) {
+      const visible = scrolled && !footerVisible;
+      button.hidden = false;
+      button.classList.toggle("is-visible", visible);
+      button.tabIndex = visible ? 0 : -1;
+    }
+    if (whatsapp) {
+      const path = window.location.pathname.replace(/\/+$/, "") || "/";
+      const visible = !footerVisible && (scrolled || (path !== "/" && path !== "/contacto"));
+      whatsapp.classList.toggle("is-hidden", !visible);
+      whatsapp.setAttribute("aria-hidden", String(!visible));
+      whatsapp.tabIndex = visible ? 0 : -1;
+    }
   };
 
   // El script se carga una sola vez; el boton se vuelve a enlazar tras cada navegacion.
   window.addEventListener("scroll", updateScrollTop, { passive: true });
   window.addEventListener("scroll", updateHeader, { passive: true });
   window.addEventListener("resize", syncHeaderHeight);
+  window.addEventListener("resize", updateScrollTop);
   document.addEventListener("astro:page-load", () => {
     syncHeaderHeight();
     lastScrollY = window.scrollY;

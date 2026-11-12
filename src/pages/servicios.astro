@@ -117,40 +117,42 @@ const editingImages = [
 
 <Layout title="Servicios">
   <section class="page interior-page interior-page--services">
-    <div class="services-hero">
-      <div class="hero-copy" data-reveal>
-        <h1>De <span class="idea-highlight">tu idea</span> a la imagen.</h1>
-        <p class="intro">
-          Creamos fotografía y contenido audiovisual que comunica, emociona y
-          destaca, desde la planificación hasta la entrega final.
-        </p>
-        <a class="editorial-link" href="/contacto/">
-          <span>Cuentanos <span class="idea-highlight">tu idea</span></span>
-          <span aria-hidden="true">↗</span>
-        </a>
+    <div class="interior-hero">
+      <div class="services-hero">
+        <div class="hero-copy" data-reveal>
+          <h1>De <span class="idea-highlight">tu idea</span> a la imagen.</h1>
+          <p class="intro">
+            Creamos fotografía y contenido audiovisual que comunica, emociona y
+            destaca, desde la planificación hasta la entrega final.
+          </p>
+          <a class="editorial-link" href="/contacto/">
+            <span>Cuentanos <span class="idea-highlight">tu idea</span></span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <button
+          class="edit-showcase__item services-hero__compare"
+          data-reveal="right"
+          style="--delay:200ms"
+          type="button"
+          data-lightbox="/media/servicios/edicion-comparacion.webp"
+          data-lightbox-title="Comparación de color: material original y exportado"
+        >
+          <img
+            src="/media/servicios/edicion-comparacion.webp"
+            alt="Comparación de color entre el material original y el exportado"
+            loading="lazy"
+            decoding="async"
+          />
+          <span>Corrección de color · antes y después</span>
+        </button>
       </div>
-      <button
-        class="edit-showcase__item services-hero__compare"
-        data-reveal="right"
-        style="--delay:200ms"
-        type="button"
-        data-lightbox="/media/servicios/edicion-comparacion.webp"
-        data-lightbox-title="Comparación de color: material original y exportado"
+      <a
+        class="scroll-cue"
+        href="#servicios-lista"
+        aria-label="Bajar a los servicios"><span aria-hidden="true"></span></a
       >
-        <img
-          src="/media/servicios/edicion-comparacion.webp"
-          alt="Comparación de color entre el material original y el exportado"
-          loading="lazy"
-          decoding="async"
-        />
-        <span>Corrección de color · antes y después</span>
-      </button>
     </div>
-    <a
-      class="scroll-cue"
-      href="#servicios-lista"
-      aria-label="Bajar a los servicios"><span aria-hidden="true"></span></a
-    >
     <div class="service-path" id="servicios-lista">
       <h2 class="service-path__heading">SERVICIOS</h2>
       {
@@ -216,18 +218,15 @@ const editingImages = [
             <span>Premiere Pro</span>
           </div>
           <div class="service-tech-stack__tool">
-            <svg
+            <img
               class="service-tech-stack__resolve"
-              viewBox="0 0 64 64"
-              role="img"
-              aria-labelledby="resolve-logo-title"
-            >
-              <title id="resolve-logo-title">DaVinci Resolve</title>
-              <circle cx="32" cy="18" r="13"></circle>
-              <circle cx="20" cy="39" r="13"></circle>
-              <circle cx="44" cy="39" r="13"></circle>
-              <circle cx="32" cy="32" r="8"></circle>
-            </svg>
+              src="/media/servicios/davinci-resolve-logo.png"
+              alt=""
+              width="52"
+              height="52"
+              loading="lazy"
+              decoding="async"
+            />
             <span>DaVinci Resolve</span>
           </div>
           <div class="service-tech-stack__tool">
