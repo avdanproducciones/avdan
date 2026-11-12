@@ -158,16 +158,13 @@ const currentPath = Astro.url.pathname;
       >
     </button>
     <a
-      class:list={[
-        "floating-whatsapp",
-        { "is-hidden": currentPath === "/" || currentPath === "/contacto/" },
-      ]}
+      class="floating-whatsapp is-hidden"
       href="https://wa.me/56921882471"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escribir a AVDAN por WhatsApp"
-      aria-hidden={currentPath === "/" || currentPath === "/contacto/" ? "true" : undefined}
-      tabindex={currentPath === "/" || currentPath === "/contacto/" ? -1 : undefined}
+      aria-hidden="true"
+      tabindex="-1"
     >
       <svg viewBox="0 0 24 24" aria-hidden="true"
         ><path
@@ -271,8 +268,7 @@ const currentPath = Astro.url.pathname;
       button.tabIndex = visible ? 0 : -1;
     }
     if (whatsapp) {
-      const path = window.location.pathname.replace(/\/+$/, "") || "/";
-      const visible = !footerVisible && (scrolled || (path !== "/" && path !== "/contacto"));
+      const visible = !footerVisible && scrolled;
       whatsapp.classList.toggle("is-hidden", !visible);
       whatsapp.setAttribute("aria-hidden", String(!visible));
       whatsapp.tabIndex = visible ? 0 : -1;

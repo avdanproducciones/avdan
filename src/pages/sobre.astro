@@ -4,32 +4,188 @@ import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="Acerca de">
   <section class="page interior-page interior-page--about about-page">
-    <div class="hero-copy about-hero" data-reveal>
-      <h1><span class="idea-highlight">Tus ideas</span>, nuestra vision audiovisual.</h1>
+    <div class="interior-hero">
+      <div class="hero-copy about-hero">
+        <h1 class="about-title">
+          <span class="about-title__block"><span class="idea-highlight">Tus ide<span data-bulb-impact="ideas">a</span>s</span><span class="about-title__baseline" aria-hidden="true"></span></span>
+          <span class="about-title__block">nuestra</span>
+          <span class="about-title__block">vision</span>
+          <span class="about-title__block"><span class="about-title__last-word">audiovisu<span data-bulb-impact="audiovisual">a</span><span data-bulb-impact="last">l</span><span class="about-title__baseline" aria-hidden="true"></span><span class="bulb about-title__bulb" aria-hidden="true"></span></span></span>
+        </h1>
+        <p class="intro about-hero__intro">Descubre quienes somos</p>
+      </div>
+      <a class="scroll-cue" href="#acerca-historia" aria-label="Bajar a la historia de AVDAN">
+        <span aria-hidden="true"></span>
+      </a>
     </div>
-    <div class="about-story">
-      <figure class="about-story__photo" data-reveal="left">
-        <button class="about-photo-trigger" type="button" data-lightbox="/media/projects/matrimonios-14.webp" data-lightbox-title="Matrimonio en iglesia" aria-label="Ampliar foto de matrimonio">
-          <img src="/media/projects/matrimonios-14.webp" alt="Un matrimonio fotografiado por AVDAN" loading="lazy" decoding="async" />
-        </button>
-      </figure>
-      <div class="about-story__copy" data-reveal="right">
-        <p class="about-story__lead">En <span class="idea-highlight">AVDAN</span> creemos que cada proyecto tiene algo unico que comunicar.</p>
-        <p>Por eso, nuestro trabajo comienza escuchando <span class="idea-highlight">tus ideas</span>, comprendiendo tus objetivos y encontrando la mejor manera de llevarlos a la realidad a traves de la fotografia y la produccion audiovisual.</p>
-        <p>Nos involucramos en cada etapa del proceso, desde la planificacion hasta la entrega final, cuidando los detalles y buscando siempre un resultado que responda a tus expectativas. Trabajamos con compromiso, creatividad y profesionalismo, adaptandonos a las necesidades de cada cliente para crear contenido visual que comunique, emocione y destaque.</p>
+    <div class="about-story" id="acerca-historia">
+      <div class="about-story__copy">
+        <p class="about-story__lead" data-reveal>En <span class="idea-highlight">AVDAN</span> creemos que cada proyecto tiene algo unico que comunicar.</p>
+        <p data-reveal>Por eso, nuestro trabajo comienza escuchando <span class="idea-highlight">tus ideas</span>, comprendiendo tus objetivos y encontrando la mejor manera de llevarlos a la realidad a traves de la fotografia y la produccion audiovisual.</p>
+        <p data-reveal>Nos involucramos en cada etapa del proceso, desde la planificacion hasta la entrega final, cuidando los detalles y buscando siempre un resultado que responda a tus <span class="idea-highlight">expectativas</span>. Trabajamos con compromiso, creatividad y profesionalismo, adaptandonos a las <span class="idea-highlight">necesidades</span> de cada cliente para crear contenido visual que comunique, emocione y destaque.</p>
       </div>
     </div>
   </section>
 
   <section class="page about-closing">
-    <div data-reveal>
+    <div class="about-closing__content" data-reveal>
       <p><span class="idea-highlight">Tu idea</span> es el comienzo. En AVDAN, nos encargamos de darle vida.</p>
       <a class="editorial-link" href="/contacto/"><span>Cuentanos <span class="idea-highlight">tu idea</span></span> <span aria-hidden="true">↗</span></a>
     </div>
-    <figure data-reveal="right">
-      <button class="about-photo-trigger" type="button" data-lightbox="/media/projects/sesiones-04.webp" data-lightbox-title="Sesion retrato" aria-label="Ampliar foto de sesion retrato">
-        <img src="/media/projects/sesiones-04.webp" alt="Retrato fotografiado por AVDAN" loading="lazy" decoding="async" />
-      </button>
-    </figure>
   </section>
 </Layout>
+
+<script>
+  const setupAboutBulb = () => {
+    const title = document.querySelector<HTMLElement>('.about-title');
+    const firstBlock = title?.querySelector<HTMLElement>('.about-title__block');
+    const word = title?.querySelector<HTMLElement>('.about-title__last-word');
+    const bulb = title?.querySelector<HTMLElement>('.about-title__bulb');
+    const subtitle = title?.parentElement?.querySelector<HTMLElement>('.about-hero__intro');
+    const firstLetter = title?.querySelector<HTMLElement>('[data-bulb-impact="ideas"]');
+    const secondLetter = title?.querySelector<HTMLElement>('[data-bulb-impact="audiovisual"]');
+    const lastLetter = title?.querySelector<HTMLElement>('[data-bulb-impact="last"]');
+    const baselines = title?.querySelectorAll<HTMLElement>('.about-title__baseline');
+    if (!title || !firstBlock || !word || !bulb || !subtitle || !firstLetter || !secondLetter || !lastLetter || !baselines || baselines.length !== 2) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const flightDuration = 2000;
+    const canvas = document.createElement('canvas').getContext('2d');
+    if (!canvas) {
+      console.warn('No se pudo medir el texto para posicionar el foco.');
+      return;
+    }
+    let active = true;
+    let flight: Animation | undefined;
+    let subtitleAnimation: Animation | undefined;
+
+    const positionBulb = () => {
+      const wordRect = word.getBoundingClientRect();
+      const bulbWidth = bulb.offsetWidth;
+      const bulbHeight = bulb.offsetHeight;
+      const baseline = baselines[1].getBoundingClientRect().top;
+      const style = getComputedStyle(title);
+      const fontSize = parseFloat(style.fontSize);
+      const firstRect = firstLetter.getBoundingClientRect();
+      const secondRect = secondLetter.getBoundingClientRect();
+      const lastRect = lastLetter.getBoundingClientRect();
+      const originX = wordRect.right + fontSize * .08;
+      const originY = baseline - bulbHeight;
+
+      // Ajusta el desplazamiento del contacto y la altura de los rebotes si cambia el dibujo o la tipografía.
+      canvas.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+      const glyphTop = canvas.measureText('a').actualBoundingBoxAscent;
+      const firstX = firstRect.left + firstRect.width / 2 - bulbWidth / 2 - originX;
+      const secondX = (secondRect.right + lastRect.left) / 2 - bulbWidth / 2 - originX;
+      const firstY = baselines[0].getBoundingClientRect().top - glyphTop - bulbHeight - originY;
+      const secondY = baseline - glyphTop - bulbHeight - originY;
+      title.style.setProperty('--bulb-baseline', `${baseline - wordRect.top}px`);
+
+      // Anticipa el tramo oculto por la cabecera para que el foco se vea a los 500 ms.
+      const startTop = -bulbHeight - 10;
+      const impactTop = originY + firstY;
+      const headerBottom = Math.max(0, document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0);
+      const visibleTop = headerBottom - bulbHeight;
+      const progress = Math.max(0, Math.min(1, (visibleTop - startTop) / (impactTop - startTop)));
+      let low = 0;
+      let high = 1;
+      for (let i = 0; i < 24; i++) {
+        const t = (low + high) / 2;
+        const y = 3 * (1 - t) * t * t + t * t * t;
+        if (y < progress) low = t;
+        else high = t;
+      }
+      const t = (low + high) / 2;
+      const easedTime = 3 * (1 - t) * (1 - t) * t * .42 + 3 * (1 - t) * t * t + t * t * t;
+      const hiddenTravel = flightDuration * .325 * easedTime;
+
+      const frame = (x: number, y: number, angle: number, offset: number): Keyframe => ({
+        offset,
+        opacity: 1,
+        transform: `translate(${x}px, ${y}px) rotate(${angle}deg)`,
+      });
+      const frames: Keyframe[] = [
+        { ...frame(firstX, -originY - bulbHeight - 10, 0, 0), easing: 'ease-in' },
+        frame(firstX, firstY, 0, .325),
+      ];
+      // Cada rebote interpola X linealmente y Y sobre una parábola.
+      for (let i = 1; i <= 16; i++) {
+        const t = i / 16;
+        frames.push(frame(
+          firstX + (secondX - firstX) * t,
+          firstY + (secondY - firstY) * t - fontSize * 2 * 4 * t * (1 - t),
+          360 * t,
+          .325 + .45 * t,
+        ));
+      }
+      for (let i = 1; i <= 16; i++) {
+        const t = i / 16;
+        frames.push(frame(
+          secondX * (1 - t),
+          secondY * (1 - t) - fontSize * .45 * 4 * t * (1 - t),
+          360 + 360 * t,
+          .775 + .225 * t,
+        ));
+      }
+      if (flight?.effect instanceof KeyframeEffect) flight.effect.setKeyframes(frames);
+      return { frames, hiddenTravel };
+    };
+
+    const resizeObserver = new ResizeObserver(positionBulb);
+    resizeObserver.observe(title);
+    const handleMotionChange = () => {
+      flight?.cancel();
+      flight = undefined;
+      subtitleAnimation?.cancel();
+      subtitle.style.animation = 'none';
+      positionBulb();
+      bulb.classList.remove('is-animating');
+      bulb.classList.add('is-settled');
+    };
+    reducedMotion.addEventListener('change', handleMotionChange);
+
+    const start = () => {
+      if (!active || reducedMotion.matches || bulb.classList.contains('is-settled')) return;
+      const { frames, hiddenTravel } = positionBulb();
+      const delay = 500 - hiddenTravel;
+      flight = bulb.animate(frames, { duration: flightDuration, delay, fill: 'both' });
+      let elapsed = 0;
+      if (firstAnimation?.effect && typeof firstAnimation.startTime === 'number') {
+        const titleDuration = firstAnimation.effect.getComputedTiming().endTime;
+        if (typeof titleDuration === 'number') {
+          const titleEnd = firstAnimation.startTime + titleDuration;
+          flight.startTime = titleEnd;
+          if (typeof document.timeline.currentTime === 'number') elapsed = document.timeline.currentTime - titleEnd;
+        }
+      }
+      bulb.style.setProperty('--bulb-light-delay', `${delay + flightDuration + 500 - elapsed}ms`);
+      bulb.classList.add('is-animating');
+      subtitle.style.animation = 'none';
+      subtitleAnimation = subtitle.animate(
+        [{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 700, delay: delay + flightDuration + 1000, easing: 'ease', fill: 'both' },
+      );
+      if (typeof flight.startTime === 'number') subtitleAnimation.startTime = flight.startTime;
+    };
+
+    const firstAnimation = firstBlock.getAnimations().find((animation) =>
+      animation instanceof CSSAnimation && animation.animationName === 'about-title-drop',
+    );
+    if (firstAnimation && !reducedMotion.matches) {
+      firstAnimation.finished.then(start, () => {
+        if (active) console.warn('La animación del título se interrumpió antes de iniciar el foco.');
+      });
+    }
+    document.fonts.ready.then(() => {
+      if (active) positionBulb();
+    });
+
+    document.addEventListener('astro:before-swap', () => {
+      active = false;
+      resizeObserver.disconnect();
+      reducedMotion.removeEventListener('change', handleMotionChange);
+    }, { once: true });
+  };
+
+  document.addEventListener('astro:page-load', setupAboutBulb);
+</script>
