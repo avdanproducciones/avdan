@@ -40,7 +40,7 @@ const services = [
     ],
   },
   {
-    title: "FOTOGRAFÍA",
+    title: "FOTOGRAFIA",
     headline: [
       { text: "Cada imagen " },
       { text: "comunica", highlight: true },
@@ -55,7 +55,7 @@ const services = [
     ],
   },
   {
-    title: "DRONE Y FOTOGRAFÍA AÉREA",
+    title: "DRONE Y FOTOGRAFIA AEREA",
     headline: [
       { text: "Hay " },
       { text: "perspectivas", highlight: true },
@@ -64,7 +64,7 @@ const services = [
     offerings: ["FOTOGRAFÍA AÉREA", "VIDEO CON DRONE", "PLANOS Y TOMAS AÉREAS"],
   },
   {
-    title: "EDICIÓN Y POSTPRODUCCIÓN",
+    title: "EDICION Y POSTPRODUCCION",
     headline: [
       { text: "El material cobra " },
       { text: "sentido", highlight: true },
@@ -120,7 +120,7 @@ const editingImages = [
     <div class="interior-hero">
       <div class="services-hero">
         <div class="hero-copy" data-reveal>
-          <h1>De <span class="idea-highlight">tu idea</span> a la imagen.</h1>
+          <h1>De <span class="idea-highlight">tu idea</span> a la imagen</h1>
           <p class="intro">
             Creamos fotografía y contenido audiovisual que comunica, emociona y
             destaca, desde la planificación hasta la entrega final.
@@ -153,35 +153,6 @@ const editingImages = [
         aria-label="Bajar a los servicios"><span aria-hidden="true"></span></a
       >
     </div>
-    <div class="service-path" id="servicios-lista">
-      <h2 class="service-path__heading">SERVICIOS</h2>
-      {
-        services.map((service) => (
-          <article class="service-step" data-reveal>
-            <div class="service-step__title" data-from="left">
-              <h2>{service.title}</h2>
-            </div>
-            <div class="service-step__body" data-from="right">
-              <h3>
-                {service.headline.map((part) =>
-                  part.highlight ? (
-                    <span class="idea-highlight">{part.text}</span>
-                  ) : (
-                    part.text
-                  ),
-                )}
-              </h3>
-              <ul>
-                {service.offerings.map((offering) => (
-                  <li>{offering}</li>
-                ))}
-              </ul>
-            </div>
-          </article>
-        ))
-      }
-    </div>
-
     <section class="service-tech-stack" aria-labelledby="tech-stack-title">
       <div class="service-tech-stack__heading">
         <h2 id="tech-stack-title">TechStack</h2>
@@ -218,18 +189,6 @@ const editingImages = [
             <span>Premiere Pro</span>
           </div>
           <div class="service-tech-stack__tool">
-            <img
-              class="service-tech-stack__resolve"
-              src="/media/servicios/davinci-resolve-logo.png"
-              alt=""
-              width="52"
-              height="52"
-              loading="lazy"
-              decoding="async"
-            />
-            <span>DaVinci Resolve</span>
-          </div>
-          <div class="service-tech-stack__tool">
             <svg
               class="service-tech-stack__lightroom"
               viewBox="0 0 64 64"
@@ -255,6 +214,18 @@ const editingImages = [
             </svg>
             <span>After Effects</span>
           </div>
+          <div class="service-tech-stack__tool">
+            <img
+              class="service-tech-stack__resolve"
+              src="/media/servicios/davinci-resolve-logo.png"
+              alt=""
+              width="52"
+              height="52"
+              loading="lazy"
+              decoding="async"
+            />
+            <span>DaVinci Resolve</span>
+          </div>
         </div>
       </div>
       <div class="service-tech-stack__gallery">
@@ -279,6 +250,34 @@ const editingImages = [
         }
       </div>
     </section>
+    <div class="service-path" id="servicios-lista">
+      <h2 class="service-path__heading">SERVICIOS</h2>
+      {
+        services.map((service) => (
+          <article class="service-step" data-reveal>
+            <div class="service-step__title" data-from="left">
+              <h2>{service.title}</h2>
+            </div>
+            <div class="service-step__body" data-from="right">
+              <h3>
+                {service.headline.map((part) =>
+                  part.highlight ? (
+                    <span class="idea-highlight">{part.text}</span>
+                  ) : (
+                    part.text
+                  ),
+                )}
+              </h3>
+              <ul>
+                {service.offerings.map((offering) => (
+                  <li>{offering}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
     <a class="editorial-link service-path__cta" href="/contacto/" data-reveal>
       <span>Cuentanos <span class="idea-highlight">tu idea</span></span>
       <span aria-hidden="true">↗</span>
