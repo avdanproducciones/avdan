@@ -12,6 +12,12 @@ interface Props {
 
 const { title } = Astro.props;
 const currentPath = Astro.url.pathname;
+const navigation = [
+  { href: "/", label: "Portafolio" },
+  { href: "/servicios/", label: "Servicios" },
+  { href: "/sobre/", label: "Acerca de" },
+  { href: "/contacto/", label: "Contacto" },
+];
 ---
 
 <!doctype html>
@@ -39,21 +45,24 @@ const currentPath = Astro.url.pathname;
             height="84"
           /></a
         >
-        <nav aria-label="Navegacion principal">
-          <a class:list={{ active: currentPath === "/" }} href="/">Portafolio</a
-          >
-          <a
-            class:list={{ active: currentPath === "/servicios/" }}
-            href="/servicios/">Servicios</a
-          >
-          <a class:list={{ active: currentPath === "/sobre/" }} href="/sobre/"
-            >Acerca de</a
-          >
-          <a
-            class:list={{ active: currentPath === "/contacto/" }}
-            href="/contacto/">Contacto</a
-          >
+        <nav class="site-nav" aria-label="Navegacion principal">
+          {navigation.map(({ href, label }) => (
+            <a class:list={{ active: currentPath === href }} href={href} aria-current={currentPath === href ? "page" : undefined}>{label}</a>
+          ))}
         </nav>
+        <details class="mobile-menu">
+          <summary class="mobile-menu__toggle" aria-label="Menú de navegación">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </summary>
+          <div class="mobile-menu__backdrop" aria-hidden="true"></div>
+          <nav class="mobile-menu__panel" aria-label="Navegación móvil">
+            {navigation.map(({ href, label }) => (
+              <a class:list={{ active: currentPath === href }} href={href} aria-current={currentPath === href ? "page" : undefined}>{label}</a>
+            ))}
+          </nav>
+        </details>
       </div>
     </header>
     <div class="darkroom-light" aria-hidden="true"></div>
@@ -240,7 +249,7 @@ const currentPath = Astro.url.pathname;
     const header = document.querySelector<HTMLElement>(".site-header");
     if (!header) return;
     const currentScrollY = Math.max(0, window.scrollY);
-    if (currentScrollY <= 0) {
+    if (currentScrollY <= 0 || header.querySelector(".mobile-menu[open]")) {
       header.classList.remove("is-hidden");
       scrollAnchor = currentScrollY;
     } else {
@@ -282,6 +291,24 @@ const currentPath = Astro.url.pathname;
   window.addEventListener("scroll", updateHeader, { passive: true });
   window.addEventListener("resize", syncHeaderHeight);
   window.addEventListener("resize", updateScrollTop);
+  window.addEventListener("resize", () => {
+    if (window.matchMedia("(max-width: 900px)").matches) return;
+    const menu = document.querySelector<HTMLDetailsElement>(".mobile-menu[open]");
+    if (menu) menu.open = false;
+  });
+  document.addEventListener("click", (event) => {
+    const menu = document.querySelector<HTMLDetailsElement>(".mobile-menu[open]");
+    if (!menu || !(event.target instanceof Node)) return;
+    if (!menu.contains(event.target) || (event.target instanceof Element && event.target.closest("a, .mobile-menu__backdrop"))) menu.open = false;
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    const menu = document.querySelector<HTMLDetailsElement>(".mobile-menu[open]");
+    if (menu) {
+      menu.open = false;
+      menu.querySelector<HTMLElement>("summary")?.focus();
+    }
+  });
   document.addEventListener("astro:page-load", () => {
     syncHeaderHeight();
     lastScrollY = window.scrollY;

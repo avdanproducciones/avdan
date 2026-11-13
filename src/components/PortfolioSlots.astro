@@ -114,6 +114,7 @@ const videos = [
     >
       <div class="image-dialog__content">
         <div class="image-dialog__header">
+          <p class="popup-swipe-hint">Desliza para cambiar de foto</p>
           <button
             class="image-dialog__close"
             type="button"
@@ -158,6 +159,7 @@ const videos = [
     >
       <div class="image-dialog__content">
         <div class="image-dialog__header">
+          <p class="popup-swipe-hint">Desliza desde los bordes para cambiar de video</p>
           <button
             class="image-dialog__close"
             type="button"
@@ -203,6 +205,7 @@ const videos = [
 
 <script>
   import { attachZoom, resetZoom } from "../scripts/zoom";
+  import { attachSwipe } from "../scripts/swipe";
 
   const loadVideo = (dialog: HTMLDialogElement) => {
     const iframe = dialog.querySelector<HTMLIFrameElement>(
@@ -236,6 +239,7 @@ const videos = [
         if (!dialog || !close || trigger.dataset.dialogReady === "true") return;
 
         trigger.dataset.dialogReady = "true";
+        attachSwipe(dialog, (step) => stepSlot(dialog, step));
         const zoomFrame = dialog.querySelector<HTMLElement>("[data-zoom]");
         if (zoomFrame) {
           attachZoom(zoomFrame, () => dialog.close());
@@ -262,11 +266,13 @@ const videos = [
 
   // Cambia de trabajo dentro del mismo grupo (fotos o videos) sin dejar de mostrar el popup.
   const stepSlot = (current: HTMLDialogElement, step: number) => {
-    const dialogs = Array.from(
+    let dialogs = Array.from(
       document.querySelectorAll<HTMLDialogElement>(
         `.portfolio-slot-dialog[data-group="${current.dataset.group}"]`,
       ),
     );
+    if (current.dataset.group === "photo" && window.matchMedia("(max-width: 900px)").matches)
+      dialogs = dialogs.slice(0, 5);
     const index = dialogs.indexOf(current);
     const next = dialogs[(index + step + dialogs.length) % dialogs.length];
     if (!next || next === current) return;
@@ -311,6 +317,7 @@ const videos = [
 
   // El hilo y las pinzas comparten la misma parabola, calculada en pixeles reales.
   const hangPhotos = () => {
+    if (window.matchMedia("(max-width: 900px)").matches) return;
     document.querySelectorAll<HTMLElement>(".garland").forEach((garland) => {
       const width = garland.getBoundingClientRect().width;
       if (!width) return;
