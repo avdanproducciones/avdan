@@ -4,6 +4,7 @@ import "../styles/global.css";
 import "../styles/views.css";
 import "../styles/film.css";
 import Lightbox from "../components/Lightbox.astro";
+import LoadingScreen from "../components/LoadingScreen.astro";
 
 interface Props {
   title: string;
@@ -26,6 +27,7 @@ const currentPath = Astro.url.pathname;
     <ClientRouter />
   </head>
   <body>
+    <LoadingScreen />
     <header class="site-header">
       <div class="site-header__inner">
         <a href="/" class="brand" aria-label="AVDAN, inicio"
