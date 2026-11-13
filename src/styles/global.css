@@ -82,6 +82,7 @@ nav a { align-items: center; color: var(--ink); display: flex; padding: 8px 0; p
 nav a::after { background: var(--accent); bottom: 0; content: ''; height: 2px; left: 0; position: absolute; transform: scaleX(0); transform-origin: left; transition: transform .2s ease; width: 100%; }
 nav a:hover, nav a.active { color: var(--ink); }
 nav a:hover::after, nav a.active::after { transform: scaleX(1); }
+.mobile-menu { display: none; }
 
 .page { margin: 0 auto; max-width: 1440px; padding: 108px 56px 140px; position: relative; }
 .hero-feature { align-items: center; display: grid; gap: clamp(40px, 8vw, 130px); grid-template-columns: minmax(0, 1.05fr) minmax(260px, .65fr); min-height: 54vh; }
@@ -244,7 +245,7 @@ h1 em, .footer-title em { font-style: normal; }
   .brand::after, .hero-copy::before { animation: none; transition: none; }
 }
 
-.site-footer { background: var(--dark); color: white; display: grid; gap: 58px 70px; grid-template-columns: minmax(280px, 1.3fr) minmax(280px, 1fr) minmax(220px, .8fr); margin-top: auto; padding: 80px 56px 30px; }
+.site-footer { background: var(--dark); color: white; display: grid; gap: 58px 88px; grid-template-columns: minmax(280px, 1.3fr) minmax(280px, 1fr) minmax(220px, .8fr); margin-top: auto; padding: 80px 56px 30px; }
 .footer-intro, .footer-contact, .footer-external, .footer-bottom { min-width: 0; }
 .footer-title { font-family: var(--font); font-size: clamp(24px, 3.48vw, 48px); letter-spacing: .02em; line-height: 1.05; margin: 58px 0 0; max-width: 600px; }
 .footer-label { color: var(--bone); font-size: 16px; font-weight: 700; line-height: 1.5; margin: 0 0 22px; }
@@ -266,7 +267,7 @@ h1 em, .footer-title em { font-style: normal; }
 .footer-bottom { background: rgba(255,255,255,.08); display: flex; grid-column: 1 / -1; justify-content: space-between; padding: 14px 16px; }
 .footer-bottom small { color: #b8cdcb; font-size: 10px; }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .site-footer { grid-template-columns: 1fr 1fr; padding-left: 36px; padding-right: 36px; }
   .footer-intro, .footer-bottom { grid-column: 1 / -1; }
 }
@@ -302,7 +303,7 @@ h1 em, .footer-title em { font-style: normal; }
   .site-footer { display: block; padding: 55px 24px 24px; }
   .footer-title { margin-top: 42px; }
   .footer-contact { margin-top: 54px; }
-  .footer-external { margin-bottom: 54px; }
+  .footer-external { margin: 54px 0; }
   .footer-contact, .footer-external { padding-top: 0; }
   .footer-bottom { display: flex; gap: 20px; }
   .footer-bottom small { font-size: 9px; }

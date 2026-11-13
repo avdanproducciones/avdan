@@ -3,22 +3,37 @@
 <dialog id="lightbox" class="image-dialog" aria-label="Imagen ampliada">
  <div class="image-dialog__content">
    <div class="image-dialog__header">
+     <p class="popup-swipe-hint" data-lightbox-hint>Desliza para cambiar de imagen</p>
       <button class="image-dialog__close" type="button" aria-label="Cerrar">
         <span aria-hidden="true">×</span>
       </button>
     </div>
-    <div class="zoom-frame" data-lightbox-image hidden><img alt="" /></div>
-    <video class="lightbox__video" data-lightbox-video controls hidden></video>
-    <div class="portfolio-slot-dialog__preview" data-lightbox-placeholder hidden aria-hidden="true"><span>+</span></div>
+    <div class="item-dialog__stage">
+      <button class="item-dialog__nav item-dialog__nav--previous" type="button" data-lightbox-previous aria-label="Imagen anterior"><span aria-hidden="true">‹</span></button>
+      <div class="zoom-frame" data-lightbox-image hidden><img alt="" /></div>
+      <video class="lightbox__video" data-lightbox-video controls hidden></video>
+      <div class="portfolio-slot-dialog__preview" data-lightbox-placeholder hidden aria-hidden="true"><span>+</span></div>
+      <button class="item-dialog__nav item-dialog__nav--next" type="button" data-lightbox-next aria-label="Imagen siguiente"><span aria-hidden="true">›</span></button>
+    </div>
   </div>
 </dialog>
 
 <script>
   import { attachZoom, resetZoom } from '../scripts/zoom';
+  import { attachSwipe } from '../scripts/swipe';
 
   // Un solo manejador delegado: cualquier elemento con data-lightbox abre este popup.
   if (!(window as any).__lightboxReady) {
     (window as any).__lightboxReady = true;
+    let activeTrigger: HTMLElement | null = null;
+    const triggers = () => Array.from(document.querySelectorAll<HTMLElement>('[data-lightbox]'));
+
+    const move = (step: number) => {
+      const items = triggers();
+      const index = activeTrigger ? items.indexOf(activeTrigger) : -1;
+      if (items.length < 2 || index < 0) return;
+      open(items[(index + step + items.length) % items.length]);
+    };
 
     const open = (trigger: HTMLElement) => {
       const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
@@ -29,6 +44,17 @@
       const img = frame.querySelector('img')!;
       const src = trigger.dataset.lightbox ?? '';
       const kind = trigger.dataset.lightboxType ?? 'image';
+      activeTrigger = trigger;
+      video.pause();
+      video.removeAttribute('src');
+      const multiple = triggers().length > 1;
+      dialog.querySelector<HTMLElement>('[data-lightbox-hint]')!.hidden = !multiple;
+      dialog.querySelector<HTMLButtonElement>('[data-lightbox-previous]')!.hidden = !multiple;
+      dialog.querySelector<HTMLButtonElement>('[data-lightbox-next]')!.hidden = !multiple;
+      if (!dialog.dataset.swipeReady) {
+        attachSwipe(dialog, move);
+        dialog.dataset.swipeReady = 'true';
+      }
 
       frame.hidden = !(src && kind === 'image');
       video.hidden = !(src && kind === 'video');
@@ -40,7 +66,7 @@
         attachZoom(frame, () => dialog.close());
       }
       if (!video.hidden) video.src = src;
-      dialog.showModal();
+      if (!dialog.open) dialog.showModal();
     };
 
     document.addEventListener('click', (event) => {
@@ -54,10 +80,17 @@
       const dialog = target.closest<HTMLDialogElement>('#lightbox');
       if (!dialog) return;
       if (target === dialog || target.closest('.image-dialog__close')) dialog.close();
+      else if (target.closest('[data-lightbox-previous]')) move(-1);
+      else if (target.closest('[data-lightbox-next]')) move(1);
       else if (target.closest('.image-dialog__content') && !target.closest('.zoom-frame, video, .image-dialog__header')) dialog.close();
     });
 
     document.addEventListener('keydown', (event) => {
+      if (document.querySelector('#lightbox[open]') && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+        event.preventDefault();
+        move(event.key === 'ArrowRight' ? 1 : -1);
+        return;
+      }
       if (event.key === 'Escape') {
         const dialog = document.querySelector<HTMLDialogElement>('#lightbox[open]');
         if (dialog) {
@@ -75,6 +108,7 @@
     document.addEventListener('close', (event) => {
       const dialog = event.target as HTMLElement;
       if (dialog.id !== 'lightbox') return;
+      activeTrigger = null;
       const video = dialog.querySelector<HTMLVideoElement>('[data-lightbox-video]');
       video?.pause();
       video?.removeAttribute('src');
