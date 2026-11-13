@@ -49,7 +49,12 @@ import { projects } from '../data/projects';
   interface YouTubeApi {
     Player: new (
       element: HTMLIFrameElement,
-      options: { events: { onReady: () => void } },
+      options: {
+        events: {
+          onReady?: () => void;
+          onStateChange?: (event: { data: number }) => void;
+        };
+      },
     ) => YouTubePlayer;
   }
 
@@ -65,6 +70,10 @@ import { projects } from '../data/projects';
   let playerReady = false;
   let apiFailed = false;
   let pausePending = false;
+  const mobileVideos = window.matchMedia('(max-width: 900px)');
+  const inlinePlayers = new Map<HTMLIFrameElement, YouTubePlayer>();
+  const readyInlinePlayers = new Set<HTMLIFrameElement>();
+  const observedInlineVideos = new WeakSet<HTMLIFrameElement>();
 
   document.addEventListener('click', (event) => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -83,8 +92,12 @@ import { projects } from '../data/projects';
     }
 
     pausePending = true;
+    const iframe = document.querySelector<HTMLIFrameElement>('.hero-video__player');
+    iframe?.contentWindow?.postMessage(
+      JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }),
+      'https://www.youtube-nocookie.com',
+    );
     if (apiFailed) {
-      const iframe = document.querySelector<HTMLIFrameElement>('.hero-video__player');
       if (!iframe) return;
       const url = new URL(iframe.src);
       url.searchParams.set('autoplay', '0');
@@ -99,12 +112,18 @@ import { projects } from '../data/projects';
     openDialogs.clear();
     dialogs.forEach((dialog) => openDialogs.add(dialog));
   });
-  dialogObserver.observe(document.body, {
-    subtree: true,
-    childList: true,
-    attributes: true,
-    attributeFilter: ['open', 'role', 'aria-modal'],
-  });
+  const observeDialogs = () => {
+    dialogObserver.disconnect();
+    openDialogs.clear();
+    dialogObserver.observe(document.body, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ['open', 'role', 'aria-modal'],
+    });
+  };
+  observeDialogs();
+  document.addEventListener('astro:after-swap', observeDialogs);
 
   const loadYouTubeApi = () => {
     if (window.YT?.Player) return Promise.resolve(window.YT);
@@ -130,6 +149,70 @@ import { projects } from '../data/projects';
     return apiPromise;
   };
 
+  const pauseOtherVideos = (playing: HTMLIFrameElement) => {
+    if (!mobileVideos.matches || !playing.isConnected) return;
+    if (!playing.matches('.hero-video__player')) pauseHeroVideo();
+    inlinePlayers.forEach((inlinePlayer, iframe) => {
+      if (iframe !== playing && readyInlinePlayers.has(iframe)) inlinePlayer.pauseVideo();
+    });
+  };
+
+  const setupInlineVideo = async (iframe: HTMLIFrameElement) => {
+    try {
+      const api = await loadYouTubeApi();
+      if (!iframe.isConnected || !mobileVideos.matches || !iframe.hasAttribute('src') || inlinePlayers.has(iframe)) return;
+      const inlinePlayer = new api.Player(iframe, {
+        events: {
+          onReady: () => {
+            if (inlinePlayers.has(iframe)) readyInlinePlayers.add(iframe);
+          },
+          onStateChange: (event) => {
+            if (event.data === 1) pauseOtherVideos(iframe);
+          },
+        },
+      });
+      inlinePlayers.set(iframe, inlinePlayer);
+    } catch (error) {
+      if (iframe.isConnected && mobileVideos.matches) {
+        console.error('No se pudo activar el control del video:', error);
+      }
+    }
+  };
+
+  const syncInlineVideos = () => {
+    if (mobileVideos.matches) {
+      document.querySelectorAll<HTMLDialogElement>('.portfolio-slot-dialog[data-group="video"][open]')
+        .forEach((dialog) => dialog.close());
+    }
+    document.querySelectorAll<HTMLIFrameElement>('[data-inline-youtube-id]').forEach((iframe) => {
+      if (mobileVideos.matches) {
+        const videoId = iframe.dataset.inlineYoutubeId;
+        if (!observedInlineVideos.has(iframe)) {
+          iframe.addEventListener('load', () => void setupInlineVideo(iframe));
+          observedInlineVideos.add(iframe);
+        }
+        if (videoId && !iframe.hasAttribute('src')) {
+          iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?playsinline=1&rel=0&enablejsapi=1`;
+        }
+      } else {
+        const inlinePlayer = inlinePlayers.get(iframe);
+        if (inlinePlayer && iframe.parentNode) {
+          const replacement = iframe.cloneNode(false) as HTMLIFrameElement;
+          replacement.removeAttribute('src');
+          const parent = iframe.parentNode;
+          const next = iframe.nextSibling;
+          inlinePlayer.destroy();
+          parent.insertBefore(replacement, next);
+          inlinePlayers.delete(iframe);
+          readyInlinePlayers.delete(iframe);
+        } else {
+          iframe.removeAttribute('src');
+        }
+      }
+    });
+  };
+  mobileVideos.addEventListener('change', syncInlineVideos);
+
   const setupHeroVideo = async () => {
     const iframe = document.querySelector<HTMLIFrameElement>('.hero-video__player');
     const button = document.querySelector<HTMLButtonElement>('.hero-video__sound');
@@ -149,6 +232,9 @@ import { projects } from '../data/projects';
             }
             button.hidden = false;
           },
+          onStateChange: (event) => {
+            if (event.data === 1) pauseOtherVideos(iframe);
+          },
         },
       });
       button.addEventListener('click', () => {
@@ -167,9 +253,14 @@ import { projects } from '../data/projects';
   };
 
   setupHeroVideo();
+  syncInlineVideos();
   document.addEventListener('astro:page-load', setupHeroVideo);
+  document.addEventListener('astro:page-load', syncInlineVideos);
   document.addEventListener('astro:before-swap', () => {
     player?.destroy();
+    inlinePlayers.forEach((inlinePlayer) => inlinePlayer.destroy());
+    inlinePlayers.clear();
+    readyInlinePlayers.clear();
     player = undefined;
     playerReady = false;
     apiFailed = false;

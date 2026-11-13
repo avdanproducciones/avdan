@@ -20,19 +20,22 @@
 
 <script>
   import { attachZoom, resetZoom } from '../scripts/zoom';
-  import { attachSwipe } from '../scripts/swipe';
+  import { animateSwipeImage, attachSwipe } from '../scripts/swipe';
 
   // Un solo manejador delegado: cualquier elemento con data-lightbox abre este popup.
   if (!(window as any).__lightboxReady) {
     (window as any).__lightboxReady = true;
     let activeTrigger: HTMLElement | null = null;
-    const triggers = () => Array.from(document.querySelectorAll<HTMLElement>('[data-lightbox]'));
+    const triggers = () => Array.from(document.querySelectorAll<HTMLElement>('[data-lightbox]'))
+      .filter((trigger) => trigger.getClientRects().length > 0);
 
-    const move = (step: number) => {
+    const move = (step: number, animate = false) => {
       const items = triggers();
       const index = activeTrigger ? items.indexOf(activeTrigger) : -1;
       if (items.length < 2 || index < 0) return;
       open(items[(index + step + items.length) % items.length]);
+      const frame = document.querySelector<HTMLElement>('#lightbox [data-lightbox-image]:not([hidden])');
+      if (animate && frame) animateSwipeImage(frame);
     };
 
     const open = (trigger: HTMLElement) => {
@@ -52,7 +55,7 @@
       dialog.querySelector<HTMLButtonElement>('[data-lightbox-previous]')!.hidden = !multiple;
       dialog.querySelector<HTMLButtonElement>('[data-lightbox-next]')!.hidden = !multiple;
       if (!dialog.dataset.swipeReady) {
-        attachSwipe(dialog, move);
+        attachSwipe(dialog, (step) => move(step, true));
         dialog.dataset.swipeReady = 'true';
       }
 

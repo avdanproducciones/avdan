@@ -1,3 +1,19 @@
+const imageAnimations = new WeakMap<HTMLElement, Animation>();
+
+export const animateSwipeImage = (element: HTMLElement) => {
+  if (!window.matchMedia('(max-width: 900px)').matches ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  imageAnimations.get(element)?.cancel();
+  const animation = element.animate(
+    [
+      { opacity: 0, transform: 'translateY(28px) scale(.94)', filter: 'blur(6px)' },
+      { opacity: 1, transform: 'none', filter: 'blur(0)' },
+    ],
+    { duration: 550, easing: 'cubic-bezier(.16, 1, .3, 1)' },
+  );
+  imageAnimations.set(element, animation);
+};
+
 export const attachSwipe = (element: HTMLElement, onSwipe: (step: number) => void, allowButton?: string) => {
   let start: { x: number; y: number } | undefined;
 

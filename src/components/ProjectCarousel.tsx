@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { Project, ProjectMedia } from '../types/project';
 import { attachZoom } from '../scripts/zoom';
-import { attachSwipe } from '../scripts/swipe';
+import { animateSwipeImage, attachSwipe } from '../scripts/swipe';
 
 interface ProjectCarouselProps {
   projects: Project[];
@@ -92,6 +92,7 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
   const [swipeHint, setSwipeHint] = useState(false);
   const dialogContentRef = useRef<HTMLDivElement>(null);
   const itemDialogRef = useRef<HTMLDivElement>(null);
+  const animateNextItem = useRef(false);
 
   useEffect(() => {
     if (!selectedCategory) return;
@@ -102,6 +103,13 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
     }
   }, [selectedCategory]);
   const categories = buildCategories(projects);
+
+  useLayoutEffect(() => {
+    if (!animateNextItem.current) return;
+    animateNextItem.current = false;
+    const frame = itemDialogRef.current?.querySelector<HTMLElement>('.zoom-frame');
+    if (frame) animateSwipeImage(frame);
+  }, [selectedItem]);
 
   useEffect(() => {
     if (!selectedCategory) return;
@@ -134,7 +142,10 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
     return attachSwipe(dialog, (step) => {
       const items = selectedCategory.items;
       const current = items.findIndex((item) => item.id === selectedItem.id);
-      setSelectedItem(items[(current + step + items.length) % items.length]);
+      const next = items[(current + step + items.length) % items.length];
+      if (next === selectedItem) return;
+      animateNextItem.current = true;
+      setSelectedItem(next);
     });
   }, [selectedCategory, selectedItem]);
 

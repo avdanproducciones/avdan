@@ -229,6 +229,21 @@ const editingImages = [
         </div>
       </div>
       <div class="service-tech-stack__gallery">
+        <button
+          class="edit-showcase__item service-tech-stack__image service-tech-stack__compare"
+          data-reveal
+          type="button"
+          data-lightbox="/media/servicios/edicion-comparacion.webp"
+          data-lightbox-title="Comparación de color: material original y exportado"
+        >
+          <img
+            src="/media/servicios/edicion-comparacion.webp"
+            alt="Comparación de color entre el material original y el exportado"
+            loading="lazy"
+            decoding="async"
+          />
+          <span>Corrección de color · antes y después</span>
+        </button>
         {
           editingImages.map((image) => (
             <button
@@ -292,5 +307,19 @@ const editingImages = [
 
   .service-tech-stack__gallery {
     margin-top: clamp(24px, 3vw, 40px);
+  }
+
+  .service-tech-stack__compare {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .services-hero__compare {
+      display: none;
+    }
+
+    .service-tech-stack__compare {
+      display: grid;
+    }
   }
 </style>

@@ -64,7 +64,25 @@ import Layout from '../layouts/Layout.astro';
     }
     let active = true;
     let flight: Animation | undefined;
+    const bulbSound = new Audio('/media/efecto-de-sonido-foco-luz-rota.mp3');
+    bulbSound.preload = 'auto';
     const revealAnimations: Animation[] = [];
+
+    const onBulbLight = (event: AnimationEvent) => {
+      if (event.animationName !== 'about-bulb-light' || event.pseudoElement !== '::after' ||
+          event.elapsedTime * 1000 >= flickerDuration) return;
+      if (!active || reducedMotion.matches) return;
+      // Omite el silencio inicial para que el sonido coincida con el primer destello.
+      bulbSound.currentTime = .128 + event.elapsedTime;
+      bulbSound.play().catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === 'NotAllowedError') {
+          console.info('El navegador bloqueó la reproducción automática del sonido del foco.');
+        } else {
+          console.warn('No se pudo reproducir el sonido del foco:', error);
+        }
+      });
+    };
+    bulb.addEventListener('animationstart', onBulbLight);
 
     const positionBulb = () => {
       const wordRect = word.getBoundingClientRect();
@@ -141,6 +159,7 @@ import Layout from '../layouts/Layout.astro';
     const resizeObserver = new ResizeObserver(positionBulb);
     resizeObserver.observe(title);
     const handleMotionChange = () => {
+      bulbSound.pause();
       flight?.cancel();
       flight = undefined;
       revealAnimations.forEach((animation) => animation.cancel());
@@ -194,6 +213,8 @@ import Layout from '../layouts/Layout.astro';
 
     document.addEventListener('astro:before-swap', () => {
       active = false;
+      bulbSound.pause();
+      bulb.removeEventListener('animationstart', onBulbLight);
       resizeObserver.disconnect();
       reducedMotion.removeEventListener('change', handleMotionChange);
     }, { once: true });

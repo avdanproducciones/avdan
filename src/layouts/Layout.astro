@@ -301,6 +301,25 @@ const navigation = [
     if (!menu || !(event.target instanceof Node)) return;
     if (!menu.contains(event.target) || (event.target instanceof Element && event.target.closest("a, .mobile-menu__backdrop"))) menu.open = false;
   });
+  let outsideMenuTouch: { x: number; y: number } | undefined;
+  document.addEventListener("touchstart", (event) => {
+    const menu = document.querySelector<HTMLDetailsElement>(".mobile-menu[open]");
+    const target = event.target instanceof Element ? event.target : null;
+    outsideMenuTouch = menu && event.touches.length === 1 &&
+      !target?.closest(".mobile-menu__panel, .mobile-menu__toggle")
+      ? { x: event.touches[0].clientX, y: event.touches[0].clientY }
+      : undefined;
+  }, { passive: true });
+  document.addEventListener("touchmove", (event) => {
+    if (!outsideMenuTouch || event.touches.length !== 1) return;
+    const touch = event.touches[0];
+    if (Math.hypot(touch.clientX - outsideMenuTouch.x, touch.clientY - outsideMenuTouch.y) < 10) return;
+    const menu = document.querySelector<HTMLDetailsElement>(".mobile-menu[open]");
+    if (menu) menu.open = false;
+    outsideMenuTouch = undefined;
+  }, { passive: true });
+  document.addEventListener("touchend", () => { outsideMenuTouch = undefined; }, { passive: true });
+  document.addEventListener("touchcancel", () => { outsideMenuTouch = undefined; }, { passive: true });
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
     const menu = document.querySelector<HTMLDetailsElement>(".mobile-menu[open]");
