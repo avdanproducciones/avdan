@@ -5,13 +5,17 @@ import Layout from "../layouts/Layout.astro";
 <Layout title="Contacto">
   <section class="page interior-page contact-page interior-page--contact">
     <div class="interior-hero">
-      <div class="hero-copy" data-reveal>
-        <h1><span class="idea-highlight">Tu idea</span> comienza aqui.</h1>
+      <div class="hero-copy contact-hero">
+        <h1 class="contact-title">
+          <span class="contact-title__block idea-highlight">Tu idea</span>
+          <span class="contact-title__block">comienza</span>
+          <span class="contact-title__block">aqui</span>
+        </h1>
         <p class="intro">
           Cuentanos que quieres comunicar. Estamos listos para escucharte y darle
           vida a tu proyecto.
         </p>
-        <a class="editorial-link" href="mailto:avdan.producciones@gmail.com"
+        <a class="editorial-link contact-hero__link" href="mailto:avdan.producciones@gmail.com"
           >Escribir un correo <span aria-hidden="true">↗</span></a
         >
       </div>

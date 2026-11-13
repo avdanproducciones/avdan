@@ -49,8 +49,12 @@ html.reveal-enabled .service-step.is-visible .service-step__body li:nth-child(3)
 .page.interior-page--about { overflow: visible; }
 .page.about-closing { padding-top: 24px; }
 .interior-page--about .about-hero { animation: none; min-height: 45vh; width: 100%; }
-.about-hero h1 { --title-delay: 500ms; --title-stagger: 180ms; --title-duration: 600ms; --title-distance: -70px; animation: none; display: grid; max-width: none; }
-.about-hero .about-hero__intro { animation: rise-in .7s ease 6s both; }
+.about-hero__heading { position: relative; width: 100%; }
+.about-hero h1 { --title-delay: 500ms; --title-stagger: 180ms; --title-duration: 600ms; --title-distance: -70px; animation: none; display: grid; margin-bottom: 8px; max-width: none; }
+.about-hero__logo-position { mix-blend-mode: screen; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: clamp(115px, 21vw, 300px); }
+.about-hero__logo { display: block; height: auto; width: 100%; }
+.about-hero .about-hero__intro, .about-hero__logo { animation: rise-in .7s ease 6s both; }
+.about-hero .about-hero__intro { margin-top: 0; }
 .about-title__block { animation: about-title-drop var(--title-duration) cubic-bezier(.22,.75,.22,1) both; display: block; }
 .about-title__block:nth-child(1) { animation-delay: calc(var(--title-delay) + 3 * var(--title-stagger)); }
 .about-title__block:nth-child(2) { animation-delay: calc(var(--title-delay) + 2 * var(--title-stagger)); }
@@ -77,7 +81,7 @@ html.reveal-enabled .service-step.is-visible .service-step__body li:nth-child(3)
 .about-title__bulb.bulb::before { content: none; }
 /* El dibujo viene de --bulb-art en .bulb (film.css); para otra imagen, define --bulb-art: url("ruta") aqui. */
 .about-title__bulb.bulb::after { animation: none; filter: brightness(.55); height: 100%; left: 0; top: 0; transform: rotate(180deg); width: 100%; }
-.about-title__bulb.bulb.is-animating::after { animation: about-bulb-light .35s steps(1, end) var(--bulb-light-delay) both; }
+.about-title__bulb.bulb.is-animating::after { animation: about-bulb-light var(--bulb-light-duration, .35s) steps(1, end) var(--bulb-light-delay) both; }
 .about-title__bulb.bulb.is-settled { animation: none; opacity: 1; }
 .about-title__bulb.bulb.is-settled::after { animation: none; filter: brightness(1.1) drop-shadow(0 0 5px rgba(255, 166, 100, .95)) drop-shadow(0 0 16px rgba(255, 95, 45, .8)); }
 @keyframes about-bulb-light {
@@ -92,11 +96,25 @@ html.reveal-enabled .service-step.is-visible .service-step__body li:nth-child(3)
 .about-story__copy p:last-child { margin-bottom: 0; }
 .about-closing__content { margin: 0 auto; max-width: 1040px; }
 .about-closing p { font-size: clamp(24px, 2.4vw, 34px); margin: 0; max-width: none; }
+
+.interior-page--contact .contact-hero, .contact-hero .contact-title { animation: none; }
+.contact-hero { --contact-title-delay: 300ms; --contact-title-duration: 300ms; }
+.contact-title__block { animation: contact-title-arrival var(--contact-title-duration) cubic-bezier(.22,.75,.22,1) both; display: block; }
+.contact-title__block:nth-child(1) { animation-delay: var(--contact-title-delay); }
+.contact-title__block:nth-child(2) { animation-delay: calc(var(--contact-title-delay) + var(--contact-title-duration)); }
+.contact-title__block:nth-child(3) { animation-delay: calc(var(--contact-title-delay) + 2 * var(--contact-title-duration)); }
+.contact-hero .intro, .contact-hero__link { animation: rise-in .7s ease calc(var(--contact-title-delay) + 3 * var(--contact-title-duration)) both; }
+@keyframes contact-title-arrival {
+  from { opacity: 0; transform: translateX(-70px); }
+  to { opacity: 1; transform: none; }
+}
+
 @media (min-width: 701px) and (max-height: 740px) {
   .about-hero h1 { font-size: min(clamp(37px, 5.8vw, 84px), max(28px, calc(23.8svh - 84.5px))); }
 }
 @media (max-width: 700px) {
   .about-hero h1 { font-size: min(clamp(29px, 8vw, 46px), calc(10.1vw - 4.85px)); overflow-wrap: anywhere; }
+  .about-hero__logo-position { top: 48%; width: clamp(55px, 20vw, 120px); }
   .about-story__copy { text-align: left; }
   .contact-page h1 { font-size: clamp(29px, 8vw, 46px); overflow-wrap: anywhere; }
 }
@@ -237,7 +255,8 @@ html.reveal-enabled .service-step.is-visible .service-step__body li:nth-child(3)
   .service-step__title, .service-step__body, .principle, .social-card, .social-card * { transition: none; }
   html.reveal-enabled [data-reveal='left'], html.reveal-enabled [data-reveal='right'] { transform: none; }
   .about-title__block { animation: none; }
-  .about-hero .about-hero__intro { animation: none; }
+  .about-hero .about-hero__intro, .about-hero__logo { animation: none; }
+  .contact-title__block, .contact-hero .intro, .contact-hero__link { animation: none; }
   .about-title__bulb.bulb { animation: none; opacity: 1; }
   .about-title__bulb.bulb::after { animation: none; filter: brightness(1.1) drop-shadow(0 0 5px rgba(255, 166, 100, .95)); }
 }
