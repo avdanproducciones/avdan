@@ -329,8 +329,10 @@ body { overflow-x: clip; }
 .hero-video__sound svg { fill: none; height: 44px; stroke: currentColor; stroke-width: 2; width: 44px; }
 .hero-video .scroll-cue { flex: 0 0 56px; margin: 0; width: 100%; }
 @media (max-width: 900px) {
-  .hero-video { height: calc(100svh - var(--header-h) - 16px); min-height: 0; }
-  .hero-video__frame { align-self: center; aspect-ratio: 16 / 9; flex: 0 0 auto; margin: auto 0; width: min(100%, max(0px, calc((100svh - var(--header-h) - 100px) * 16 / 9))); }
+  .hero-video { height: auto; min-height: 0; padding: 8px 16px 0; }
+  .hero-video__frame { aspect-ratio: 16 / 9; border: 0; box-shadow: none; flex: 0 0 auto; min-height: 200px; }
+  .hero-video .scroll-cue { display: none; }
+  .home-page .garland-section { margin-top: 0; }
 }
 .home-page { padding-top: 0; }
 .home-page .scroll-cue { margin-top: 28px; }
