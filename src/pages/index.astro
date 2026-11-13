@@ -83,8 +83,12 @@ import { projects } from '../data/projects';
     }
 
     pausePending = true;
+    const iframe = document.querySelector<HTMLIFrameElement>('.hero-video__player');
+    iframe?.contentWindow?.postMessage(
+      JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }),
+      'https://www.youtube-nocookie.com',
+    );
     if (apiFailed) {
-      const iframe = document.querySelector<HTMLIFrameElement>('.hero-video__player');
       if (!iframe) return;
       const url = new URL(iframe.src);
       url.searchParams.set('autoplay', '0');
@@ -99,12 +103,18 @@ import { projects } from '../data/projects';
     openDialogs.clear();
     dialogs.forEach((dialog) => openDialogs.add(dialog));
   });
-  dialogObserver.observe(document.body, {
-    subtree: true,
-    childList: true,
-    attributes: true,
-    attributeFilter: ['open', 'role', 'aria-modal'],
-  });
+  const observeDialogs = () => {
+    dialogObserver.disconnect();
+    openDialogs.clear();
+    dialogObserver.observe(document.body, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ['open', 'role', 'aria-modal'],
+    });
+  };
+  observeDialogs();
+  document.addEventListener('astro:after-swap', observeDialogs);
 
   const loadYouTubeApi = () => {
     if (window.YT?.Player) return Promise.resolve(window.YT);

@@ -36,6 +36,7 @@ export const attachZoom = (frame: HTMLElement, onOutside?: () => void) => {
   frame.dataset.zoomReady = 'true';
 
   let touchStart: { x: number; y: number } | undefined;
+  let panTouch: { x: number; y: number } | undefined;
   let lastTap: { x: number; y: number; time: number; src: string | null } | undefined;
   let lastTouchTime = 0;
 
@@ -53,14 +54,36 @@ export const attachZoom = (frame: HTMLElement, onOutside?: () => void) => {
     lastTouchTime = Date.now();
     if (event.touches.length !== 1) {
       touchStart = undefined;
+      panTouch = undefined;
       lastTap = undefined;
+      frame.classList.remove('is-panning');
       return;
     }
     touchStart = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+    panTouch = readScale(frame) > MIN_SCALE ? { ...touchStart } : undefined;
+  };
+
+  const onTouchMove = (event: TouchEvent) => {
+    if (!touchStart || !panTouch || event.touches.length !== 1 || readScale(frame) <= MIN_SCALE) return;
+    const touch = event.touches[0];
+    if (Math.hypot(touch.clientX - touchStart.x, touch.clientY - touchStart.y) <= 5 && !frame.classList.contains('is-panning')) return;
+    const img = frame.querySelector('img');
+    if (!img || !img.offsetWidth || !img.offsetHeight) return;
+    const scale = readScale(frame) - 1;
+    const originX = parseFloat(frame.style.getPropertyValue('--ox')) || 0;
+    const originY = parseFloat(frame.style.getPropertyValue('--oy')) || 0;
+    frame.style.setProperty('--ox', `${Math.max(0, Math.min(100, originX - (touch.clientX - panTouch.x) / (img.offsetWidth * scale) * 100))}%`);
+    frame.style.setProperty('--oy', `${Math.max(0, Math.min(100, originY - (touch.clientY - panTouch.y) / (img.offsetHeight * scale) * 100))}%`);
+    frame.classList.add('is-panning');
+    panTouch = { x: touch.clientX, y: touch.clientY };
+    if (event.cancelable) event.preventDefault();
   };
 
   const onTouchEnd = (event: TouchEvent) => {
     lastTouchTime = Date.now();
+    const wasPanning = frame.classList.contains('is-panning');
+    panTouch = undefined;
+    frame.classList.remove('is-panning');
     if (!touchStart || event.touches.length || event.changedTouches.length !== 1) {
       touchStart = undefined;
       lastTap = undefined;
@@ -69,7 +92,7 @@ export const attachZoom = (frame: HTMLElement, onOutside?: () => void) => {
     const touch = event.changedTouches[0];
     const moved = Math.hypot(touch.clientX - touchStart.x, touch.clientY - touchStart.y);
     touchStart = undefined;
-    if (moved > 20) {
+    if (wasPanning || moved > 20) {
       lastTap = undefined;
       return;
     }
@@ -94,7 +117,7 @@ export const attachZoom = (frame: HTMLElement, onOutside?: () => void) => {
     }
   };
 
-  const onTouchCancel = () => { touchStart = undefined; lastTap = undefined; };
+  const onTouchCancel = () => { touchStart = undefined; panTouch = undefined; lastTap = undefined; frame.classList.remove('is-panning'); };
   const onMove = (event: MouseEvent) => {
     if (readScale(frame) > MIN_SCALE && isOverImage(frame, event)) setOrigin(frame, event);
   };
@@ -111,6 +134,7 @@ export const attachZoom = (frame: HTMLElement, onOutside?: () => void) => {
   frame.addEventListener('mousemove', onMove);
   frame.addEventListener('wheel', onWheel, { passive: false });
   frame.addEventListener('touchstart', onTouchStart, { passive: true });
+  frame.addEventListener('touchmove', onTouchMove, { passive: false });
   frame.addEventListener('touchend', onTouchEnd, { passive: false });
   frame.addEventListener('touchcancel', onTouchCancel);
 
@@ -119,6 +143,7 @@ export const attachZoom = (frame: HTMLElement, onOutside?: () => void) => {
     frame.removeEventListener('mousemove', onMove);
     frame.removeEventListener('wheel', onWheel);
     frame.removeEventListener('touchstart', onTouchStart);
+    frame.removeEventListener('touchmove', onTouchMove);
     frame.removeEventListener('touchend', onTouchEnd);
     frame.removeEventListener('touchcancel', onTouchCancel);
     delete frame.dataset.zoomReady;

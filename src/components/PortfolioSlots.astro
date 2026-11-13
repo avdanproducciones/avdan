@@ -159,7 +159,7 @@ const videos = [
     >
       <div class="image-dialog__content">
         <div class="image-dialog__header">
-          <p class="popup-swipe-hint">Desliza desde los bordes para cambiar de video</p>
+          <p class="popup-swipe-hint">Desliza sobre los lados del video para cambiar</p>
           <button
             class="image-dialog__close"
             type="button"
@@ -184,7 +184,7 @@ const videos = [
             <iframe
               title={video.title}
               data-youtube-id={video.youtubeId}
-              allow="autoplay; encrypted-media; picture-in-picture"
+              allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
               referrerpolicy="strict-origin-when-cross-origin"
               allowfullscreen
             />

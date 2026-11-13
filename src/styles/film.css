@@ -260,8 +260,10 @@ body { overflow-x: clip; }
   .image-dialog .zoom-frame, .item-dialog .zoom-frame { border: 0; max-height: 100svh; max-width: 100%; }
   .image-dialog .zoom-frame img, .item-dialog .zoom-frame img { max-height: 100svh; }
   .image-dialog .zoom-frame.is-zoomed, .item-dialog .zoom-frame.is-zoomed { height: 100svh; }
+  .zoom-frame.is-zoomed { touch-action: none; }
+  .zoom-frame.is-panning img { transition: none; }
   .portfolio-slot-dialog .item-dialog__stage > .portfolio-slot-dialog__preview { align-self: center; aspect-ratio: 16 / 9; border: 0; flex: 0 1 auto; height: auto; position: relative; width: min(100%, calc(100svh * 16 / 9)); }
-  .portfolio-slot-dialog .portfolio-slot-dialog__preview::before, .portfolio-slot-dialog .portfolio-slot-dialog__preview::after { bottom: 60px; content: ''; position: absolute; top: 0; touch-action: pan-y; width: 40px; z-index: 1; }
+  .portfolio-slot-dialog .portfolio-slot-dialog__preview::before, .portfolio-slot-dialog .portfolio-slot-dialog__preview::after { bottom: 64px; content: ''; position: absolute; top: 56px; touch-action: pan-y; width: calc(50% - 56px); z-index: 1; }
   .portfolio-slot-dialog .portfolio-slot-dialog__preview::before { left: 0; }
   .portfolio-slot-dialog .portfolio-slot-dialog__preview::after { right: 0; }
   .image-dialog .item-dialog__nav, .item-dialog .item-dialog__nav, .category-dialog__side { clip-path: inset(50%); height: 1px; overflow: hidden; position: absolute; width: 1px; }
