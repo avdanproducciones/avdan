@@ -6,13 +6,16 @@ import Layout from '../layouts/Layout.astro';
   <section class="page interior-page interior-page--about about-page">
     <div class="interior-hero">
       <div class="hero-copy about-hero">
-        <h1 class="about-title">
-          <span class="about-title__block"><span class="idea-highlight">Tus ide<span data-bulb-impact="ideas">a</span>s</span><span class="about-title__baseline" aria-hidden="true"></span></span>
-          <span class="about-title__block">nuestra</span>
-          <span class="about-title__block">vision</span>
-          <span class="about-title__block"><span class="about-title__last-word">audiovisu<span data-bulb-impact="audiovisual">a</span><span data-bulb-impact="last">l</span><span class="about-title__baseline" aria-hidden="true"></span><span class="bulb about-title__bulb" aria-hidden="true"></span></span></span>
-        </h1>
-        <p class="intro about-hero__intro">Descubre quienes somos</p>
+        <div class="about-hero__heading">
+          <h1 class="about-title">
+            <span class="about-title__block"><span class="idea-highlight">Tus ide<span data-bulb-impact="ideas">a</span>s</span><span class="about-title__baseline" aria-hidden="true"></span></span>
+            <span class="about-title__block">nuestra</span>
+            <span class="about-title__block">vision</span>
+            <span class="about-title__block"><span class="about-title__last-word">audiovisu<span data-bulb-impact="audiovisual">a</span><span data-bulb-impact="last">l</span><span class="about-title__baseline" aria-hidden="true"></span><span class="bulb about-title__bulb" aria-hidden="true"></span></span></span>
+          </h1>
+          <span class="about-hero__logo-position"><img class="about-hero__logo" src="/logo-avdan.svg" width="320" height="226" alt="" aria-hidden="true" /></span>
+        </div>
+        <p class="intro about-hero__intro">Descubre quiénes somos</p>
       </div>
       <a class="scroll-cue" href="#acerca-historia" aria-label="Bajar a la historia de AVDAN">
         <span aria-hidden="true"></span>
@@ -41,15 +44,19 @@ import Layout from '../layouts/Layout.astro';
     const firstBlock = title?.querySelector<HTMLElement>('.about-title__block');
     const word = title?.querySelector<HTMLElement>('.about-title__last-word');
     const bulb = title?.querySelector<HTMLElement>('.about-title__bulb');
-    const subtitle = title?.parentElement?.querySelector<HTMLElement>('.about-hero__intro');
+    const hero = title?.closest<HTMLElement>('.about-hero');
+    const subtitle = hero?.querySelector<HTMLElement>('.about-hero__intro');
+    const logo = hero?.querySelector<HTMLElement>('.about-hero__logo');
     const firstLetter = title?.querySelector<HTMLElement>('[data-bulb-impact="ideas"]');
     const secondLetter = title?.querySelector<HTMLElement>('[data-bulb-impact="audiovisual"]');
     const lastLetter = title?.querySelector<HTMLElement>('[data-bulb-impact="last"]');
     const baselines = title?.querySelectorAll<HTMLElement>('.about-title__baseline');
-    if (!title || !firstBlock || !word || !bulb || !subtitle || !firstLetter || !secondLetter || !lastLetter || !baselines || baselines.length !== 2) return;
+    if (!title || !firstBlock || !word || !bulb || !subtitle || !logo || !firstLetter || !secondLetter || !lastLetter || !baselines || baselines.length !== 2) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const flightDuration = 2000;
+    const lightPause = 500;
+    const flickerDuration = 350;
     const canvas = document.createElement('canvas').getContext('2d');
     if (!canvas) {
       console.warn('No se pudo medir el texto para posicionar el foco.');
@@ -57,7 +64,7 @@ import Layout from '../layouts/Layout.astro';
     }
     let active = true;
     let flight: Animation | undefined;
-    let subtitleAnimation: Animation | undefined;
+    const revealAnimations: Animation[] = [];
 
     const positionBulb = () => {
       const wordRect = word.getBoundingClientRect();
@@ -81,11 +88,11 @@ import Layout from '../layouts/Layout.astro';
       const secondY = baseline - glyphTop - bulbHeight - originY;
       title.style.setProperty('--bulb-baseline', `${baseline - wordRect.top}px`);
 
-      // Anticipa el tramo oculto por la cabecera para que el foco se vea a los 500 ms.
+      // Anticipa la caída hasta dejar el foco completo por debajo de la cabecera.
       const startTop = -bulbHeight - 10;
       const impactTop = originY + firstY;
       const headerBottom = Math.max(0, document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0);
-      const visibleTop = headerBottom - bulbHeight;
+      const visibleTop = headerBottom + bulbHeight * .25 + 8;
       const progress = Math.max(0, Math.min(1, (visibleTop - startTop) / (impactTop - startTop)));
       let low = 0;
       let high = 1;
@@ -136,8 +143,8 @@ import Layout from '../layouts/Layout.astro';
     const handleMotionChange = () => {
       flight?.cancel();
       flight = undefined;
-      subtitleAnimation?.cancel();
-      subtitle.style.animation = 'none';
+      revealAnimations.forEach((animation) => animation.cancel());
+      [subtitle, logo].forEach((element) => { element.style.animation = 'none'; });
       positionBulb();
       bulb.classList.remove('is-animating');
       bulb.classList.add('is-settled');
@@ -147,7 +154,7 @@ import Layout from '../layouts/Layout.astro';
     const start = () => {
       if (!active || reducedMotion.matches || bulb.classList.contains('is-settled')) return;
       const { frames, hiddenTravel } = positionBulb();
-      const delay = 500 - hiddenTravel;
+      const delay = -hiddenTravel;
       flight = bulb.animate(frames, { duration: flightDuration, delay, fill: 'both' });
       let elapsed = 0;
       if (firstAnimation?.effect && typeof firstAnimation.startTime === 'number') {
@@ -158,14 +165,19 @@ import Layout from '../layouts/Layout.astro';
           if (typeof document.timeline.currentTime === 'number') elapsed = document.timeline.currentTime - titleEnd;
         }
       }
-      bulb.style.setProperty('--bulb-light-delay', `${delay + flightDuration + 500 - elapsed}ms`);
+      bulb.style.setProperty('--bulb-light-delay', `${delay + flightDuration + lightPause - elapsed}ms`);
+      bulb.style.setProperty('--bulb-light-duration', `${flickerDuration}ms`);
       bulb.classList.add('is-animating');
-      subtitle.style.animation = 'none';
-      subtitleAnimation = subtitle.animate(
-        [{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'none' }],
-        { duration: 700, delay: delay + flightDuration + 1000, easing: 'ease', fill: 'both' },
-      );
-      if (typeof flight.startTime === 'number') subtitleAnimation.startTime = flight.startTime;
+      const flightStartTime = flight.startTime;
+      [subtitle, logo].forEach((element) => {
+        element.style.animation = 'none';
+        const animation = element.animate(
+          [{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'none' }],
+          { duration: 700, delay: delay + flightDuration + lightPause + flickerDuration, easing: 'ease', fill: 'both' },
+        );
+        if (typeof flightStartTime === 'number') animation.startTime = flightStartTime;
+        revealAnimations.push(animation);
+      });
     };
 
     const firstAnimation = firstBlock.getAnimations().find((animation) =>
