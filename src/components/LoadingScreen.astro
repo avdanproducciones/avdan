@@ -1,0 +1,94 @@
+<div class="loading-screen" role="status" aria-label="Cargando AVDAN">
+  <div class="loading-screen__content">
+    <img class="loading-screen__logo" src="/logo-avdan.svg" width="320" height="226" alt="" aria-hidden="true" />
+    <div class="loading-screen__track" aria-hidden="true">
+      <div class="loading-screen__progress"></div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const key = 'avdan-loading-seen';
+    try {
+      if (sessionStorage.getItem(key)) return;
+    } catch (error) {
+      console.warn('No se pudo consultar la sesión para mostrar la pantalla de carga.', error);
+      return;
+    }
+
+    const screen = document.querySelector('.loading-screen');
+    if (!screen) return;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const started = performance.now();
+    const minimumDuration = reducedMotion ? 0 : 1500;
+    let ready = document.readyState === 'complete';
+    let finished = false;
+    let blockedElements = [];
+
+    root.classList.add('is-loading');
+    const blockPage = () => {
+      if (finished) return;
+      blockedElements = Array.from(document.body.children).filter((element) =>
+        element !== screen && element.tagName !== 'SCRIPT' && !element.hasAttribute('inert'),
+      );
+      blockedElements.forEach((element) => element.setAttribute('inert', ''));
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', blockPage, { once: true });
+    } else {
+      blockPage();
+    }
+
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      try {
+        sessionStorage.setItem(key, '1');
+      } catch (error) {
+        console.warn('No se pudo guardar la sesión de la pantalla de carga.', error);
+      }
+      screen.classList.add('is-finished');
+      window.setTimeout(() => {
+        root.classList.remove('is-loading');
+        blockedElements.forEach((element) => element.removeAttribute('inert'));
+        screen.remove();
+      }, reducedMotion ? 0 : 300);
+    };
+    const finishWhenReady = () => {
+      if (ready && performance.now() - started >= minimumDuration) finish();
+    };
+    window.addEventListener('load', () => {
+      ready = true;
+      finishWhenReady();
+    }, { once: true });
+    window.setTimeout(finishWhenReady, minimumDuration);
+    window.setTimeout(finish, 4000);
+  })();
+</script>
+
+<style>
+  .loading-screen { display: none; }
+  :global(html.is-loading) .loading-screen { align-items: center; background: #000; display: flex; inset: 0; justify-content: center; position: fixed; z-index: 10000; }
+  :global(html.is-loading) { overflow: hidden; }
+  :global(html.is-loading body > :not(.loading-screen)), :global(html.is-loading body > :not(.loading-screen) *) { animation-play-state: paused !important; }
+  .loading-screen.is-finished { opacity: 0; transition: opacity .3s ease; }
+  .loading-screen__content { width: min(320px, 70vw); }
+  .loading-screen__logo { animation: loading-logo-in .85s ease both; display: block; height: auto; width: 100%; }
+  .loading-screen__track { background: #333; height: 3px; margin: 20px auto 0; overflow: hidden; width: 44%; }
+  .loading-screen__progress { animation: loading-progress 1.2s ease-in-out infinite; background: #e7e5e4; height: 100%; width: 40%; }
+  @keyframes loading-logo-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes loading-progress {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(250%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .loading-screen__logo, .loading-screen__progress { animation: none; }
+    .loading-screen__progress { width: 100%; }
+    .loading-screen.is-finished { transition: none; }
+  }
+</style>
