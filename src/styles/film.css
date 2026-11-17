@@ -25,6 +25,10 @@ body::after {
   80% { transform: translate(3%, 3%); }
   100% { transform: translate(0, 0); }
 }
+@media (max-width: 900px) {
+  /* Keep the grain texture without a continuously moving, oversized mobile layer. */
+  body::after { animation: none; inset: 0; }
+}
 
 /* Cabecera */
 .site-header { background: #000; }

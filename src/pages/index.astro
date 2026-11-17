@@ -10,11 +10,12 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
   <h1 class="sr-only">AVDAN Producciones — Portafolio audiovisual</h1>
   <section class="hero-video" aria-label="Video destacado: Memorias del Mar">
     <div class="hero-video__frame">
-      <Image src={heroPoster} widths={[480, 720, 960, 1280]} sizes="(max-width: 900px) calc(100vw - 32px), 100vw" format="webp" quality={75} alt="Memorias del Mar" class="hero-video__poster" loading="eager" fetchpriority="high" />
+      <Image src={heroPoster} widths={[360, 400, 480, 640, 720, 960, 1280]} sizes="(max-width: 900px) calc(100vw - 32px), 100vw" format="avif" quality={50} alt="Memorias del Mar" class="hero-video__poster" loading="eager" fetchpriority="high" />
       <iframe
         class="hero-video__player"
         data-hero-youtube-id="hcbyyc0O8Ng"
-        src="https://www.youtube-nocookie.com/embed/hcbyyc0O8Ng?autoplay=1&amp;mute=1&amp;playsinline=1&amp;rel=0&amp;enablejsapi=1"
+        data-autoplay-src="https://www.youtube-nocookie.com/embed/hcbyyc0O8Ng?autoplay=1&amp;mute=1&amp;playsinline=1&amp;rel=0&amp;enablejsapi=1"
+        hidden
         title="Memorias del Mar | AVDAN"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         referrerpolicy="strict-origin-when-cross-origin"
@@ -257,7 +258,22 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
     }
   };
 
-  // Only the hero loads on entry; the other players remain interaction-only.
+  // Autoplay still starts on entry, after the local cover has had a chance to paint.
+  // The YouTube control API follows the iframe load instead of competing with the LCP.
+  const startHeroVideo = async () => {
+    const iframe = document.querySelector<HTMLIFrameElement>('.hero-video__player[data-autoplay-src]');
+    if (!iframe || iframe.dataset.heroLoading) return;
+    iframe.dataset.heroLoading = 'true';
+    const poster = document.querySelector<HTMLImageElement>('.hero-video__poster');
+    await poster?.decode().catch(() => undefined);
+    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    if (!iframe.isConnected) return;
+    iframe.addEventListener('load', () => void setupHeroVideo(), { once: true });
+    iframe.src = iframe.dataset.autoplaySrc!;
+    iframe.hidden = false;
+  };
+
+  // The other players remain interaction-only.
   document.addEventListener('click', (event) => {
     const target = event.target instanceof Element ? event.target : null;
     const inlineButton = target?.closest<HTMLButtonElement>('[data-inline-play]');
@@ -272,9 +288,9 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
     iframe.focus();
     void setupInlineVideo(iframe);
   });
-  void setupHeroVideo();
+  void startHeroVideo();
   syncInlineVideos();
-  document.addEventListener('astro:page-load', setupHeroVideo);
+  document.addEventListener('astro:page-load', startHeroVideo);
   document.addEventListener('astro:page-load', syncInlineVideos);
   document.addEventListener('astro:before-swap', () => {
     player?.destroy();

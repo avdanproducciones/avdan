@@ -219,7 +219,11 @@ const navigation = [
 </html>
 
 <script>
+  let revealObserver: IntersectionObserver | undefined;
+  let repeatObserver: IntersectionObserver | undefined;
   const revealSections = () => {
+    revealObserver?.disconnect();
+    repeatObserver?.disconnect();
     const elements = document.querySelectorAll<HTMLElement>(
       "[data-reveal]:not([data-reveal-repeat])",
     );
@@ -239,6 +243,7 @@ const navigation = [
       },
       { threshold: 0.12 },
     );
+    revealObserver = observer;
 
     elements.forEach((element) => observer.observe(element));
 
@@ -251,6 +256,7 @@ const navigation = [
       },
       { threshold: 0.12 },
     );
+    repeatObserver = repeat;
     document
       .querySelectorAll<HTMLElement>("[data-reveal-repeat]")
       .forEach((element) => repeat.observe(element));
@@ -262,6 +268,10 @@ const navigation = [
   );
   revealSections();
   document.addEventListener("astro:page-load", revealSections);
+  document.addEventListener("astro:before-swap", () => {
+    revealObserver?.disconnect();
+    repeatObserver?.disconnect();
+  });
 
   const syncHeaderHeight = () => {
     const header = document.querySelector<HTMLElement>(".site-header");
@@ -316,10 +326,18 @@ const navigation = [
   };
 
   // El script se carga una sola vez; el boton se vuelve a enlazar tras cada navegacion.
-  window.addEventListener("scroll", updateScrollTop, { passive: true });
-  window.addEventListener("scroll", updateHeader, { passive: true });
+  let scrollFrame = 0;
+  const scheduleScrollUpdate = () => {
+    if (scrollFrame) return;
+    scrollFrame = requestAnimationFrame(() => {
+      scrollFrame = 0;
+      updateHeader();
+      updateScrollTop();
+    });
+  };
+  window.addEventListener("scroll", scheduleScrollUpdate, { passive: true });
   window.addEventListener("resize", syncHeaderHeight);
-  window.addEventListener("resize", updateScrollTop);
+  window.addEventListener("resize", scheduleScrollUpdate);
   window.addEventListener("resize", () => {
     if (window.matchMedia("(max-width: 900px)").matches) return;
     const menu = document.querySelector<HTMLDetailsElement>(".mobile-menu[open]");

@@ -55,7 +55,7 @@ const videos = [
               <span class="garland__swing">
                 <span class="garland__pin" aria-hidden="true" />
                 <span class="garland__photo">
-                  <img src={thumbnail(photo.src)} srcset={thumbnailSet(photo.src)} sizes="(max-width: 900px) 90vw, 20vw" width="720" height="900" alt="" loading={rowIndex === 0 && index === 0 ? 'eager' : 'lazy'} fetchpriority={rowIndex === 0 && index === 0 ? 'high' : undefined} decoding="async" />
+                  <img src={thumbnail(photo.src)} srcset={thumbnailSet(photo.src)} sizes="(max-width: 900px) calc(100vw - 50px), 20vw" width="720" height="900" alt="" loading={rowIndex === 0 && index === 0 ? 'eager' : 'lazy'} decoding="async" />
                 </span>
               </span>
             </button>
@@ -93,7 +93,7 @@ const videos = [
               <span class="portfolio-slot__window" data-timecode="00:00:00:00">
                 <Image
                   src={index === 0 ? memoriesPoster : spotPoster}
-                  widths={[480, 720, 960]} sizes="(max-width: 900px) 100vw, 60vw" format="webp" quality={75}
+                  widths={[360, 400, 480, 640, 720, 960]} sizes="(max-width: 900px) calc(100vw - 32px), 60vw" format="avif" quality={50}
                   alt=""
                   loading="lazy"
                   decoding="async"
@@ -105,7 +105,7 @@ const videos = [
           </button>
           <div class="portfolio-slot__inline">
             <button class="video-facade" type="button" data-inline-play aria-label={`Reproducir ${video.title}`}>
-              <Image src={index === 0 ? memoriesPoster : spotPoster} widths={[480, 720, 960]} sizes="calc(100vw - 44px)" format="webp" quality={75} alt="" loading="lazy" />
+              <Image src={index === 0 ? memoriesPoster : spotPoster} widths={[360, 400, 480, 640, 720, 960]} sizes="calc(100vw - 44px)" format="avif" quality={50} alt="" loading="lazy" />
               <span aria-hidden="true">▶</span>
             </button>
             <iframe

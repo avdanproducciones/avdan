@@ -28,17 +28,20 @@ for (const route of routes) {
 }
 const sitemap = readFileSync('dist/sitemap.xml', 'utf8');
 const home = readFileSync('dist/index.html', 'utf8');
-const initialPlayers = [...home.matchAll(/<iframe\b[^>]*\ssrc="([^"]+)"[^>]*>/g)];
+const initialPlayers = [...home.matchAll(/<iframe\b[^>]*\sdata-autoplay-src="([^"]+)"[^>]*>/g)];
 assert.equal(initialPlayers.length, 1, 'Only the hero player loads on entry');
 const heroUrl = new URL(initialPlayers[0][1].replaceAll('&amp;', '&'));
 assert.equal(heroUrl.pathname, '/embed/hcbyyc0O8Ng');
 assert.equal(heroUrl.searchParams.get('autoplay'), '1');
 assert.equal(heroUrl.searchParams.get('mute'), '1');
+assert.doesNotMatch(home, /<iframe\b[^>]*\ssrc=/, 'Players wait for the local cover to paint or for interaction');
 assert.doesNotMatch(home, /<script[^>]+src="https:\/\/www\.youtube\.com\/iframe_api/, 'No initial YouTube API');
 assert.doesNotMatch(home, /<link[^>]+rel="stylesheet"/, 'No render-blocking stylesheet');
 assert.doesNotMatch(home, /class="loading-screen"/, 'Content is immediately accessible');
 assert.match(home, /fetchpriority="high"/);
 assert.match(home, /\/media\/optimized\/seleccion-01-360.avif 360w/);
+assert.match(home, /\/media\/optimized\/seleccion-01-400.avif 400w/);
+assert.match(home, /\/media\/optimized\/eventos-08-card-400.avif 400w/);
 assert.match(home, /montserrat-variable\.woff2/);
 assert.match(home, /http-equiv="content-security-policy"/);
 assert.match(home, /strict-dynamic/);
