@@ -9,21 +9,16 @@
 
 <script is:inline>
   (() => {
-    const key = 'avdan-loading-seen';
-    try {
-      if (sessionStorage.getItem(key)) return;
-    } catch (error) {
-      console.warn('No se pudo consultar la sesión para mostrar la pantalla de carga.', error);
-      return;
-    }
+    // Las transiciones internas de Astro reutilizan el documento ya cargado.
+    if (document.readyState !== 'loading') return;
 
     const screen = document.querySelector('.loading-screen');
     if (!screen) return;
     const root = document.documentElement;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const started = performance.now();
-    const minimumDuration = reducedMotion ? 0 : 1500;
-    let ready = document.readyState === 'complete';
+    const minimumDuration = 500;
+    const fadeDuration = reducedMotion ? 0 : 120;
     let finished = false;
     let blockedElements = [];
 
@@ -35,36 +30,25 @@
       );
       blockedElements.forEach((element) => element.setAttribute('inert', ''));
     };
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', blockPage, { once: true });
-    } else {
-      blockPage();
-    }
-
     const finish = () => {
       if (finished) return;
       finished = true;
-      try {
-        sessionStorage.setItem(key, '1');
-      } catch (error) {
-        console.warn('No se pudo guardar la sesión de la pantalla de carga.', error);
-      }
+      window.clearTimeout(fallback);
       screen.classList.add('is-finished');
       window.setTimeout(() => {
         root.classList.remove('is-loading');
         blockedElements.forEach((element) => element.removeAttribute('inert'));
         screen.remove();
-      }, reducedMotion ? 0 : 300);
+      }, fadeDuration);
     };
-    const finishWhenReady = () => {
-      if (ready && performance.now() - started >= minimumDuration) finish();
-    };
-    window.addEventListener('load', () => {
-      ready = true;
-      finishWhenReady();
+    const fallback = window.setTimeout(finish, 4000);
+    document.addEventListener('DOMContentLoaded', async () => {
+      blockPage();
+      await screen.querySelector('img').decode().catch(() => {});
+      if (finished) return;
+      const remaining = Math.max(0, minimumDuration - (performance.now() - started));
+      window.setTimeout(finish, Math.ceil(remaining));
     }, { once: true });
-    window.setTimeout(finishWhenReady, minimumDuration);
-    window.setTimeout(finish, 4000);
   })();
 </script>
 
@@ -73,9 +57,9 @@
   :global(html.is-loading) .loading-screen { align-items: center; background: #000; display: flex; inset: 0; justify-content: center; position: fixed; z-index: 10000; }
   :global(html.is-loading) { overflow: hidden; }
   :global(html.is-loading body > :not(.loading-screen)), :global(html.is-loading body > :not(.loading-screen) *) { animation-play-state: paused !important; }
-  .loading-screen.is-finished { opacity: 0; transition: opacity .3s ease; }
+  .loading-screen.is-finished { opacity: 0; transition: opacity .12s ease; }
   .loading-screen__content { width: min(320px, 70vw); }
-  .loading-screen__logo { animation: loading-logo-in .85s ease both; display: block; height: auto; width: 100%; }
+  .loading-screen__logo { animation: loading-logo-in .15s ease both; display: block; height: auto; width: 100%; }
   .loading-screen__track { background: #333; height: 3px; margin: 20px auto 0; overflow: hidden; width: 44%; }
   .loading-screen__progress { animation: loading-progress 1.2s ease-in-out infinite; background: #e7e5e4; height: 100%; width: 40%; }
   @keyframes loading-logo-in {

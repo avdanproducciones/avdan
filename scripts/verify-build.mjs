@@ -9,6 +9,7 @@ let assets = 0;
 for (const route of routes) {
   const html = readFileSync(`dist${route}index.html`, 'utf8');
   assert.match(html, /<html lang="es-CL"/);
+  assert.match(html, /<body\b[^>]*>\s*<div class="loading-screen"/, `Pantalla de carga inicial: ${route}`);
   const title = html.match(/<title>(.*?)<\/title>/)?.[1];
   const description = html.match(/name="description" content="([^"]+)"/)?.[1];
   assert.ok(title && !titles.has(title), `Título único: ${route}`);
@@ -37,7 +38,6 @@ assert.equal(heroUrl.searchParams.get('mute'), '1');
 assert.doesNotMatch(home, /<iframe\b[^>]*\ssrc=/, 'Players wait for the local cover to paint or for interaction');
 assert.doesNotMatch(home, /<script[^>]+src="https:\/\/www\.youtube\.com\/iframe_api/, 'No initial YouTube API');
 assert.doesNotMatch(home, /<link[^>]+rel="stylesheet"/, 'No render-blocking stylesheet');
-assert.doesNotMatch(home, /class="loading-screen"/, 'Content is immediately accessible');
 assert.match(home, /fetchpriority="high"/);
 assert.match(home, /\/media\/optimized\/seleccion-01-360.avif 360w/);
 assert.match(home, /\/media\/optimized\/seleccion-01-400.avif 400w/);
