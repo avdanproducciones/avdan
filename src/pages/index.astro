@@ -5,6 +5,7 @@ import PortfolioSlots from '../components/PortfolioSlots.astro';
 import { projects } from '../data/projects';
 ---
 <Layout title="Portafolio">
+  <h1 class="sr-only">AVDAN Producciones — Portafolio audiovisual</h1>
   <section class="hero-video" aria-label="Video destacado: Memorias del Mar">
     <div class="hero-video__frame">
       <iframe
@@ -31,7 +32,7 @@ import { projects } from '../data/projects';
         <h2>Categorias</h2>
       </div>
       <div data-reveal style="--delay:120ms">
-        <ProjectCarousel projects={projects} client:load />
+        <ProjectCarousel projects={projects} client:visible />
       </div>
     </section>
   </section>

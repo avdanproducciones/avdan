@@ -145,7 +145,7 @@ const videos = [
             <span aria-hidden="true">‹</span>
           </button>
           <div class="zoom-frame" data-zoom>
-            <img src={photo.src} alt={photo.title} />
+            <img src={photo.src} alt={photo.title} loading="lazy" decoding="async" />
           </div>
           <button
             class="item-dialog__nav item-dialog__nav--next"
