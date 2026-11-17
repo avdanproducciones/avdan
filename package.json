@@ -8,6 +8,9 @@
     "npm": ">=9.6.5"
   },
   "scripts": {
+    "optimize:media": "node scripts/optimize-media.mjs",
+    "predev": "npm run optimize:media",
+    "prebuild": "npm run optimize:media",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
@@ -23,6 +26,8 @@
     "@astrojs/check": "^0.9.10",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
+    "sharp": "^0.35.5",
+    "subset-font": "^2.9.0",
     "typescript": "^5.9.0"
   }
 }

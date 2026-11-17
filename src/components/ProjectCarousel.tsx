@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import type { Project, ProjectMedia } from '../types/project';
 import { attachZoom } from '../scripts/zoom';
 import { animateSwipeImage, attachSwipe } from '../scripts/swipe';
+import { thumbnail, thumbnailSet } from '../data/images';
 
 interface ProjectCarouselProps {
   projects: Project[];
@@ -78,7 +79,7 @@ function GalleryImage({ src, lazy }: { src: string; lazy: boolean }) {
   return (
     <span className={`category-dialog__image category-dialog__image--${status}`}>
       {status === 'error' && <span className="category-dialog__image-error">No se pudo cargar la imagen</span>}
-      <img src={src} alt="" loading={lazy ? 'lazy' : 'eager'} decoding="async" onLoad={() => setStatus('loaded')} onError={() => setStatus('error')} />
+      <img src={thumbnail(src)} srcSet={thumbnailSet(src)} sizes="(max-width: 700px) 90vw, 30vw" alt="" loading={lazy ? 'lazy' : 'eager'} decoding="async" onLoad={() => setStatus('loaded')} onError={() => setStatus('error')} />
     </span>
   );
 }
@@ -245,7 +246,7 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
         aria-label={`Abrir galeria de ${category.name}`}
       >
         <span className="category-card__preview" aria-hidden="true">
-          {cover && <img src={cover} alt="" loading="lazy" decoding="async" />}
+          {cover && <img src={thumbnail(cover)} srcSet={thumbnailSet(cover)} sizes="(max-width: 700px) 90vw, 30vw" width="720" height="900" alt="" loading="lazy" decoding="async" />}
           <span>+</span>
         </span>
         <span className="category-card__name">{category.name}</span>

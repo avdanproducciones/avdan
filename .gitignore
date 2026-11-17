@@ -4,6 +4,9 @@ node_modules/
 # Artefactos generados por Astro y la compilación
 .astro/
 dist/
+public/media/optimized/
+public/fonts/*.woff2
+reports/
 
 # Recursos privados del proyecto
 recursos/

@@ -20,6 +20,10 @@ Sitio web estático para AVDAN, desarrollado con Astro, TypeScript y React.
 
 El sitio usa Akira Expanded para titulares y Montserrat para texto. Montserrat se sirve localmente desde `public/fonts/` y se distribuye bajo la licencia incluida en `public/fonts/montserrat-OFL.txt`.
 
+`npm run dev` y `npm run build` generan automáticamente fuentes WOFF2 con caracteres latinos y miniaturas adaptables en `public/media/optimized/`. Los originales se conservan para la ampliación. Para regenerarlos manualmente, ejecuta `npm run optimize:media`. Los archivos generados se excluyen de Git y se reutilizan mientras no cambien los originales o el generador.
+
+Los videos de YouTube se cargan al pulsar reproducir. Las portadas son locales y el contenido inicial no realiza solicitudes a YouTube. La CSP con hashes se genera durante la compilación de Astro; verifica siempre con `build` y `preview`.
+
 ## Requisitos
 
 - Node.js `22.23.4` o superior
