@@ -22,7 +22,7 @@ El sitio usa Akira Expanded para titulares y Montserrat para texto. Montserrat s
 
 ## Requisitos
 
-- Node.js `22.22.0` o superior
+- Node.js `22.23.4` o superior
 - npm `9.6.5` o superior
 
 ## Instalación
@@ -50,6 +50,18 @@ Generar la compilación:
 ```powershell
 npm run build
 ```
+
+Verificar metadatos y recursos generados (después de compilar):
+
+```powershell
+node scripts/verify-build.mjs
+node scripts/verify-preview.mjs
+```
+
+El dominio público está configurado en `astro.config.mjs` y `src/data/site.ts`.
+Los builds con `VERCEL_ENV=preview` generan `noindex` y robots restrictivo.
+Las cabeceras de `vercel.json` se aplican en Vercel, no en `astro preview`.
+Consulta `AUDITORIA.md` para resultados y límites de la revisión.
 
 Previsualizar la compilación:
 

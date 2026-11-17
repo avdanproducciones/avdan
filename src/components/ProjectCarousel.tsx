@@ -104,6 +104,41 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
   }, [selectedCategory]);
   const categories = buildCategories(projects);
 
+  // Cada capa modal retiene el foco y restaura la capa anterior al cerrarse.
+  useEffect(() => {
+    if (!selectedCategory) return;
+    const modal = selectedItem
+      ? itemDialogRef.current
+      : dialogContentRef.current?.closest<HTMLElement>('.category-dialog');
+    if (!modal) return;
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const background = Array.from(document.body.children).filter(
+      (element): element is HTMLElement => element instanceof HTMLElement && element !== modal && !element.inert,
+    );
+    background.forEach((element) => { element.inert = true; });
+    const focusable = () => Array.from(modal.querySelectorAll<HTMLElement>('button, a[href], input, select, textarea, [tabindex="0"]'))
+      .filter((element) => element.getClientRects().length > 0);
+    focusable()[0]?.focus();
+    const trapFocus = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+      const items = focusable();
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (!first || !last) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault(); last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault(); first.focus();
+      }
+    };
+    document.addEventListener('keydown', trapFocus);
+    return () => {
+      document.removeEventListener('keydown', trapFocus);
+      background.forEach((element) => { element.inert = false; });
+      if (previous?.isConnected) previous.focus();
+    };
+  }, [Boolean(selectedCategory), Boolean(selectedItem)]);
+
   useLayoutEffect(() => {
     if (!animateNextItem.current) return;
     animateNextItem.current = false;

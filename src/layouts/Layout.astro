@@ -5,13 +5,26 @@ import "../styles/views.css";
 import "../styles/film.css";
 import Lightbox from "../components/Lightbox.astro";
 import LoadingScreen from "../components/LoadingScreen.astro";
+import { site, pageDescriptions, isPreview } from '../data/site';
 
 interface Props {
   title: string;
+  description?: string;
+  noindex?: boolean;
 }
 
 const { title } = Astro.props;
 const currentPath = Astro.url.pathname;
+const description = Astro.props.description ?? pageDescriptions[currentPath] ?? pageDescriptions['/'];
+const noindex = Astro.props.noindex || isPreview;
+const canonical = new URL(currentPath, site.url);
+const pageTitle = `${title} | ${site.name}`;
+const structuredData = {
+  '@context': 'https://schema.org', '@type': 'Organization',
+  name: site.name, url: site.url, logo: new URL('/logo-avdan.svg', site.url).href,
+  email: 'avdan.producciones@gmail.com',
+  sameAs: ['https://www.instagram.com/avdan.prod/', 'https://www.youtube.com/channel/UCySStgJVu23f-DTDuiiPX9Q'],
+};
 const navigation = [
   { href: "/", label: "Portafolio" },
   { href: "/servicios/", label: "Servicios" },
@@ -21,18 +34,35 @@ const navigation = [
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es-CL">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta
       name="description"
-      content="AVDAN da vida a tus ideas a traves de la fotografia y la produccion audiovisual."
+      content={description}
     />
-    <title>{title}AVDAN</title>
+    <title>{pageTitle}</title>
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {!Astro.props.noindex && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_CL" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(site.image, site.url)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(site.image, site.url)} />
+    <link rel="icon" href="/logo-avdan.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/akira-expanded-demo.otf" as="font" type="font/otf" crossorigin />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />
     <ClientRouter />
   </head>
   <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
     <LoadingScreen />
     <header class="site-header">
       <div class="site-header__inner">
@@ -66,7 +96,7 @@ const navigation = [
       </div>
     </header>
     <div class="darkroom-light" aria-hidden="true"></div>
-    <main transition:animate="fade"><slot /></main>
+    <main id="contenido" tabindex="-1" transition:animate="fade"><slot /></main>
 
     <footer class="site-footer">
       <div class="footer-intro" data-reveal>
@@ -145,7 +175,7 @@ const navigation = [
             class="footer-social__whatsapp"
             href="https://wa.me/56921882471"
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
             aria-label="WhatsApp"
           >
             <svg class="social-mark" viewBox="0 0 24 24" aria-hidden="true"
@@ -339,7 +369,7 @@ const navigation = [
     document
       .querySelector<HTMLButtonElement>(".scroll-top")
       ?.addEventListener("click", () =>
-        window.scrollTo({ top: 0, behavior: "smooth" }),
+        window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }),
       );
   });
 </script>
