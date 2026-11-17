@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFileSync, existsSync } from 'node:fs';
 
 const routes = ['/', '/servicios/', '/sobre/', '/contacto/'];
@@ -8,6 +9,11 @@ const preview = process.env.VERCEL_ENV === 'preview';
 let assets = 0;
 for (const route of routes) {
   const html = readFileSync(`dist${route}index.html`, 'utf8');
+  const loadingScript = html.match(/<script data-loading-screen[^>]*>([\s\S]*?)<\/script>/);
+  assert.ok(loadingScript, 'Script de carga inicial: ' + route);
+  const scriptHash = createHash('sha256').update(loadingScript[1].replace(/\r\n?/g, '\n')).digest('base64');
+  const csp = html.match(/<meta http-equiv="content-security-policy" content="([^"]*)"/)?.[1];
+  assert.ok(csp?.includes("'sha256-" + scriptHash + "'"), 'CSP autoriza el script de carga inicial: ' + route);
   assert.match(html, /<html lang="es-CL"/);
   assert.match(html, /<body\b[^>]*>\s*<div class="loading-screen"/, `Pantalla de carga inicial: ${route}`);
   const title = html.match(/<title>(.*?)<\/title>/)?.[1];
