@@ -28,7 +28,12 @@ for (const route of routes) {
 }
 const sitemap = readFileSync('dist/sitemap.xml', 'utf8');
 const home = readFileSync('dist/index.html', 'utf8');
-assert.doesNotMatch(home, /<iframe[^>]+\ssrc=/, 'YouTube only loads after interaction');
+const initialPlayers = [...home.matchAll(/<iframe\b[^>]*\ssrc="([^"]+)"[^>]*>/g)];
+assert.equal(initialPlayers.length, 1, 'Only the hero player loads on entry');
+const heroUrl = new URL(initialPlayers[0][1].replaceAll('&amp;', '&'));
+assert.equal(heroUrl.pathname, '/embed/hcbyyc0O8Ng');
+assert.equal(heroUrl.searchParams.get('autoplay'), '1');
+assert.equal(heroUrl.searchParams.get('mute'), '1');
 assert.doesNotMatch(home, /<script[^>]+src="https:\/\/www\.youtube\.com\/iframe_api/, 'No initial YouTube API');
 assert.doesNotMatch(home, /<link[^>]+rel="stylesheet"/, 'No render-blocking stylesheet');
 assert.doesNotMatch(home, /class="loading-screen"/, 'Content is immediately accessible');
