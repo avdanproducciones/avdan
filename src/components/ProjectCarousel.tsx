@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import type { Project, ProjectMedia } from '../types/project';
 import { attachZoom } from '../scripts/zoom';
 import { animateSwipeImage, attachSwipe } from '../scripts/swipe';
-import { thumbnail, thumbnailSet } from '../data/images';
+import { thumbnail, thumbnailSet, categoryThumbnail, categoryThumbnailSet } from '../data/images';
 
 interface ProjectCarouselProps {
   projects: Project[];
@@ -246,7 +246,7 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
         aria-label={`Abrir galeria de ${category.name}`}
       >
         <span className="category-card__preview" aria-hidden="true">
-          {cover && <img src={thumbnail(cover)} srcSet={thumbnailSet(cover)} sizes="(max-width: 700px) 90vw, 30vw" width="720" height="900" alt="" loading="lazy" decoding="async" />}
+          {cover && <img src={categoryThumbnail(cover)} srcSet={categoryThumbnailSet(cover)} sizes="(max-width: 900px) calc(100vw - 64px), 30vw" width="720" height="540" alt="" loading="lazy" decoding="async" />}
           <span>+</span>
         </span>
         <span className="category-card__name">{category.name}</span>

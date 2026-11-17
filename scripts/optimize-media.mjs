@@ -1,8 +1,10 @@
 import { readdir, mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import sharp from 'sharp';
 import subsetFont from 'subset-font';
+import imageConfig from '../src/data/image-config.json' with { type: 'json' };
 
-const generatorTime = (await stat(new URL(import.meta.url))).mtimeMs;
+const generatorTime = Math.max((await stat(new URL(import.meta.url))).mtimeMs,
+  (await stat(new URL('../src/data/image-config.json', import.meta.url))).mtimeMs);
 const fresh = async (source, target) => {
   try { return (await stat(target)).mtimeMs > Math.max(generatorTime, (await stat(source)).mtimeMs); }
   catch { return false; }
@@ -10,16 +12,27 @@ const fresh = async (source, target) => {
 
 // Keep full-resolution originals for zoom; cards use smaller, separately cached copies.
 await mkdir('public/media/optimized', { recursive: true });
-for (const file of await readdir('public/media/projects')) {
-  if (!file.endsWith('.webp')) continue;
-  const selection = file.startsWith('seleccion-');
-  for (const width of [360, 720]) {
+const files = (await readdir('public/media/projects')).filter((file) => file.endsWith('.webp'));
+const optimizePhoto = async (file) => {
+  for (const width of imageConfig.widths) {
     const source = `public/media/projects/${file}`;
-    const target = `public/media/optimized/${file.replace('.webp', '')}-${width}.${selection ? 'avif' : 'webp'}`;
-    if (await fresh(source, target)) continue;
-    const image = sharp(source).resize({ width, withoutEnlargement: true });
-    await (selection ? image.avif({ quality: 50, effort: 4 }) : image.webp({ quality: 72 })).toFile(target);
+    const name = file.replace('.webp', '');
+    const target = `public/media/optimized/${name}-${width}.avif`;
+    if (!(await fresh(source, target))) {
+      await sharp(source).resize({ width, withoutEnlargement: true }).avif({ quality: 48, effort: 4 }).toFile(target);
+    }
+    if (imageConfig.categoryCovers.includes(name)) {
+      const cover = `public/media/optimized/${name}-card-${width}.avif`;
+      if (!(await fresh(source, cover))) {
+        await sharp(source).resize({ width, height: Math.round(width * .75), fit: 'cover' })
+          .avif({ quality: 48, effort: 4 }).toFile(cover);
+      }
+    }
   }
+};
+// Bound parallelism to avoid exhausting memory when encoding AVIF during builds.
+for (let index = 0; index < files.length; index += 4) {
+  await Promise.all(files.slice(index, index + 4).map(optimizePhoto));
 }
 // Latin, accented Spanish characters, punctuation, arrows and UI symbols.
 const characters = [[0x20, 0x24f], [0x2000, 0x206f], [0x2190, 0x21ff], [0x25a0, 0x25ff], [0x20ac, 0x20ac]]
