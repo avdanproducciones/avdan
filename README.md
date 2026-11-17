@@ -22,7 +22,7 @@ El sitio usa Akira Expanded para titulares y Montserrat para texto. Montserrat s
 
 `npm run dev` y `npm run build` generan automáticamente fuentes WOFF2 con caracteres latinos y miniaturas adaptables en `public/media/optimized/`. Los originales se conservan para la ampliación. Para regenerarlos manualmente, ejecuta `npm run optimize:media`. Los archivos generados se excluyen de Git y se reutilizan mientras no cambien los originales o el generador.
 
-Los videos de YouTube se cargan al pulsar reproducir. Las portadas son locales y el contenido inicial no realiza solicitudes a YouTube. La CSP con hashes se genera durante la compilación de Astro; verifica siempre con `build` y `preview`.
+El video principal carga YouTube al entrar y solicita reproducción automática sin sonido; el botón permite activarlo. Los demás videos se cargan al pulsar reproducir. Las portadas son locales. La CSP con hashes se genera durante la compilación de Astro; verifica siempre con `build` y `preview`.
 
 ## Requisitos
 

@@ -14,15 +14,15 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
       <iframe
         class="hero-video__player"
         data-hero-youtube-id="hcbyyc0O8Ng"
-        hidden
+        src="https://www.youtube-nocookie.com/embed/hcbyyc0O8Ng?autoplay=1&amp;mute=1&amp;playsinline=1&amp;rel=0&amp;enablejsapi=1"
         title="Memorias del Mar | AVDAN"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen
       ></iframe>
-      <button class="hero-video__sound" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z" /></svg>
-        Reproducir Memorias del Mar con sonido
+      <button class="hero-video__sound" type="button" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3Z" /><path d="M16 8a6 6 0 0 1 0 8M19 5a10 10 0 0 1 0 14" /></svg>
+        Toca para ver con sonido
       </button>
     </div>
     <a class="scroll-cue" href="#seleccion" aria-label="Bajar a la seleccion de trabajos">
@@ -235,7 +235,7 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
               player?.pauseVideo();
               pausePending = false;
             }
-            button.hidden = true;
+            button.hidden = false;
           },
           onStateChange: (event) => {
             if (event.data === 1) pauseOtherVideos(iframe);
@@ -257,25 +257,22 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
     }
   };
 
-  // No player or third-party API is downloaded until a visitor chooses a video.
+  // Only the hero loads on entry; the other players remain interaction-only.
   document.addEventListener('click', (event) => {
     const target = event.target instanceof Element ? event.target : null;
-    const heroButton = target?.closest<HTMLButtonElement>('.hero-video__sound');
     const inlineButton = target?.closest<HTMLButtonElement>('[data-inline-play]');
-    const iframe = heroButton
-      ? document.querySelector<HTMLIFrameElement>('.hero-video__player')
-      : inlineButton?.parentElement?.querySelector<HTMLIFrameElement>('[data-inline-youtube-id]');
+    const iframe = inlineButton?.parentElement?.querySelector<HTMLIFrameElement>('[data-inline-youtube-id]');
     if (!iframe) return;
-    const videoId = iframe.dataset.heroYoutubeId ?? iframe.dataset.inlineYoutubeId;
+    const videoId = iframe.dataset.inlineYoutubeId;
     if (!videoId) return;
     pauseOtherVideos(iframe);
     iframe.hidden = false;
     iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(location.origin)}`;
-    (heroButton ?? inlineButton)!.hidden = true;
+    inlineButton!.hidden = true;
     iframe.focus();
-    if (heroButton) void setupHeroVideo();
-    else void setupInlineVideo(iframe);
+    void setupInlineVideo(iframe);
   });
+  void setupHeroVideo();
   syncInlineVideos();
   document.addEventListener('astro:page-load', setupHeroVideo);
   document.addEventListener('astro:page-load', syncInlineVideos);
