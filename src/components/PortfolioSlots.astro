@@ -1,4 +1,8 @@
 ---
+import { thumbnail, thumbnailSet } from '../data/images';
+import { Image } from 'astro:assets';
+import memoriesPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
+import spotPoster from '../../public/media/video/ttPV0iTUSW8.jpg';
 const photos = [
   { title: "Claudio Parra", src: "/media/projects/seleccion-01.webp" },
   { title: "Flor de Rap", src: "/media/projects/seleccion-07.webp" },
@@ -51,7 +55,7 @@ const videos = [
               <span class="garland__swing">
                 <span class="garland__pin" aria-hidden="true" />
                 <span class="garland__photo">
-                  <img src={photo.src} alt="" loading="lazy" decoding="async" />
+                  <img src={thumbnail(photo.src)} srcset={thumbnailSet(photo.src)} sizes="(max-width: 900px) 90vw, 20vw" width="720" height="900" alt="" loading={rowIndex === 0 && index === 0 ? 'eager' : 'lazy'} fetchpriority={rowIndex === 0 && index === 0 ? 'high' : undefined} decoding="async" />
                 </span>
               </span>
             </button>
@@ -87,8 +91,9 @@ const videos = [
           >
             <span class="portfolio-slot__frame" aria-hidden="true">
               <span class="portfolio-slot__window" data-timecode="00:00:00:00">
-                <img
-                  src={`https://i.ytimg.com/vi/${video.youtubeId}/maxresdefault.jpg`}
+                <Image
+                  src={index === 0 ? memoriesPoster : spotPoster}
+                  widths={[480, 720, 960]} sizes="(max-width: 900px) 100vw, 60vw" format="webp" quality={75}
                   alt=""
                   loading="lazy"
                   decoding="async"
@@ -99,10 +104,15 @@ const videos = [
             <span class="portfolio-slot__caption">{video.title}</span>
           </button>
           <div class="portfolio-slot__inline">
+            <button class="video-facade" type="button" data-inline-play aria-label={`Reproducir ${video.title}`}>
+              <Image src={index === 0 ? memoriesPoster : spotPoster} widths={[480, 720, 960]} sizes="calc(100vw - 44px)" format="webp" quality={75} alt="" loading="lazy" />
+              <span aria-hidden="true">▶</span>
+            </button>
             <iframe
               class="portfolio-slot__inline-player"
               title={video.title}
               data-inline-youtube-id={video.youtubeId}
+              hidden
               loading="lazy"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               referrerpolicy="strict-origin-when-cross-origin"

@@ -3,22 +3,26 @@ import Layout from '../layouts/Layout.astro';
 import ProjectCarousel from '../components/ProjectCarousel';
 import PortfolioSlots from '../components/PortfolioSlots.astro';
 import { projects } from '../data/projects';
+import { Image } from 'astro:assets';
+import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
 ---
 <Layout title="Portafolio">
   <h1 class="sr-only">AVDAN Producciones — Portafolio audiovisual</h1>
   <section class="hero-video" aria-label="Video destacado: Memorias del Mar">
     <div class="hero-video__frame">
+      <Image src={heroPoster} widths={[480, 720, 960, 1280]} sizes="(max-width: 900px) calc(100vw - 32px), 100vw" format="webp" quality={75} alt="Memorias del Mar" class="hero-video__poster" loading="eager" fetchpriority="high" />
       <iframe
         class="hero-video__player"
-        src="https://www.youtube-nocookie.com/embed/hcbyyc0O8Ng?autoplay=1&amp;mute=1&amp;playsinline=1&amp;rel=0&amp;enablejsapi=1"
+        data-hero-youtube-id="hcbyyc0O8Ng"
+        hidden
         title="Memorias del Mar | AVDAN"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen
       ></iframe>
-      <button class="hero-video__sound" type="button" hidden>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" /><path d="m17 9 4 6M21 9l-4 6" /></svg>
-        Toca para ver con sonido
+      <button class="hero-video__sound" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z" /></svg>
+        Reproducir Memorias del Mar con sonido
       </button>
     </div>
     <a class="scroll-cue" href="#seleccion" aria-label="Bajar a la seleccion de trabajos">
@@ -87,6 +91,7 @@ import { projects } from '../data/projects';
   });
 
   const pauseHeroVideo = () => {
+    if (!document.querySelector('.hero-video__player[src]')) return;
     if (player && playerReady) {
       player.pauseVideo();
       return;
@@ -187,15 +192,14 @@ import { projects } from '../data/projects';
     }
     document.querySelectorAll<HTMLIFrameElement>('[data-inline-youtube-id]').forEach((iframe) => {
       if (mobileVideos.matches) {
-        const videoId = iframe.dataset.inlineYoutubeId;
         if (!observedInlineVideos.has(iframe)) {
           iframe.addEventListener('load', () => void setupInlineVideo(iframe));
           observedInlineVideos.add(iframe);
         }
-        if (videoId && !iframe.hasAttribute('src')) {
-          iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?playsinline=1&rel=0&enablejsapi=1`;
-        }
       } else {
+        const facade = iframe.parentElement?.querySelector<HTMLButtonElement>('[data-inline-play]');
+        if (facade) facade.hidden = false;
+        iframe.hidden = true;
         const inlinePlayer = inlinePlayers.get(iframe);
         if (inlinePlayer && iframe.parentNode) {
           const replacement = iframe.cloneNode(false) as HTMLIFrameElement;
@@ -217,7 +221,7 @@ import { projects } from '../data/projects';
   const setupHeroVideo = async () => {
     const iframe = document.querySelector<HTMLIFrameElement>('.hero-video__player');
     const button = document.querySelector<HTMLButtonElement>('.hero-video__sound');
-    if (!iframe || !button) return;
+    if (!iframe || !button || !iframe.hasAttribute('src')) return;
 
     try {
       const api = await loadYouTubeApi();
@@ -231,7 +235,7 @@ import { projects } from '../data/projects';
               player?.pauseVideo();
               pausePending = false;
             }
-            button.hidden = false;
+            button.hidden = true;
           },
           onStateChange: (event) => {
             if (event.data === 1) pauseOtherVideos(iframe);
@@ -253,7 +257,25 @@ import { projects } from '../data/projects';
     }
   };
 
-  setupHeroVideo();
+  // No player or third-party API is downloaded until a visitor chooses a video.
+  document.addEventListener('click', (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    const heroButton = target?.closest<HTMLButtonElement>('.hero-video__sound');
+    const inlineButton = target?.closest<HTMLButtonElement>('[data-inline-play]');
+    const iframe = heroButton
+      ? document.querySelector<HTMLIFrameElement>('.hero-video__player')
+      : inlineButton?.parentElement?.querySelector<HTMLIFrameElement>('[data-inline-youtube-id]');
+    if (!iframe) return;
+    const videoId = iframe.dataset.heroYoutubeId ?? iframe.dataset.inlineYoutubeId;
+    if (!videoId) return;
+    pauseOtherVideos(iframe);
+    iframe.hidden = false;
+    iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(location.origin)}`;
+    (heroButton ?? inlineButton)!.hidden = true;
+    iframe.focus();
+    if (heroButton) void setupHeroVideo();
+    else void setupInlineVideo(iframe);
+  });
   syncInlineVideos();
   document.addEventListener('astro:page-load', setupHeroVideo);
   document.addEventListener('astro:page-load', syncInlineVideos);

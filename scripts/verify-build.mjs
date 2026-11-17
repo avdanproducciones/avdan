@@ -27,6 +27,16 @@ for (const route of routes) {
   }
 }
 const sitemap = readFileSync('dist/sitemap.xml', 'utf8');
+const home = readFileSync('dist/index.html', 'utf8');
+assert.doesNotMatch(home, /<iframe[^>]+\ssrc=/, 'YouTube only loads after interaction');
+assert.doesNotMatch(home, /<script[^>]+src="https:\/\/www\.youtube\.com\/iframe_api/, 'No initial YouTube API');
+assert.doesNotMatch(home, /<link[^>]+rel="stylesheet"/, 'No render-blocking stylesheet');
+assert.doesNotMatch(home, /class="loading-screen"/, 'Content is immediately accessible');
+assert.match(home, /fetchpriority="high"/);
+assert.match(home, /\/media\/optimized\/seleccion-01-360.avif 360w/);
+assert.match(home, /montserrat-variable\.woff2/);
+assert.match(home, /http-equiv="content-security-policy"/);
+assert.match(home, /strict-dynamic/);
 assert.equal((sitemap.match(/<loc>/g) ?? []).length, preview ? 0 : routes.length);
 const robots = readFileSync('dist/robots.txt', 'utf8');
 assert.ok(robots.includes(preview ? 'Disallow: /' : 'Sitemap: https://avdan-bay.vercel.app/sitemap.xml'));
