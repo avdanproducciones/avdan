@@ -25,8 +25,10 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3Z" /><path d="M16 8a6 6 0 0 1 0 8M19 5a10 10 0 0 1 0 14" /></svg>
         Toca para ver con sonido
       </button>
+      <a class="hero-video__fallback" href="https://www.youtube.com/watch?v=hcbyyc0O8Ng" target="_blank" rel="noopener noreferrer" hidden>Ver en YouTube <span aria-hidden="true">↗</span></a>
+      <noscript><a class="hero-video__fallback" href="https://www.youtube.com/watch?v=hcbyyc0O8Ng" target="_blank" rel="noopener noreferrer">Ver en YouTube <span aria-hidden="true">↗</span></a></noscript>
     </div>
-    <a class="scroll-cue" href="#seleccion" aria-label="Bajar a la seleccion de trabajos">
+    <a class="scroll-cue" href="#seleccion" aria-label="Bajar a la selección de trabajos">
       <span aria-hidden="true"></span>
     </a>
   </section>
@@ -58,6 +60,7 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
       options: {
         events: {
           onReady?: () => void;
+          onError?: () => void;
           onStateChange?: (event: { data: number }) => void;
         };
       },
@@ -76,6 +79,7 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
   let playerReady = false;
   let apiFailed = false;
   let pausePending = false;
+  let heroTimeout: number | undefined;
   const mobileVideos = window.matchMedia('(max-width: 900px)');
   const inlinePlayers = new Map<HTMLIFrameElement, YouTubePlayer>();
   const readyInlinePlayers = new Set<HTMLIFrameElement>();
@@ -138,15 +142,26 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
 
     apiPromise = new Promise<YouTubeApi>((resolve, reject) => {
       const previousReady = window.onYouTubeIframeAPIReady;
-      window.onYouTubeIframeAPIReady = () => {
+      const script = document.createElement('script');
+      const cleanup = () => {
+        window.clearTimeout(timeout);
+        if (window.onYouTubeIframeAPIReady === onReady) window.onYouTubeIframeAPIReady = previousReady;
+      };
+      const fail = (message: string) => {
+        cleanup();
+        script.remove();
+        reject(new Error(message));
+      };
+      const onReady = () => {
+        cleanup();
         previousReady?.();
         if (window.YT?.Player) resolve(window.YT);
-        else reject(new Error('La API de YouTube no esta disponible.'));
+        else fail('La API de YouTube no está disponible.');
       };
-
-      const script = document.createElement('script');
+      const timeout = window.setTimeout(() => fail('La API de YouTube no respondió.'), 10000);
+      window.onYouTubeIframeAPIReady = onReady;
       script.src = 'https://www.youtube.com/iframe_api';
-      script.onerror = () => reject(new Error('No se pudo cargar la API de YouTube.'));
+      script.onerror = () => fail('No se pudo cargar la API de YouTube.');
       document.head.appendChild(script);
     }).catch((error: unknown) => {
       apiPromise = undefined;
@@ -219,10 +234,9 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
   };
   mobileVideos.addEventListener('change', syncInlineVideos);
 
-  const setupHeroVideo = async () => {
-    const iframe = document.querySelector<HTMLIFrameElement>('.hero-video__player');
-    const button = document.querySelector<HTMLButtonElement>('.hero-video__sound');
-    if (!iframe || !button || !iframe.hasAttribute('src')) return;
+  const setupHeroVideo = async (iframe: HTMLIFrameElement, showFallback: () => void) => {
+    const button = iframe.parentElement?.querySelector<HTMLButtonElement>('.hero-video__sound');
+    if (!button || !iframe.hasAttribute('src')) return;
 
     try {
       const api = await loadYouTubeApi();
@@ -231,12 +245,18 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
       player = new api.Player(iframe, {
         events: {
           onReady: () => {
+            if (!iframe.isConnected) return;
+            window.clearTimeout(heroTimeout);
             playerReady = true;
             if (pausePending) {
               player?.pauseVideo();
               pausePending = false;
             }
             button.hidden = false;
+          },
+          onError: () => {
+            button.hidden = true;
+            showFallback();
           },
           onStateChange: (event) => {
             if (event.data === 1) pauseOtherVideos(iframe);
@@ -249,11 +269,13 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
         player.seekTo(0, true);
         player.playVideo();
         button.hidden = true;
+        iframe.focus();
       });
     } catch (error) {
       if (!iframe.isConnected) return;
       console.error('No se pudo activar el control de sonido del video:', error);
       apiFailed = true;
+      showFallback();
       if (pausePending) pauseHeroVideo();
     }
   };
@@ -268,8 +290,17 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
     await poster?.decode().catch(() => undefined);
     await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
     if (!iframe.isConnected) return;
-    iframe.addEventListener('load', () => void setupHeroVideo(), { once: true });
-    iframe.src = iframe.dataset.autoplaySrc!;
+    const fallback = iframe.parentElement?.querySelector<HTMLAnchorElement>('.hero-video__fallback');
+    const showFallback = () => {
+      if (!iframe.isConnected || !fallback) return;
+      window.clearTimeout(heroTimeout);
+      fallback.hidden = false;
+    };
+    heroTimeout = window.setTimeout(showFallback, 15000);
+    iframe.addEventListener('load', () => void setupHeroVideo(iframe, showFallback), { once: true });
+    const url = new URL(iframe.dataset.autoplaySrc!);
+    url.searchParams.set('origin', location.origin);
+    iframe.src = url.href;
     iframe.hidden = false;
   };
 
@@ -293,6 +324,7 @@ import heroPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
   document.addEventListener('astro:page-load', startHeroVideo);
   document.addEventListener('astro:page-load', syncInlineVideos);
   document.addEventListener('astro:before-swap', () => {
+    window.clearTimeout(heroTimeout);
     player?.destroy();
     inlinePlayers.forEach((inlinePlayer) => inlinePlayer.destroy());
     inlinePlayers.clear();

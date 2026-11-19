@@ -43,7 +43,7 @@ const navigation = [
     />
     <title>{pageTitle}</title>
     {noindex && <meta name="robots" content="noindex, nofollow" />}
-    {!Astro.props.noindex && <link rel="canonical" href={canonical} />}
+    {!noindex && <link rel="canonical" href={canonical} />}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_CL" />
     <meta property="og:site_name" content={site.name} />
@@ -76,7 +76,7 @@ const navigation = [
             fetchpriority="high"
           /></a
         >
-        <nav class="site-nav" aria-label="Navegacion principal">
+        <nav class="site-nav" aria-label="Navegación principal">
           {navigation.map(({ href, label }) => (
             <a class:list={{ active: currentPath === href }} href={href} aria-current={currentPath === href ? "page" : undefined}>{label}</a>
           ))}
@@ -108,7 +108,7 @@ const navigation = [
       <div class="footer-contact" data-reveal style="--delay:120ms">
         <p class="footer-label">Contacto</p>
         <a class="footer-cta" href="/contacto/"
-          >Cuentanos sobre tu proyecto <span aria-hidden="true">↗</span></a
+          >Cuéntanos sobre tu proyecto <span aria-hidden="true">↗</span></a
         >
         <a class="footer-email" href="mailto:avdan.producciones@gmail.com"
           ><span>avdan.producciones@<wbr />gmail.com</span> <span aria-hidden="true">↗</span></a
