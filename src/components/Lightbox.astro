@@ -4,7 +4,7 @@
  <div class="image-dialog__content">
    <div class="image-dialog__header">
      <p class="popup-swipe-hint" data-lightbox-hint>Desliza para cambiar de imagen</p>
-      <button class="image-dialog__close" type="button" aria-label="Cerrar">
+      <button class="image-dialog__close" type="button" aria-label="Cerrar" autofocus>
         <span aria-hidden="true">×</span>
       </button>
     </div>
@@ -26,6 +26,7 @@
   if (!(window as any).__lightboxReady) {
     (window as any).__lightboxReady = true;
     let activeTrigger: HTMLElement | null = null;
+    let openingTrigger: HTMLElement | null = null;
     const triggers = () => Array.from(document.querySelectorAll<HTMLElement>('[data-lightbox]'))
       .filter((trigger) => trigger.getClientRects().length > 0);
 
@@ -69,7 +70,10 @@
         attachZoom(frame, () => dialog.close());
       }
       if (!video.hidden) video.src = src;
-      if (!dialog.open) dialog.showModal();
+      if (!dialog.open) {
+        openingTrigger = trigger;
+        dialog.showModal();
+      }
     };
 
     document.addEventListener('click', (event) => {
@@ -89,17 +93,20 @@
     });
 
     document.addEventListener('keydown', (event) => {
-      if (document.querySelector('#lightbox[open]') && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
-        event.preventDefault();
-        move(event.key === 'ArrowRight' ? 1 : -1);
+      const dialog = document.querySelector<HTMLDialogElement>('#lightbox[open]');
+      if (dialog && event.key === 'Tab') {
+        const first = dialog.querySelector<HTMLButtonElement>('.image-dialog__close')!;
+        const last = dialog.querySelector<HTMLButtonElement>('[data-lightbox-next]:not([hidden])')
+          ?? dialog.querySelector<HTMLVideoElement>('video:not([hidden])') ?? first;
+        if (event.shiftKey ? document.activeElement === first : document.activeElement === last && !(last instanceof HTMLVideoElement)) {
+          event.preventDefault();
+          (event.shiftKey ? last : first).focus();
+        }
         return;
       }
-      if (event.key === 'Escape') {
-        const dialog = document.querySelector<HTMLDialogElement>('#lightbox[open]');
-        if (dialog) {
-          event.preventDefault();
-          dialog.close();
-        }
+      if (dialog && !(event.target instanceof HTMLVideoElement) && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+        event.preventDefault();
+        move(event.key === 'ArrowRight' ? 1 : -1);
         return;
       }
       if ((event.key === 'Enter' || event.key === ' ') && (event.target as HTMLElement).matches?.('[data-lightbox][role="button"]')) {
@@ -109,14 +116,17 @@
     });
 
     document.addEventListener('close', (event) => {
-      const dialog = event.target as HTMLElement;
-      if (dialog.id !== 'lightbox') return;
+      const dialog = event.target as HTMLDialogElement;
+      if (dialog.id !== 'lightbox' || dialog.open) return;
+      const previous = openingTrigger;
+      openingTrigger = null;
       activeTrigger = null;
       const video = dialog.querySelector<HTMLVideoElement>('[data-lightbox-video]');
       video?.pause();
       video?.removeAttribute('src');
       const frame = dialog.querySelector<HTMLElement>('[data-lightbox-image]');
       if (frame) resetZoom(frame);
+      if (previous?.isConnected) previous.focus({ preventScroll: true });
     }, true);
   }
 </script>

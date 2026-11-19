@@ -1,10 +1,10 @@
 ---
-import { createHash } from 'node:crypto';
 import loadingScript from './loading-screen.js?raw';
 
 // Los navegadores normalizan los saltos de línea del HTML antes de calcular el hash.
 const script = loadingScript.replace(/\r\n?/g, '\n');
-Astro.csp.insertScriptHash(`sha256-${createHash('sha256').update(script).digest('base64')}`);
+const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(script));
+Astro.csp?.insertScriptHash(`sha256-${btoa(String.fromCharCode(...new Uint8Array(digest)))}`);
 ---
 
 <div class="loading-screen" role="status" aria-label="Cargando AVDAN">

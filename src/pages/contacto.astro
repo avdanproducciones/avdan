@@ -1,6 +1,13 @@
 ---
 import '../styles/views.css';
 import Layout from "../layouts/Layout.astro";
+import { Image } from 'astro:assets';
+import { thumbnail, thumbnailSet } from '../data/images';
+import videoPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
+
+const instagramPhotos = ['01', '07', '10', '06', '03', '05'].map(
+  (number) => `/media/projects/seleccion-${number}.webp`,
+);
 ---
 
 <Layout title="Contacto">
@@ -13,11 +20,10 @@ import Layout from "../layouts/Layout.astro";
           <span class="contact-title__block">aqui</span>
         </h1>
         <p class="intro">
-          Cuentanos que quieres comunicar. Estamos listos para escucharte y darle
-          vida a tu proyecto.
+          Cuéntanos qué tienes en mente. En AVDAN transformamos ideas en fotografías y producciones audiovisuales que conectan, emocionan y cuentan historias.
         </p>
         <a class="editorial-link contact-hero__link" href="mailto:avdan.producciones@gmail.com"
-          >Escribir un correo <span aria-hidden="true">↗</span></a
+          >Cuentanos tu proyecto por correo <span aria-hidden="true">↗</span></a
         >
       </div>
       <a class="scroll-cue" href="#redes-sociales" aria-label="Bajar a las redes sociales">
@@ -46,57 +52,21 @@ import Layout from "../layouts/Layout.astro";
                 class="social-card__avatar-fill"></circle></svg
             >
           </span>
-          <span><strong>@avdan</strong><small>Instagram</small></span>
+          <span><strong>@avdan.prod</strong><small>Instagram</small></span>
         </div>
         <div class="social-card__grid" aria-hidden="true">
-          <span
-            ><img
-              src="/media/projects/seleccion-01.webp"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            /></span
-          >
-          <span
-            ><img
-              src="/media/projects/seleccion-07.webp"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            /></span
-          >
-          <span
-            ><img
-              src="/media/projects/seleccion-10.webp"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            /></span
-          >
-          <span
-            ><img
-              src="/media/projects/seleccion-06.webp"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            /></span
-          >
-          <span
-            ><img
-              src="/media/projects/seleccion-03.webp"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            /></span
-          >
-          <span
-            ><img
-              src="/media/projects/seleccion-05.webp"
-              alt=""
-              loading="lazy"
-              decoding="async"
-            /></span
-          >
+          {instagramPhotos.map((src) => (
+            <span>
+              <img
+                src={thumbnail(src, 360)}
+                srcset={thumbnailSet(src)}
+                sizes="(max-width: 900px) calc((100vw - 64px) / 3), 16vw"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
+          ))}
         </div>
         <span class="social-card__cta"
           >Ver perfil <span aria-hidden="true">↗</span></span
@@ -124,8 +94,11 @@ import Layout from "../layouts/Layout.astro";
           <span><strong>AVDAN</strong><small>YouTube</small></span>
         </div>
         <div class="social-card__video" aria-hidden="true">
-          <img
-            src="https://i.ytimg.com/vi/hcbyyc0O8Ng/maxresdefault.jpg"
+          <Image
+            src={videoPoster}
+            widths={[400, 640, 960]}
+            sizes="(max-width: 900px) calc(100vw - 56px), 50vw"
+            format="avif"
             alt=""
             loading="lazy"
             decoding="async"

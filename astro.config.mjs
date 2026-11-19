@@ -10,7 +10,10 @@ export default defineConfig({
   build: { inlineStylesheets: 'always' },
   security: {
     csp: {
-      scriptDirective: { strictDynamic: true },
+      scriptDirective: {
+        strictDynamic: true,
+        resources: [{ resource: "'none'", kind: 'attribute' }],
+      },
       // Animated elements and React dialogs set style attributes at runtime.
       styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
       directives: ["object-src 'none'", "base-uri 'self'"],
