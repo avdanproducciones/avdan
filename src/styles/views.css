@@ -49,7 +49,7 @@ html.reveal-enabled .service-step.is-visible [data-from] { opacity: 1; transform
 .page.about-closing { padding-top: 24px; }
 .interior-page--about .about-hero { animation: none; min-height: 45vh; width: 100%; }
 .about-hero__heading { --about-logo-width: clamp(115px, 28vw, 385px); --about-title-width: calc(100cqw - var(--about-logo-width)); container-type: inline-size; position: relative; width: 100%; }
-/* AUDIOVISUAL y la bombilla necesitan cerca de 9.6 em en la misma línea. */
+/* Reserva espacio para la última palabra y la bombilla en la misma línea. */
 .about-hero h1 { --about-title-size: clamp(37px, 5.8vw, 84px); --title-delay: 500ms; --title-stagger: 180ms; --title-duration: 600ms; --title-distance: -70px; animation: none; display: grid; font-size: min(var(--about-title-size), calc(var(--about-title-width) / 9.7)); margin-bottom: 8px; max-width: none; }
 .about-hero__logo-position { mix-blend-mode: screen; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: var(--about-logo-width); }
 .about-hero__logo { display: block; height: auto; width: 100%; }
