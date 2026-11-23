@@ -9,10 +9,10 @@ import Layout from '../layouts/Layout.astro';
       <div class="hero-copy about-hero">
         <div class="about-hero__heading">
           <h1 class="about-title">
-            <span class="about-title__block"><span class="idea-highlight">Tus ide<span data-bulb-impact="ideas">a</span>s</span><span class="about-title__baseline" aria-hidden="true"></span></span>
-            <span class="about-title__block">nuestra</span>
-            <span class="about-title__block">vision</span>
-            <span class="about-title__block"><span class="about-title__last-word">audiovisu<span data-bulb-impact="audiovisual">a</span><span data-bulb-impact="last">l</span><span class="about-title__baseline" aria-hidden="true"></span><span class="bulb about-title__bulb" aria-hidden="true"></span></span></span>
+            <span class="about-title__block"><span class="idea-highlight">Tu ide<span data-bulb-impact="first">a</span></span><span class="about-title__baseline" aria-hidden="true"></span></span>
+            <span class="about-title__block">merece</span>
+            <span class="about-title__block">una gran</span>
+            <span class="about-title__block"><span class="about-title__last-word">ejecuci<span data-bulb-impact="second">o</span><span data-bulb-impact="last">n</span><span class="about-title__baseline" aria-hidden="true"></span><span class="bulb about-title__bulb" aria-hidden="true"></span></span></span>
           </h1>
           <span class="about-hero__logo-position"><img class="about-hero__logo" src="/logo-avdan.svg" width="320" height="226" alt="" aria-hidden="true" /></span>
         </div>
@@ -40,19 +40,22 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
+  let activeTitle: HTMLElement | undefined;
+
   const setupAboutBulb = () => {
     const title = document.querySelector<HTMLElement>('.about-title');
-    const firstBlock = title?.querySelector<HTMLElement>('.about-title__block');
-    const word = title?.querySelector<HTMLElement>('.about-title__last-word');
-    const bulb = title?.querySelector<HTMLElement>('.about-title__bulb');
-    const hero = title?.closest<HTMLElement>('.about-hero');
+    if (!title || title === activeTitle) return;
+    const firstBlock = title.querySelector<HTMLElement>('.about-title__block');
+    const word = title.querySelector<HTMLElement>('.about-title__last-word');
+    const bulb = title.querySelector<HTMLElement>('.about-title__bulb');
+    const hero = title.closest<HTMLElement>('.about-hero');
     const subtitle = hero?.querySelector<HTMLElement>('.about-hero__intro');
     const logo = hero?.querySelector<HTMLElement>('.about-hero__logo');
-    const firstLetter = title?.querySelector<HTMLElement>('[data-bulb-impact="ideas"]');
-    const secondLetter = title?.querySelector<HTMLElement>('[data-bulb-impact="audiovisual"]');
-    const lastLetter = title?.querySelector<HTMLElement>('[data-bulb-impact="last"]');
-    const baselines = title?.querySelectorAll<HTMLElement>('.about-title__baseline');
-    if (!title || !firstBlock || !word || !bulb || !subtitle || !logo || !firstLetter || !secondLetter || !lastLetter || !baselines || baselines.length !== 2) return;
+    const firstLetter = title.querySelector<HTMLElement>('[data-bulb-impact="first"]');
+    const secondLetter = title.querySelector<HTMLElement>('[data-bulb-impact="second"]');
+    const lastLetter = title.querySelector<HTMLElement>('[data-bulb-impact="last"]');
+    const baselines = title.querySelectorAll<HTMLElement>('.about-title__baseline');
+    if (!firstBlock || !word || !bulb || !subtitle || !logo || !firstLetter || !secondLetter || !lastLetter || baselines.length !== 2) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const flightDuration = 2000;
@@ -65,6 +68,7 @@ import Layout from '../layouts/Layout.astro';
       console.warn('No se pudo medir el texto para posicionar el foco.');
       return;
     }
+    activeTitle = title;
     let active = true;
     let flight: Animation | undefined;
     const bulbSound = new Audio('/media/efecto-de-sonido-foco-luz-rota.mp3');
@@ -110,11 +114,12 @@ import Layout from '../layouts/Layout.astro';
 
       // Ajusta el desplazamiento del contacto y la altura de los rebotes si cambia el dibujo o la tipografía.
       canvas.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
-      const glyphTop = canvas.measureText('a').actualBoundingBoxAscent;
+      const firstGlyphTop = canvas.measureText(firstLetter.textContent ?? '').actualBoundingBoxAscent;
+      const secondGlyphTop = canvas.measureText(secondLetter.textContent ?? '').actualBoundingBoxAscent;
       const firstX = firstRect.left + firstRect.width / 2 - bulbWidth / 2 - originX;
       const secondX = (secondRect.right + lastRect.left) / 2 - bulbWidth / 2 - originX;
-      const firstY = restingRect(baselines[0]).top - glyphTop - bulbHeight - originY;
-      const secondY = baseline - glyphTop - bulbHeight - originY;
+      const firstY = restingRect(baselines[0]).top - firstGlyphTop - bulbHeight - originY;
+      const secondY = baseline - secondGlyphTop - bulbHeight - originY;
       title.style.setProperty('--bulb-baseline', `${baseline - wordRect.top}px`);
 
       const frame = (x: number, y: number, angle: number, offset: number): Keyframe => ({
@@ -163,19 +168,20 @@ import Layout from '../layouts/Layout.astro';
     };
     reducedMotion.addEventListener('change', handleMotionChange);
 
-    const start = () => {
-      if (!active || reducedMotion.matches || bulb.classList.contains('is-settled')) return;
+    const start = (titleAnimation?: Animation) => {
+      if (!active || !title.isConnected || reducedMotion.matches || bulb.classList.contains('is-settled')) return;
       const { frames } = positionBulb();
       flight = bulb.animate(frames, { duration: flightDuration, fill: 'both' });
       let elapsed = 0;
-      if (firstAnimation?.effect && typeof firstAnimation.startTime === 'number') {
-        const titleDuration = firstAnimation.effect.getComputedTiming().endTime;
+      const now = document.timeline.currentTime;
+      if (titleAnimation?.effect && typeof titleAnimation.startTime === 'number' && typeof now === 'number') {
+        const titleDuration = titleAnimation.effect.getComputedTiming().endTime;
         if (typeof titleDuration === 'number') {
-          const titleEnd = firstAnimation.startTime + titleDuration;
-          // The fall overlaps the title; its first impact lands just after “Tus ideas”.
+          const titleEnd = titleAnimation.startTime + titleDuration;
+          // El primer impacto coincide con la llegada de «Tu idea».
           const flightStart = titleEnd + impactAfterTitle - flightDuration * firstImpactOffset;
-          flight.startTime = flightStart;
-          if (typeof document.timeline.currentTime === 'number') elapsed = document.timeline.currentTime - flightStart;
+          flight.startTime = Math.max(now, flightStart);
+          elapsed = now - flight.startTime;
         }
       }
       bulb.style.setProperty('--bulb-light-delay', `${flightDuration + lightPause - elapsed}ms`);
@@ -196,10 +202,12 @@ import Layout from '../layouts/Layout.astro';
     const firstAnimation = firstBlock.getAnimations().find((animation) =>
       animation instanceof CSSAnimation && animation.animationName === 'about-title-drop',
     );
-    if (firstAnimation && !reducedMotion.matches) {
-      firstAnimation.ready.then(start, () => {
-        if (active) console.warn('La animación del título se interrumpió antes de iniciar el foco.');
-      });
+    if (reducedMotion.matches) {
+      handleMotionChange();
+    } else if (firstAnimation) {
+      firstAnimation.ready.then(start, () => start());
+    } else {
+      start();
     }
     document.fonts.ready.then(() => {
       if (active) positionBulb();
@@ -207,12 +215,17 @@ import Layout from '../layouts/Layout.astro';
 
     document.addEventListener('astro:before-swap', () => {
       active = false;
+      activeTitle = undefined;
       bulbSound.pause();
+      flight?.cancel();
+      revealAnimations.forEach((animation) => animation.cancel());
       bulb.removeEventListener('animationstart', onBulbLight);
       resizeObserver.disconnect();
       reducedMotion.removeEventListener('change', handleMotionChange);
     }, { once: true });
   };
 
+  document.addEventListener('astro:after-swap', setupAboutBulb);
   document.addEventListener('astro:page-load', setupAboutBulb);
+  setupAboutBulb();
 </script>
