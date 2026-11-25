@@ -9,6 +9,7 @@ export const pageDescriptions: Record<string, string> = {
   '/servicios/': 'Conoce los servicios de fotografía y producción audiovisual de AVDAN para eventos, matrimonios y sesiones fotográficas.',
   '/sobre/': 'Conoce AVDAN Producciones y nuestra forma de dar vida a tus ideas a través de la fotografía y la producción audiovisual.',
   '/contacto/': 'Cuéntanos tu proyecto. Contacta a AVDAN Producciones por correo, WhatsApp o nuestras redes sociales.',
+  '/policy/': 'Consulta la política de privacidad y las condiciones generales de los servicios de AVDAN Producciones.',
 };
 
 export const isPreview = import.meta.env.VERCEL_ENV === 'preview';

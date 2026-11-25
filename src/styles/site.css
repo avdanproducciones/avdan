@@ -1,0 +1,3 @@
+/* Keep the base and theme together when Astro swaps route styles. */
+@import './global.css';
+@import './film.css';
