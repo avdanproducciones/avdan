@@ -2,13 +2,18 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync, existsSync } from 'node:fs';
 
-const routes = ['/', '/servicios/', '/sobre/', '/contacto/'];
+const routes = ['/', '/servicios/', '/sobre/', '/contacto/', '/policy/'];
 const titles = new Set();
 const descriptions = new Set();
+let layoutStyles;
 const preview = process.env.VERCEL_ENV === 'preview';
 let assets = 0;
 for (const route of routes) {
   const html = readFileSync(`dist${route}index.html`, 'utf8');
+  const stylesheet = html.match(/<link rel="stylesheet" href="(\/_astro\/Layout\.[^"/]+\.css)"/)?.[1];
+  assert.ok(stylesheet, `Hoja de estilos compartida: ${route}`);
+  layoutStyles ??= stylesheet;
+  assert.equal(stylesheet, layoutStyles, `Astro conserva la misma hoja de estilos al navegar a ${route}`);
   const loadingScript = html.match(/<script data-loading-screen[^>]*>([\s\S]*?)<\/script>/);
   assert.ok(loadingScript, 'Script de carga inicial: ' + route);
   const scriptHash = createHash('sha256').update(loadingScript[1].replace(/\r\n?/g, '\n')).digest('base64');
@@ -45,7 +50,6 @@ assert.equal(heroUrl.searchParams.get('autoplay'), '1');
 assert.equal(heroUrl.searchParams.get('mute'), '1');
 assert.doesNotMatch(home, /<iframe\b[^>]*\ssrc=/, 'Players wait for the local cover to paint or for interaction');
 assert.doesNotMatch(home, /<script[^>]+src="https:\/\/www\.youtube\.com\/iframe_api/, 'No initial YouTube API');
-assert.doesNotMatch(home, /<link[^>]+rel="stylesheet"/, 'No render-blocking stylesheet');
 assert.match(home, /fetchpriority="high"/);
 assert.match(home, /href="https:\/\/www\.youtube\.com\/watch\?v=hcbyyc0O8Ng"/, 'Direct link to the hero video');
 assert.match(home, /\/media\/optimized\/seleccion-01-360.avif 360w/);

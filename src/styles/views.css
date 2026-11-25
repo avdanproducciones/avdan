@@ -5,6 +5,8 @@ html.reveal-enabled [data-reveal] { transition-delay: var(--delay, 0ms); }
 html.reveal-enabled [data-reveal].is-visible { transform: none; }
 
 /* Servicios: carrete de pelicula */
+body[data-page='/servicios/'] main { isolation: isolate; }
+body[data-page='/servicios/'] main > .darkroom-light { z-index: -1; }
 .interior-hero { display: flex; flex-direction: column; min-height: calc(100svh - var(--header-h) - 108px); }
 .interior-hero > .services-hero, .interior-hero > .hero-copy { flex: 1 0 auto; }
 .interior-hero > .scroll-cue { flex: 0 0 56px; margin-top: auto; }
@@ -24,7 +26,7 @@ html.reveal-enabled [data-reveal].is-visible { transform: none; }
 .service-step__title::after { right: 16px; }
 /* POSTPRODUCCION ocupa aproximadamente 12.4 em en Akira Expanded. */
 .service-step__title h2 { font-family: var(--font); font-size: min(clamp(20px, 2.55vw, 37px), 8cqw); font-weight: 400; letter-spacing: .02em; line-height: 1.05; margin: 0; }
-.service-step__body { align-content: center; background: var(--bone); color: var(--room); display: grid; gap: 22px; padding: clamp(28px, 4vw, 56px); }
+.service-step__body { align-content: center; background: #fff; color: var(--room); display: grid; gap: 22px; padding: clamp(28px, 4vw, 56px); }
 .service-step__body h3 { color: var(--room); font-family: var(--font-text); font-size: 16px; font-weight: 500; line-height: 1.5; margin: 0; max-width: 600px; }
 .service-step__body ul { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; margin: 0; padding: 0; }
 .service-step__body li { background: var(--room); color: var(--bone); font-size: 13px; padding: 12px 18px; transition: background .25s ease, transform .25s ease; }
@@ -42,6 +44,8 @@ html.reveal-enabled .service-step [data-from] { opacity: 0; transform: translate
 .service-step [data-from='right'] { --entry-x: 48px; }
 html.reveal-enabled .service-step [data-from='right'] { transition-delay: 80ms; }
 html.reveal-enabled .service-step.is-visible [data-from] { opacity: 1; transform: none; }
+/* Keep the white panel opaque throughout its slide. */
+html.reveal-enabled .service-step .service-step__body[data-from] { opacity: 1; transition-property: transform; }
 
 /* Sobre: texto como foco principal */
 .page.interior-page--about { padding-bottom: 48px; }

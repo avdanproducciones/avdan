@@ -7,7 +7,7 @@ export default defineConfig({
   integrations: [react()],
   output: 'static',
   markdown: { syntaxHighlight: false },
-  build: { inlineStylesheets: 'always' },
+  build: { inlineStylesheets: 'never' },
   security: {
     csp: {
       scriptDirective: {

@@ -1,0 +1,148 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/views.css';
+---
+
+<Layout title="Políticas de privacidad y condiciones de servicios">
+  <article class="page interior-page policies">
+    <header class="interior-hero">
+      <div class="hero-copy">
+        <h1>
+          Politicas de <span class="idea-highlight">privacidad</span>
+        </h1>
+        <p class="intro">Cómo usamos los datos que compartes con AVDAN Producciones y cómo se acuerdan las condiciones de cada proyecto.</p>
+      </div>
+      <a class="scroll-cue" href="#privacidad" aria-label="Bajar a la política de privacidad">
+        <span aria-hidden="true"></span>
+      </a>
+    </header>
+
+    <section class="about-story about-story__copy" aria-labelledby="privacidad">
+      <h2 class="service-path__heading" id="privacidad">Politica de <span class="idea-highlight">privacidad</span></h2>
+      <h3>Datos de contacto y del proyecto</h3>
+      <p>Cuando nos escribes, usamos los datos que compartes, como tu nombre, correo, teléfono y detalles del proyecto, para responder tu consulta, preparar una cotización y coordinar el servicio si lo contratas.</p>
+      <h3>Videos y plataformas externas</h3>
+      <p>El sitio carga contenido de YouTube para mostrar el video de portada y reproducir los videos del portafolio. Cuando se carga ese contenido o cuando abres enlaces a Instagram, YouTube o WhatsApp, esas plataformas aplican sus propias políticas de privacidad.</p>
+      <h3>Consultas sobre tus datos</h3>
+      <p>Para consultar qué datos nos has compartido o solicitar acceso, corrección o eliminación, <a class="policy-email" href="mailto:avdan.producciones@gmail.com">escríbenos por correo <span aria-hidden="true">↗</span></a>.</p>
+    </section>
+
+    <section class="about-story about-story__copy" aria-labelledby="servicios">
+      <h2 class="service-path__heading" id="servicios">Condiciones de <span class="idea-highlight">servicios</span></h2>
+      <h3>Cotización y reserva</h3>
+      <p>El alcance, el precio, la fecha y las condiciones de reserva y pago se definen para cada proyecto en la cotización o el acuerdo correspondiente.</p>
+      <h3>Cambios, cancelaciones y entregas</h3>
+      <p>Los plazos, formatos de entrega, revisiones y condiciones para reprogramar o cancelar se rigen por el acuerdo de cada proyecto.</p>
+      <h3>Uso y publicación del material</h3>
+      <p>El uso de las fotografías y los videos entregados, así como su posible publicación en el portafolio o en redes sociales, se define según el acuerdo y las autorizaciones aplicables.</p>
+    </section>
+
+    <footer class="about-story about-story__copy policies__closing">
+      <p>En AVDAN cuidamos los datos que nos confías y queremos que tengas una buena experiencia desde el primer contacto hasta la entrega. Si tienes dudas sobre tu privacidad o sobre las condiciones de tu proyecto, puedes escribirnos.</p>
+    </footer>
+  </article>
+</Layout>
+
+<style>
+  .policies h1 {
+    max-width: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .policies .hero-copy h1 {
+      animation: contact-title-arrival .7s cubic-bezier(.22, .75, .22, 1) both;
+    }
+  }
+
+  .policies h3 {
+    font-size: inherit;
+    margin: 1.5em 0 0.5em;
+  }
+
+  .policies h2 {
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+
+  .policies__closing {
+    border-inline-start: 3px solid var(--safelight);
+    padding-inline-start: clamp(16px, 3vw, 32px);
+  }
+
+  .policy-email {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    transition: color .25s ease;
+  }
+
+  .policy-email:hover,
+  .policy-email:focus-visible {
+    color: var(--safelight);
+  }
+
+  .policy-email span {
+    display: inline-block;
+    transition: transform .25s ease;
+  }
+
+  .policy-email:is(:hover, :focus-visible) span {
+    transform: translate(3px, -3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .policy-email,
+    .policy-email span {
+      transition: none;
+    }
+
+    .policy-email:is(:hover, :focus-visible) span {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .page.policies {
+      padding-top: clamp(48px, 9vw, 108px);
+    }
+
+    .policies .interior-hero,
+    .policies .hero-copy {
+      min-height: 0;
+    }
+
+    .policies .scroll-cue {
+      display: none;
+    }
+
+    .policies h1 {
+      font-size: clamp(1.25rem, 3.15vw, 3rem);
+      line-height: 1.16;
+      margin-top: 0;
+    }
+
+    .policies .about-story {
+      max-width: 68ch;
+      margin: clamp(48px, 7vw, 96px) 0 0;
+      text-align: left;
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    .policies h2 {
+      font-family: inherit;
+      font-size: clamp(1.5rem, 3.2vw, 2.25rem);
+      font-weight: 700;
+      margin: 0 0 24px;
+    }
+
+    .policies h3 {
+      font-size: 1.125rem;
+      margin: 24px 0 8px;
+    }
+
+    .policies .about-story p {
+      color: #d0cfc4;
+      margin: 0;
+    }
+  }
+</style>

@@ -1,7 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import "../styles/global.css";
-import "../styles/film.css";
+import "../styles/site.css";
 import Lightbox from "../components/Lightbox.astro";
 import LoadingScreen from "../components/LoadingScreen.astro";
 import { site, pageDescriptions, isPreview } from '../data/site';
@@ -14,6 +13,7 @@ interface Props {
 
 const { title } = Astro.props;
 const currentPath = Astro.url.pathname;
+const isServices = currentPath === '/servicios/';
 const description = Astro.props.description ?? pageDescriptions[currentPath] ?? pageDescriptions['/'];
 const noindex = Astro.props.noindex || isPreview;
 const canonical = new URL(currentPath, site.url);
@@ -29,6 +29,7 @@ const navigation = [
   { href: "/servicios/", label: "Servicios" },
   { href: "/sobre/", label: "Acerca de" },
   { href: "/contacto/", label: "Contacto" },
+  { href: "/policy/", label: "Politica" },
 ];
 ---
 
@@ -55,7 +56,7 @@ const navigation = [
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(site.image, site.url)} />
-    <link rel="icon" href="/logo-avdan.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="/fonts/akira-expanded-demo.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/montserrat-variable.woff2" as="font" type="font/woff2" crossorigin />
     <script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />
@@ -96,8 +97,11 @@ const navigation = [
         </details>
       </div>
     </header>
-    <div class="darkroom-light" aria-hidden="true"></div>
-    <main id="contenido" tabindex="-1" transition:animate="fade"><slot /></main>
+    {!isServices && <div class="darkroom-light" aria-hidden="true"></div>}
+    <main id="contenido" tabindex="-1" transition:animate="fade">
+      {isServices && <div class="darkroom-light" aria-hidden="true"></div>}
+      <slot />
+    </main>
 
     <footer class="site-footer">
       <div class="footer-intro" data-reveal>
@@ -110,9 +114,9 @@ const navigation = [
         <a class="footer-cta" href="/contacto/"
           >Cuéntanos sobre tu proyecto <span aria-hidden="true">↗</span></a
         >
-        <a class="footer-email" href="mailto:avdan.producciones@gmail.com"
-          ><span>avdan.producciones@<wbr />gmail.com</span> <span aria-hidden="true">↗</span></a
-        >
+        <a class="footer-cta" href="/policy/" aria-current={currentPath === '/policy/' ? 'page' : undefined}>
+          Política de privacidad <span aria-hidden="true">↗</span>
+        </a>
       </div>
       <div class="footer-external" data-reveal style="--delay:240ms">
         <p class="footer-label">Redes sociales</p>
@@ -264,12 +268,12 @@ const navigation = [
       .forEach((element) => repeat.observe(element));
   };
 
-  document.documentElement.classList.add("reveal-enabled");
-  document.addEventListener("astro:after-swap", () =>
-    document.documentElement.classList.add("reveal-enabled"),
-  );
-  revealSections();
-  document.addEventListener("astro:page-load", revealSections);
+  const initReveals = () => {
+    document.documentElement.classList.add("reveal-enabled");
+    revealSections();
+  };
+  initReveals();
+  document.addEventListener("astro:after-swap", initReveals);
   document.addEventListener("astro:before-swap", () => {
     revealObserver?.disconnect();
     repeatObserver?.disconnect();

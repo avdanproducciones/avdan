@@ -105,6 +105,15 @@ h1 em, .footer-title em { font-style: normal; }
 .scroll-cue span { border-bottom: 2px solid var(--ink); border-right: 2px solid var(--ink); height: 16px; transform: rotate(45deg) translate(-4px, -4px); transition: border-color .25s ease; width: 16px; }
 .scroll-cue:hover { transform: translateY(8px); }
 .scroll-cue:hover span { border-color: var(--accent); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .scroll-cue span { animation: scroll-cue-breathe 2.8s ease-in-out infinite; }
+}
+
+@keyframes scroll-cue-breathe {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 4px; }
+}
 .hero-image { margin: 0; max-width: 430px; position: relative; transform: rotate(2deg); }
 .hero-image__trigger { background: none; border: 0; cursor: zoom-in; display: block; padding: 0; width: 100%; }
 .hero-image__trigger:focus-visible { outline: 2px solid var(--ink); outline-offset: 8px; }
