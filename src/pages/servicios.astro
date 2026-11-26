@@ -1,5 +1,5 @@
 ---
-import '../styles/views.css';
+import "../styles/views.css";
 import Layout from "../layouts/Layout.astro";
 
 const services = [
@@ -121,13 +121,17 @@ const editingImages = [
     <div class="interior-hero">
       <div class="services-hero">
         <div class="hero-copy" data-reveal>
-          <h1>De <span class="idea-highlight">tu idea</span> a la imagen</h1>
+          <h1>
+            De <span class="idea-highlight">tu idea</span> a la imagen
+          </h1>
           <p class="intro">
             Creamos fotografía y contenido audiovisual que comunica, emociona y
             destaca, desde la planificación hasta la entrega final.
           </p>
           <a class="editorial-link" href="/contacto/">
-            <span>Cuentanos <span class="idea-highlight">tu idea</span></span>
+            <span>
+              Cuentanos <span class="idea-highlight">tu idea</span>
+            </span>
             <span aria-hidden="true">↗</span>
           </a>
         </div>
@@ -151,12 +155,14 @@ const editingImages = [
       <a
         class="scroll-cue"
         href="#tech-stack-title"
-        aria-label="Bajar al TechStack"><span aria-hidden="true"></span></a
+        aria-label="Bajar al TechStack"
       >
+        <span aria-hidden="true"></span>
+      </a>
     </div>
     <section class="service-tech-stack" aria-labelledby="tech-stack-title">
       <div class="service-tech-stack__heading">
-        <h2 id="tech-stack-title" class="idea-highlight">TechStack</h2>
+        <h2 id="tech-stack-title">TechStack</h2>
         <div
           class="service-tech-stack__tools"
           aria-label="Tecnologías utilizadas"
@@ -170,7 +176,9 @@ const editingImages = [
             >
               <title id="photoshop-logo-title">Adobe Photoshop</title>
               <rect x="3" y="3" width="58" height="58" rx="8"></rect>
-              <text x="32" y="41" text-anchor="middle">Ps</text>
+              <text x="32" y="41" text-anchor="middle">
+                Ps
+              </text>
             </svg>
             <span>Photoshop</span>
           </div>
@@ -183,9 +191,7 @@ const editingImages = [
             >
               <title id="premiere-logo-title">Adobe Premiere Pro</title>
               <rect x="3" y="3" width="58" height="58" rx="8"></rect>
-              <path
-                d="M18 45V19h10c7 0 11 4 11 10s-4 10-11 10h-4v6h-6Zm6-12h4c3 0 5-1 5-4s-2-4-5-4h-4v8Zm17 12V28h6v3c1-2 3-4 6-4v6c-4 0-6 2-6 5v7h-6Z"
-              ></path>
+              <path d="M18 45V19h10c7 0 11 4 11 10s-4 10-11 10h-4v6h-6Zm6-12h4c3 0 5-1 5-4s-2-4-5-4h-4v8Zm17 12V28h6v3c1-2 3-4 6-4v6c-4 0-6 2-6 5v7h-6Z"></path>
             </svg>
             <span>Premiere Pro</span>
           </div>
@@ -198,7 +204,9 @@ const editingImages = [
             >
               <title id="lightroom-logo-title">Adobe Lightroom</title>
               <rect x="3" y="3" width="58" height="58" rx="8"></rect>
-              <text x="32" y="41" text-anchor="middle">Lr</text>
+              <text x="32" y="41" text-anchor="middle">
+                Lr
+              </text>
             </svg>
             <span>Lightroom</span>
           </div>
@@ -211,7 +219,9 @@ const editingImages = [
             >
               <title id="after-effects-logo-title">Adobe After Effects</title>
               <rect x="3" y="3" width="58" height="58" rx="8"></rect>
-              <text x="32" y="41" text-anchor="middle">Ae</text>
+              <text x="32" y="41" text-anchor="middle">
+                Ae
+              </text>
             </svg>
             <span>After Effects</span>
           </div>
@@ -245,59 +255,60 @@ const editingImages = [
           />
           <span>Corrección de color · antes y después</span>
         </button>
-        {
-          editingImages.map((image) => (
-            <button
-              class="edit-showcase__item service-tech-stack__image"
-              data-reveal
-              type="button"
-              data-lightbox={image.src}
-              data-lightbox-title={image.title}
-            >
-              <img
-                src={image.src}
-                alt={image.alt}
-                loading="lazy"
-                decoding="async"
-              />
-              <span>{image.caption}</span>
-            </button>
-          ))
-        }
+        {editingImages.map((image) => (
+          <button
+            class="edit-showcase__item service-tech-stack__image"
+            data-reveal
+            type="button"
+            data-lightbox={image.src}
+            data-lightbox-title={image.title}
+          >
+            <img
+              src={image.src}
+              alt={image.alt}
+              loading="lazy"
+              decoding="async"
+            />
+            <span>{image.caption}</span>
+          </button>
+        ))}
       </div>
     </section>
     <div class="service-path">
-      <h2 class="service-path__heading idea-highlight">SERVICIOS</h2>
-      {
-        services.map((service) => (
-          <article class="service-step" data-reveal>
-            <div class="service-step__title" data-from="left">
-              <h2>{service.title}</h2>
-            </div>
-            <div class="service-step__body" data-from="right">
-              <h3>
-                {service.headline.map((part) =>
-                  part.highlight ? (
-                    <span class="idea-highlight">{part.text}</span>
-                  ) : (
-                    part.text
-                  ),
-                )}
-              </h3>
-              <ul>
-                {service.offerings.map((offering) => (
-                  <li>{offering}</li>
-                ))}
-              </ul>
-            </div>
-          </article>
-        ))
-      }
+      <h2 class="service-path__heading">SERVICIOS</h2>
+      {services.map((service) => (
+        <article class="service-step" data-reveal>
+          <div class="service-step__title" data-from="left">
+            <h2>{service.title}</h2>
+          </div>
+          <div class="service-step__body" data-from="right">
+            <h3>
+              {service.headline.map((part) =>
+                part.highlight ? (
+                  <span class="idea-highlight">{part.text}</span>
+                ) : (
+                  part.text
+                ),
+              )}
+            </h3>
+            <ul>
+              {service.offerings.map((offering) => (
+                <li>{offering}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))}
     </div>
     <div data-reveal>
-      <p>¿Tienes un evento, una historia o un proyecto en mente? Cuéntanos qué necesitas y descubramos cómo llevarlo a la pantalla.</p>
+      <p>
+        ¿Tienes un evento, una historia o un proyecto en mente? Cuéntanos qué
+        necesitas y descubramos cómo llevarlo a la pantalla.
+      </p>
       <a class="editorial-link service-path__cta" href="/contacto/">
-        <span>Solicitar <span class="idea-highlight">una propuesta</span></span>
+        <span>
+          Solicitar <span class="idea-highlight">una propuesta</span>
+        </span>
         <span aria-hidden="true">↗</span>
       </a>
     </div>
