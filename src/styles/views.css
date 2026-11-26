@@ -100,9 +100,10 @@ html.reveal-enabled .service-step .service-step__body[data-from] { opacity: 1; t
 .about-closing p { font-size: clamp(24px, 2.4vw, 34px); margin: 0; max-width: none; }
 
 .interior-page--contact .contact-hero, .contact-hero .contact-title { animation: none; }
-.contact-hero { --contact-title-delay: 300ms; --contact-title-duration: 300ms; }
+.contact-hero { --contact-title-delay: 300ms; --contact-title-duration: 300ms; --contact-content-delay: calc(var(--contact-title-delay) + 3 * var(--contact-title-duration)); }
 .contact-hero__heading { align-items: center; display: grid; grid-template-columns: max-content minmax(0, 1fr); }
 .contact-filmstrip {
+  animation: contact-filmstrip-arrival .8s cubic-bezier(.22,.75,.22,1) var(--contact-content-delay) both;
   background: var(--film);
   border: 1px solid rgba(231, 229, 228, .22);
   box-shadow: 0 0 32px rgba(214, 52, 31, .24);
@@ -126,11 +127,15 @@ html.reveal-enabled .service-step .service-step__body[data-from] { opacity: 1; t
 .contact-filmstrip::before { top: 3px; }
 .contact-filmstrip::after { bottom: 3px; }
 .contact-filmstrip img { aspect-ratio: 1; display: block; object-fit: cover; width: 100%; }
+@keyframes contact-filmstrip-arrival {
+  from { opacity: 0; translate: 0 18px; }
+  to { opacity: 1; translate: none; }
+}
 .contact-title__block { animation: contact-title-arrival var(--contact-title-duration) cubic-bezier(.22,.75,.22,1) both; display: block; }
 .contact-title__block:nth-child(1) { animation-delay: var(--contact-title-delay); }
 .contact-title__block:nth-child(2) { animation-delay: calc(var(--contact-title-delay) + var(--contact-title-duration)); }
 .contact-title__block:nth-child(3) { animation-delay: calc(var(--contact-title-delay) + 2 * var(--contact-title-duration)); }
-.contact-hero .intro, .contact-hero__link { animation: rise-in .7s ease calc(var(--contact-title-delay) + 3 * var(--contact-title-duration)) both; }
+.contact-hero .intro, .contact-hero__link { animation: rise-in .7s ease var(--contact-content-delay) both; }
 @keyframes contact-title-arrival {
   from { opacity: 0; transform: translateX(-70px); }
   to { opacity: 1; transform: none; }
@@ -318,7 +323,7 @@ html.reveal-enabled .service-step .service-step__body[data-from] { opacity: 1; t
   html.reveal-enabled [data-reveal='left'], html.reveal-enabled [data-reveal='right'] { transform: none; }
   .about-title__block { animation: none; }
   .about-hero .about-hero__intro, .about-hero__logo { animation: none; }
-  .contact-title__block, .contact-hero .intro, .contact-hero__link { animation: none; }
+  .contact-title__block, .contact-filmstrip, .contact-hero .intro, .contact-hero__link { animation: none; }
   .about-title__bulb.bulb { animation: none; opacity: 1; }
   .about-title__bulb.bulb::after { animation: none; filter: brightness(1.1) drop-shadow(0 0 5px rgba(255, 166, 100, .95)); }
 }
