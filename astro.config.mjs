@@ -3,7 +3,7 @@ import react from '@astrojs/react';
 
 export default defineConfig({
   site: 'https://avdan-bay.vercel.app',
-  trailingSlash: 'always',
+  trailingSlash: 'ignore',
   integrations: [react()],
   output: 'static',
   markdown: { syntaxHighlight: false },

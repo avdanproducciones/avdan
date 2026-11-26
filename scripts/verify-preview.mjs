@@ -12,9 +12,16 @@ try {
     });
     server.stderr.on('data', (chunk) => process.stderr.write(chunk));
   });
-  for (const path of ['/', '/servicios/', '/sobre/', '/contacto/', '/robots.txt', '/sitemap.xml', '/ruta-inexistente-auditoria/']) {
+  for (const path of ['/', '/servicios/', '/sobre/', '/contacto/', '/contacto', '/robots.txt', '/sitemap.xml', '/ruta-inexistente-auditoria/', '/ruta-inexistente-auditoria']) {
     const response = await fetch(`http://127.0.0.1:4329${path}`);
     assert.equal(response.status, path.includes('inexistente') ? 404 : 200, path);
+    if (response.status === 404) {
+      assert.match(await response.text(), /class="idea-highlight"[^>]*>no encontrada</);
+    } else if (path.startsWith('/contacto')) {
+      const html = await response.text();
+      assert.equal((html.match(/href="\/policy\/"/g) ?? []).length, 1);
+      assert.match(html, /<footer\b[\s\S]*href="\/policy\/"/);
+    }
     console.log(`${response.status} ${path}`);
   }
 } finally {
