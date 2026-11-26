@@ -1,0 +1,168 @@
+<page-scrollbar hidden>
+  <div
+    class="page-scrollbar__track"
+    role="scrollbar"
+    tabindex="0"
+    aria-label="Desplazamiento de la página"
+    aria-controls="contenido"
+    aria-orientation="vertical"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow="0"
+  >
+    <span class="page-scrollbar__thumb" aria-hidden="true"></span>
+  </div>
+</page-scrollbar>
+
+<style>
+  page-scrollbar {
+    display: none;
+    position: fixed;
+    inset: calc(var(--header-h) + 8px) 0 8px auto;
+    z-index: 31;
+    width: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s ease;
+  }
+
+  page-scrollbar[data-near],
+  page-scrollbar[data-dragging],
+  page-scrollbar:has(:focus-visible) {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .page-scrollbar__track {
+    position: relative;
+    height: 100%;
+    cursor: pointer;
+    touch-action: none;
+    outline-offset: -2px;
+  }
+
+  .page-scrollbar__track::before, .page-scrollbar__thumb {
+    position: absolute;
+    inset-inline: 3px;
+    border-radius: 4px;
+  }
+
+  .page-scrollbar__track::before {
+    content: '';
+    inset-block: 0;
+    background: var(--room);
+  }
+
+  .page-scrollbar__thumb {
+    top: var(--thumb-top, 0px);
+    height: var(--thumb-height, 36px);
+    background: var(--safelight);
+    cursor: grab;
+  }
+
+  page-scrollbar[data-dragging] .page-scrollbar__thumb { cursor: grabbing; }
+
+  :global(html:has(dialog[open], .category-dialog, .item-dialog)) page-scrollbar { display: none; }
+
+  @media (any-pointer: fine) {
+    page-scrollbar:not([hidden]) { display: block; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    page-scrollbar { transition: none; }
+  }
+</style>
+
+<script>
+  class PageScrollbar extends HTMLElement {
+    #events?: AbortController;
+    #resize?: ResizeObserver;
+
+    connectedCallback() {
+      const track = this.querySelector<HTMLElement>('.page-scrollbar__track')!;
+      const thumb = this.querySelector<HTMLElement>('.page-scrollbar__thumb')!;
+      const root = document.documentElement;
+      const maxScroll = () => Math.max(0, root.scrollHeight - root.clientHeight);
+      let travel = 0;
+      let grabOffset = 0;
+      let dragPointer: number | undefined;
+      this.#events = new AbortController();
+      const options = { signal: this.#events.signal };
+
+      const updatePosition = () => {
+        const max = maxScroll();
+        const progress = max ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+        track.style.setProperty('--thumb-top', `${progress * travel}px`);
+        track.setAttribute('aria-valuenow', String(Math.round(progress * 100)));
+      };
+
+      const updateSize = () => {
+        this.hidden = maxScroll() === 0;
+        const height = track.clientHeight;
+        const thumbHeight = Math.min(height, Math.max(36, height * root.clientHeight / root.scrollHeight));
+        travel = height - thumbHeight;
+        track.style.setProperty('--thumb-height', `${thumbHeight}px`);
+        updatePosition();
+      };
+
+      const scrollToPointer = (clientY: number) => {
+        if (travel <= 0) return;
+        const offset = clientY - track.getBoundingClientRect().top - grabOffset;
+        window.scrollTo({ top: maxScroll() * Math.min(1, Math.max(0, offset / travel)), behavior: 'instant' });
+      };
+
+      window.addEventListener('pointermove', (event) => {
+        this.toggleAttribute('data-near', event.pointerType === 'mouse' && event.clientX >= root.clientWidth - 24);
+      }, options);
+      root.addEventListener('pointerleave', () => this.removeAttribute('data-near'), options);
+      window.addEventListener('blur', () => this.removeAttribute('data-near'), options);
+      window.addEventListener('scroll', updatePosition, { ...options, passive: true });
+      window.addEventListener('resize', updateSize, options);
+
+      track.addEventListener('pointerdown', (event) => {
+        if (event.button !== 0 || event.pointerType !== 'mouse' || dragPointer !== undefined) return;
+        event.preventDefault();
+        const bounds = thumb.getBoundingClientRect();
+        grabOffset = event.target === thumb ? event.clientY - bounds.top : bounds.height / 2;
+        dragPointer = event.pointerId;
+        track.setPointerCapture(dragPointer);
+        this.setAttribute('data-dragging', '');
+        scrollToPointer(event.clientY);
+      }, options);
+      track.addEventListener('pointermove', (event) => {
+        if (event.pointerId === dragPointer) scrollToPointer(event.clientY);
+      }, options);
+      track.addEventListener('lostpointercapture', () => {
+        dragPointer = undefined;
+        this.removeAttribute('data-dragging');
+      }, options);
+
+      track.addEventListener('keydown', (event) => {
+        let top = window.scrollY;
+        switch (event.key) {
+          case 'ArrowUp': top -= 40; break;
+          case 'ArrowDown': top += 40; break;
+          case 'PageUp': top -= root.clientHeight; break;
+          case 'PageDown': top += root.clientHeight; break;
+          case 'Home': top = 0; break;
+          case 'End': top = maxScroll(); break;
+          default: return;
+        }
+        event.preventDefault();
+        window.scrollTo({ top, behavior: 'instant' });
+      }, options);
+
+      this.#resize = new ResizeObserver(updateSize);
+      this.#resize.observe(document.body);
+      this.#resize.observe(track);
+      updateSize();
+    }
+
+    disconnectedCallback() {
+      this.#events?.abort();
+      this.#resize?.disconnect();
+    }
+  }
+
+  customElements.define('page-scrollbar', PageScrollbar);
+</script>
