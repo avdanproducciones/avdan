@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" fill="none">
+  <!-- Adapted from Tabler Icons: https://github.com/tabler/tabler-icons/blob/main/icons/outline/camera-off.svg
+       MIT License
+       Copyright (c) 2020-2026 Paweł Kuna
+
+       Permission is hereby granted, free of charge, to any person obtaining a copy
+       of this software and associated documentation files (the "Software"), to deal
+       in the Software without restriction, including without limitation the rights
+       to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+       copies of the Software, and to permit persons to whom the Software is
+       furnished to do so, subject to the following conditions:
+
+       The above copyright notice and this permission notice shall be included in all
+       copies or substantial portions of the Software.
+
+       THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+       IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+       FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+       AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+       LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+       SOFTWARE. -->
+  <defs>
+    <linearGradient id="metal" x2=".2" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#e1dad4"/>
+      <stop offset=".34" stop-color="#928984"/>
+      <stop offset=".58" stop-color="#4a4140"/>
+      <stop offset="1" stop-color="#1d191a"/>
+    </linearGradient>
+    <linearGradient id="body" x2=".15" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#453e3c"/>
+      <stop offset=".38" stop-color="#252122"/>
+      <stop offset="1" stop-color="#100e10"/>
+    </linearGradient>
+    <radialGradient id="glass" cx=".38" cy=".29" r=".77">
+      <stop stop-color="#936e77"/>
+      <stop offset=".32" stop-color="#472e43"/>
+      <stop offset=".67" stop-color="#201e30"/>
+      <stop offset="1" stop-color="#0b0c15"/>
+    </radialGradient>
+    <pattern id="grip" width="5" height="5" patternUnits="userSpaceOnUse">
+      <path d="m0 3 3-3m0 5 2-2" stroke="#cbb9ad" stroke-opacity=".13" stroke-width=".65"/>
+    </pattern>
+    <clipPath id="lens-glass"><circle cx="160" cy="130" r="45"/></clipPath>
+  </defs>
+
+  <!-- Controls, shoe and brushed top plate -->
+  <rect x="232" y="48" width="35" height="18" rx="4" fill="url(#metal)" stroke="#242021" stroke-width="2"/>
+  <path d="M237 52v10m6-10v10m6-10v10m6-10v10m6-10v10" stroke="#2c2626" stroke-width="2"/>
+  <rect x="58" y="53" width="24" height="12" rx="5" fill="url(#metal)" stroke="#262022" stroke-width="2"/>
+  <path d="M118 61l20-28h44l18 28h69a16 16 0 0 1 16 16v91a21 21 0 0 1-21 21H48a16 16 0 0 1-16-16V77a16 16 0 0 1 16-16z" fill="url(#body)" stroke="#8d7c76" stroke-width="2"/>
+  <path d="M33 91V77a15 15 0 0 1 15-15h71l20-28h42l18 28h70a15 15 0 0 1 15 15v14z" fill="url(#metal)"/>
+  <path d="M48 64h72l19-27h42l18 27h70" stroke="#f3dfce" stroke-opacity=".7" stroke-width="1.25"/>
+  <path d="M141 51h37l7 17h-51z" fill="#262125" stroke="#706164" stroke-width="1.5"/>
+  <path d="M149 44h22" stroke="#e8d6ca" stroke-width="2" stroke-linecap="round"/>
+  <rect x="48" y="72" width="28" height="10" rx="2" fill="#1a181e"/>
+  <path d="M52 75h19" stroke="#a895a7" stroke-opacity=".65"/>
+  <circle cx="266" cy="77" r="3.4" fill="#ee6152"/>
+
+  <!-- Leatherette and sculpted handgrip -->
+  <path d="M34 92h249v76a20 20 0 0 1-20 20H48a14 14 0 0 1-14-14z" fill="url(#grip)"/>
+  <path d="M251 97q29-3 29 16v54a17 17 0 0 1-17 17h-27l8-73q1-11 7-14z" fill="#141214" stroke="#504444"/>
+  <path d="M251 97q29-3 29 16v54a17 17 0 0 1-17 17h-27l8-73q1-11 7-14z" fill="url(#grip)"/>
+  <path d="M34 176q2 13 15 13h212q20 0 23-17" stroke="#090809" stroke-width="4"/>
+  <path d="M46 170h27m-27 5h19" stroke="#8a7974" stroke-opacity=".55" stroke-width="1.5"/>
+  <circle cx="61" cy="107" r="3.5" fill="#1a1516" stroke="#775a54" stroke-width="1.5"/>
+
+  <!-- Focus ring, front element and fractured glass -->
+  <ellipse cx="162" cy="193" rx="60" ry="12" fill="#0a080b" opacity=".6"/>
+  <circle cx="160" cy="130" r="72" fill="url(#metal)" stroke="#160f13" stroke-width="3"/>
+  <circle cx="160" cy="130" r="66" fill="#171419" stroke="#b9a69b" stroke-width="1.5"/>
+  <circle cx="160" cy="130" r="62" stroke="#625453" stroke-width="3" stroke-dasharray="1.5 3"/>
+  <circle cx="160" cy="130" r="56" fill="#121018" stroke="#846e6b" stroke-width="1.5"/>
+  <circle cx="160" cy="130" r="50" fill="#24202a" stroke="#0b0a0f" stroke-width="3"/>
+  <circle cx="160" cy="130" r="45" fill="url(#glass)" stroke="#595063" stroke-width="1.5"/>
+  <circle cx="160" cy="130" r="31" stroke="#ac859a" stroke-opacity=".23"/>
+  <ellipse cx="146" cy="113" rx="19" ry="8" transform="rotate(-24 146 113)" fill="#edd1d7" opacity=".21"/>
+  <path d="M174 159q17-5 24-19" stroke="#bc665c" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>
+  <g clip-path="url(#lens-glass)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m197 96-13 17-21 12 7 14-19 9-9 30m21-53-19-5-13-18-16-4m55 41 16 5 16 23m-39-42-10 13-26 2-13 16m70-43 5 8 18 3" stroke="#100b12" stroke-width="4"/>
+    <path d="m197 96-13 17-21 12 7 14-19 9-9 30m21-53-19-5-13-18-16-4m55 41 16 5 16 23m-39-42-10 13-26 2-13 16m70-43 5 8 18 3" stroke="#efd9d1" stroke-opacity=".85" stroke-width="1.5"/>
+    <path d="m197 96-13 17-21 12 7 14" stroke="#ef6a59" stroke-width="2"/>
+    <path d="m196 96 8 21-15 4-5-8z" fill="#e4b1a7" opacity=".16"/>
+  </g>
+  <path d="m209 85-5 9 7-2 4 5 8-2" stroke="#ab7165" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

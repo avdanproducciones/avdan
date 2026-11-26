@@ -2,10 +2,72 @@
 import '../styles/views.css';
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Página no encontrada" description="La página solicitada no existe. Vuelve al portafolio de AVDAN Producciones." noindex>
-  <section class="page interior-page">
-    <h1>Pagina <span class="idea-highlight">no encontrada</span></h1>
+<Layout title="Página no encontrada" description="La página solicitada no existe. Vuelve al portafolio de AVDAN Producciones." noindex backgroundSafelight>
+  <section class="page interior-page not-found">
+    <div class="not-found__heading">
+      <div class="not-found__title">
+        <h1>Pagina <span class="idea-highlight">no encontrada</span></h1>
+      </div>
+      <img class="not-found__camera" src="/media/camera-off.svg" width="320" height="240" alt="" />
+    </div>
     <p>La dirección solicitada no está disponible.</p>
-    <a class="editorial-link" href="/">Volver al portafolio</a>
+    <a class="editorial-link not-found__return" href="/">Volver al portafolio</a>
   </section>
 </Layout>
+
+<style>
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100svh;
+  }
+
+  .not-found__heading {
+    --camera-size: clamp(58px, 24vw, 296px);
+    --camera-gutter: clamp(10px, 2.5vw, 40px);
+    --camera-column: calc(var(--camera-size) + 2 * var(--camera-gutter));
+    align-items: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--camera-column);
+  }
+
+  .not-found__title {
+    container-type: inline-size;
+  }
+
+  .not-found__title h1 {
+    font-size: min(clamp(37px, 5.8vw, 84px), 10cqw);
+    margin: 0;
+  }
+
+  .not-found__camera {
+    display: block;
+    height: auto;
+    justify-self: center;
+    transform: rotate(6deg);
+    width: var(--camera-size);
+  }
+
+  .not-found__return {
+    font-size: clamp(16px, 2vw, 20px);
+    margin-top: 16px;
+    min-height: 44px;
+  }
+
+  @media (max-width: 700px) {
+    .not-found {
+      padding-block: 40px 64px;
+    }
+
+    .not-found__heading {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 16px;
+    }
+
+    .not-found__camera {
+      grid-row: 1;
+      width: min(90%, 320px);
+    }
+  }
+</style>

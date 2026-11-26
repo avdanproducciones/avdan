@@ -1,8 +1,9 @@
 ---
-import { thumbnail, thumbnailSet } from '../data/images';
-import { Image } from 'astro:assets';
-import memoriesPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
-import spotPoster from '../../public/media/video/ttPV0iTUSW8.jpg';
+import { thumbnail, thumbnailSet } from "../data/images";
+import { Image } from "astro:assets";
+import memoriesPoster from "../../public/media/video/hcbyyc0O8Ng.jpg";
+import spotPoster from "../../public/media/video/ttPV0iTUSW8.jpg";
+import seminarPoster from "../../public/media/video/iuhY8rtAWyg.jpg";
 const photos = [
   { title: "Claudio Parra", src: "/media/projects/seleccion-01.webp" },
   { title: "Flor de Rap", src: "/media/projects/seleccion-07.webp" },
@@ -20,8 +21,24 @@ const photos = [
 ];
 const strings = [photos.slice(0, 5), photos.slice(5, 10)];
 const videos = [
-  { title: "Memorias del Mar", youtubeId: "hcbyyc0O8Ng", size: "large" },
-  { title: "SPOT T.G", youtubeId: "ttPV0iTUSW8", size: "standard" },
+  {
+    title: "Seminario de Prevencion de Incendios",
+    youtubeId: "iuhY8rtAWyg",
+    poster: seminarPoster,
+    size: "large",
+  },
+  {
+    title: "SPOT T.G",
+    youtubeId: "ttPV0iTUSW8",
+    poster: spotPoster,
+    size: "standard",
+  },
+  {
+    title: "Memorias del Mar",
+    youtubeId: "hcbyyc0O8Ng",
+    poster: memoriesPoster,
+    size: "standard",
+  },
 ];
 ---
 
@@ -31,38 +48,50 @@ const videos = [
   aria-labelledby="garland-title"
 >
   <div class="section-heading section-heading--center" data-reveal>
-    <i class="bulb" style="--x: 12%; --cord: 20px; --d: -3s" aria-hidden="true"
+    <i
+      class="bulb"
+      style="--x: 12%; --cord: 20px; --d: -3s"
+      aria-hidden="true"
     ></i>
     <h2 id="garland-title">Seleccion</h2>
-    <p class="darkroom-sign" aria-hidden="true"><i></i>Revelando…</p>
+    <p class="darkroom-sign" aria-hidden="true">
+      <i></i>Revelando…
+    </p>
   </div>
 
   <div class="garland-scroll">
-    {
-      strings.map((row, rowIndex) => (
-        <div class="garland" style={`--row:${rowIndex}`} data-reveal>
-          <svg class="garland__thread" aria-hidden="true">
-            <path d="" fill="none" />
-          </svg>
-          {row.map((photo, index) => (
-            <button
-              class="garland__item"
-              type="button"
-              style={`--i:${index}`}
-              aria-label={`Abrir ${photo.title}`}
-              data-slot-dialog={`photo-${rowIndex * 5 + index}`}
-            >
-              <span class="garland__swing">
-                <span class="garland__pin" aria-hidden="true" />
-                <span class="garland__photo">
-                  <img src={thumbnail(photo.src)} srcset={thumbnailSet(photo.src)} sizes="(max-width: 900px) calc(100vw - 50px), 20vw" width="720" height="900" alt="" loading={rowIndex === 0 && index === 0 ? 'eager' : 'lazy'} decoding="async" />
-                </span>
+    {strings.map((row, rowIndex) => (
+      <div class="garland" style={`--row:${rowIndex}`} data-reveal>
+        <svg class="garland__thread" aria-hidden="true">
+          <path d="" fill="none" />
+        </svg>
+        {row.map((photo, index) => (
+          <button
+            class="garland__item"
+            type="button"
+            style={`--i:${index}`}
+            aria-label={`Abrir ${photo.title}`}
+            data-slot-dialog={`photo-${rowIndex * 5 + index}`}
+          >
+            <span class="garland__swing">
+              <span class="garland__pin" aria-hidden="true" />
+              <span class="garland__photo">
+                <img
+                  src={thumbnail(photo.src)}
+                  srcset={thumbnailSet(photo.src)}
+                  sizes="(max-width: 900px) calc(100vw - 50px), 20vw"
+                  width="720"
+                  height="900"
+                  alt=""
+                  loading={rowIndex === 0 && index === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                />
               </span>
-            </button>
-          ))}
-        </div>
-      ))
-    }
+            </span>
+          </button>
+        ))}
+      </div>
+    ))}
   </div>
 </section>
 
@@ -72,158 +101,175 @@ const videos = [
   </div>
 
   <div class="portfolio-grid">
-    {
-      videos.map((video, index) => (
-        <article
-          class:list={{
-            "portfolio-slot": true,
-            "portfolio-slot--video": true,
-            "portfolio-slot--large": video.size === "large",
-          }}
-          data-reveal
-          style={`--delay:${index * 120}ms`}
+    {videos.map((video, index) => (
+      <article
+        class:list={{
+          "portfolio-slot": true,
+          "portfolio-slot--video": true,
+          "portfolio-slot--large": video.size === "large",
+        }}
+        data-reveal
+        style={`--delay:${index * 120}ms`}
+      >
+        <button
+          class="portfolio-slot__trigger"
+          type="button"
+          aria-label={`Abrir ${video.title.toLowerCase()}`}
+          data-slot-dialog={`video-${index}`}
         >
-          <button
-            class="portfolio-slot__trigger"
-            type="button"
-            aria-label={`Abrir ${video.title.toLowerCase()}`}
-            data-slot-dialog={`video-${index}`}
-          >
-            <span class="portfolio-slot__frame" aria-hidden="true">
-              <span class="portfolio-slot__window" data-timecode="00:00:00:00">
-                <Image
-                  src={index === 0 ? memoriesPoster : spotPoster}
-                  widths={[360, 400, 480, 640, 720, 960]} sizes="(max-width: 900px) calc(100vw - 32px), 60vw" format="avif" quality={50}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                />
-                <span class="portfolio-slot__mark">▶</span>
-              </span>
+          <span class="portfolio-slot__frame" aria-hidden="true">
+            <span class="portfolio-slot__window" data-timecode="00:00:00:00">
+              <Image
+                src={video.poster}
+                widths={[360, 400, 480, 640, 720, 960]}
+                sizes="(max-width: 900px) calc(100vw - 32px), 60vw"
+                format="avif"
+                quality={50}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="portfolio-slot__mark">▶</span>
             </span>
-            <span class="portfolio-slot__caption">{video.title}</span>
-          </button>
-          <div class="portfolio-slot__inline">
-            <button class="video-facade" type="button" data-inline-play aria-label={`Reproducir ${video.title}`}>
-              <Image src={index === 0 ? memoriesPoster : spotPoster} widths={[360, 400, 480, 640, 720, 960]} sizes="calc(100vw - 44px)" format="avif" quality={50} alt="" loading="lazy" />
-              <span aria-hidden="true">▶</span>
-            </button>
-            <iframe
-              class="portfolio-slot__inline-player"
-              title={video.title}
-              data-inline-youtube-id={video.youtubeId}
-              hidden
+          </span>
+          <span class="portfolio-slot__caption">{video.title}</span>
+        </button>
+        <div class="portfolio-slot__inline">
+          <button
+            class="video-facade"
+            type="button"
+            data-inline-play
+            aria-label={`Reproducir ${video.title}`}
+          >
+            <Image
+              src={video.poster}
+              widths={[360, 400, 480, 640, 720, 960]}
+              sizes="calc(100vw - 44px)"
+              format="avif"
+              quality={50}
+              alt=""
               loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
-            ></iframe>
-            <p class="portfolio-slot__caption">{video.title}</p>
-          </div>
-        </article>
-      ))
-    }
+            />
+            <span aria-hidden="true">▶</span>
+          </button>
+          <iframe
+            class="portfolio-slot__inline-player"
+            title={video.title}
+            data-inline-youtube-id={video.youtubeId}
+            hidden
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+          <p class="portfolio-slot__caption">{video.title}</p>
+        </div>
+      </article>
+    ))}
   </div>
 </section>
 
-{
-  photos.map((photo, index) => (
-    <dialog
-      class="image-dialog portfolio-slot-dialog"
-      data-group="photo"
-      id={`photo-${index}`}
-      aria-label={photo.title}
-    >
-      <div class="image-dialog__content">
-        <div class="image-dialog__header">
-          <p class="popup-swipe-hint">Desliza para cambiar de foto</p>
-          <button
-            class="image-dialog__close"
-            type="button"
-            aria-label={`Cerrar ${photo.title}`}
-          >
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="item-dialog__stage">
-          <button
-            class="item-dialog__nav item-dialog__nav--previous"
-            type="button"
-            data-slot-step="-1"
-            aria-label="Trabajo anterior"
-          >
-            <span aria-hidden="true">‹</span>
-          </button>
-          <div class="zoom-frame" data-zoom>
-            <img src={photo.src} alt={photo.title} loading="lazy" decoding="async" />
-          </div>
-          <button
-            class="item-dialog__nav item-dialog__nav--next"
-            type="button"
-            data-slot-step="1"
-            aria-label="Trabajo siguiente"
-          >
-            <span aria-hidden="true">›</span>
-          </button>
-        </div>
+{photos.map((photo, index) => (
+  <dialog
+    class="image-dialog portfolio-slot-dialog"
+    data-group="photo"
+    id={`photo-${index}`}
+    aria-label={photo.title}
+  >
+    <div class="image-dialog__content">
+      <div class="image-dialog__header">
+        <p class="popup-swipe-hint">Desliza para cambiar de foto</p>
+        <button
+          class="image-dialog__close"
+          type="button"
+          aria-label={`Cerrar ${photo.title}`}
+        >
+          <span aria-hidden="true">×</span>
+        </button>
       </div>
-    </dialog>
-  ))
-}
+      <div class="item-dialog__stage">
+        <button
+          class="item-dialog__nav item-dialog__nav--previous"
+          type="button"
+          data-slot-step="-1"
+          aria-label="Trabajo anterior"
+        >
+          <span aria-hidden="true">‹</span>
+        </button>
+        <div class="zoom-frame" data-zoom>
+          <img
+            src={photo.src}
+            alt={photo.title}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <button
+          class="item-dialog__nav item-dialog__nav--next"
+          type="button"
+          data-slot-step="1"
+          aria-label="Trabajo siguiente"
+        >
+          <span aria-hidden="true">›</span>
+        </button>
+      </div>
+    </div>
+  </dialog>
+))}
 
-{
-  videos.map((video, index) => (
-    <dialog
-      class="image-dialog portfolio-slot-dialog"
-      data-group="video"
-      id={`video-${index}`}
-      aria-label={video.title}
-    >
-      <div class="image-dialog__content">
-        <div class="image-dialog__header">
-          <p class="popup-swipe-hint">Desliza sobre los lados del video para cambiar</p>
-          <button
-            class="image-dialog__close"
-            type="button"
-            aria-label={`Cerrar ${video.title.toLowerCase()}`}
-          >
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="item-dialog__stage">
-          <button
-            class="item-dialog__nav item-dialog__nav--previous"
-            type="button"
-            data-slot-step="-1"
-            aria-label="Video anterior"
-          >
-            <span aria-hidden="true">‹</span>
-          </button>
-          <div
-            class="portfolio-slot-dialog__preview"
-            aria-label={`Previsualizacion de ${video.title.toLowerCase()}`}
-          >
-            <iframe
-              title={video.title}
-              data-youtube-id={video.youtubeId}
-              allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
-            />
-          </div>
-          <button
-            class="item-dialog__nav item-dialog__nav--next"
-            type="button"
-            data-slot-step="1"
-            aria-label="Video siguiente"
-          >
-            <span aria-hidden="true">›</span>
-          </button>
-        </div>
+{videos.map((video, index) => (
+  <dialog
+    class="image-dialog portfolio-slot-dialog"
+    data-group="video"
+    id={`video-${index}`}
+    aria-label={video.title}
+  >
+    <div class="image-dialog__content">
+      <div class="image-dialog__header">
+        <p class="popup-swipe-hint">
+          Desliza sobre los lados del video para cambiar
+        </p>
+        <button
+          class="image-dialog__close"
+          type="button"
+          aria-label={`Cerrar ${video.title.toLowerCase()}`}
+        >
+          <span aria-hidden="true">×</span>
+        </button>
       </div>
-    </dialog>
-  ))
-}
+      <div class="item-dialog__stage">
+        <button
+          class="item-dialog__nav item-dialog__nav--previous"
+          type="button"
+          data-slot-step="-1"
+          aria-label="Video anterior"
+        >
+          <span aria-hidden="true">‹</span>
+        </button>
+        <div
+          class="portfolio-slot-dialog__preview"
+          aria-label={`Previsualizacion de ${video.title.toLowerCase()}`}
+        >
+          <iframe
+            title={video.title}
+            data-youtube-id={video.youtubeId}
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          />
+        </div>
+        <button
+          class="item-dialog__nav item-dialog__nav--next"
+          type="button"
+          data-slot-step="1"
+          aria-label="Video siguiente"
+        >
+          <span aria-hidden="true">›</span>
+        </button>
+      </div>
+    </div>
+  </dialog>
+))}
 
 <script>
   import { attachZoom, resetZoom } from "../scripts/zoom";
@@ -293,7 +339,10 @@ const videos = [
         `.portfolio-slot-dialog[data-group="${current.dataset.group}"]`,
       ),
     );
-    if (current.dataset.group === "photo" && window.matchMedia("(max-width: 900px)").matches)
+    if (
+      current.dataset.group === "photo" &&
+      window.matchMedia("(max-width: 900px)").matches
+    )
       dialogs = dialogs.slice(0, 5);
     const index = dialogs.indexOf(current);
     const next = dialogs[(index + step + dialogs.length) % dialogs.length];

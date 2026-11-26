@@ -121,6 +121,7 @@ a:focus-visible, button:focus-visible { outline-color: var(--bone); }
 .portfolio-slot--video .portfolio-slot__frame::before, .portfolio-slot--video .portfolio-slot__frame::after { background: var(--hole); bottom: 10px; content: ''; mask: var(--perf-v) repeat-y center top / 12px 22px; -webkit-mask: var(--perf-v) repeat-y center top / 12px 22px; position: absolute; top: 10px; width: 12px; }
 .portfolio-slot--video .portfolio-slot__frame::before { left: 16px; }
 .portfolio-slot--video .portfolio-slot__frame::after { right: 16px; }
+.portfolio-slot--video .portfolio-slot__window { overflow: hidden; }
 .portfolio-slot--video .portfolio-slot__window::before { background: var(--safelight); border-radius: 50%; content: ''; height: 12px; left: 16px; position: absolute; top: 16px; width: 12px; }
 .portfolio-slot--video .portfolio-slot__window::after { content: attr(data-timecode); font-size: 11px; font-variant-numeric: tabular-nums; position: absolute; right: 16px; top: 12px; }
 .portfolio-slot--video .portfolio-slot__mark { align-items: center; border: 3px solid currentColor; border-radius: 50%; display: flex; font-size: 26px; height: 64px; justify-content: center; padding-left: 3px; width: 64px; }
@@ -329,6 +330,8 @@ body { overflow-x: clip; }
   79% { opacity: 1; }
 }
 .darkroom-light { background: radial-gradient(ellipse 70% 55% at 50% 25%, rgba(214, 52, 31, .16), transparent 70%); box-shadow: inset 0 0 220px 40px rgba(110, 10, 0, .5); inset: 0; mix-blend-mode: screen; pointer-events: none; position: fixed; z-index: 2; }
+.main--background-light { isolation: isolate; }
+.main--background-light > .darkroom-light { z-index: -1; }
 .portfolio-slots .section-heading .darkroom-sign { align-items: center; color: var(--safelight); display: inline-flex; font-family: var(--font); font-size: clamp(9px, 0.81vw, 12px); gap: 10px; letter-spacing: .02em; margin: 0; padding: 9px 16px; position: absolute; right: 6%; top: 56px; border: 3px solid var(--safelight); box-shadow: 0 0 14px rgba(214, 52, 31, .4); text-shadow: 0 0 8px rgba(214, 52, 31, .7); transform-origin: 50% -56px; animation: sign-swing 6s ease-in-out infinite alternate; }
 @keyframes sign-swing { from { transform: rotate(-1.6deg); } to { transform: rotate(1.6deg); } }
 .darkroom-sign::before, .darkroom-sign::after { background: #6f685f; content: ''; height: 58px; position: absolute; top: -58px; width: 2px; }
