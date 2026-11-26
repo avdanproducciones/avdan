@@ -257,9 +257,6 @@ html.reveal-enabled .service-step .service-step__body[data-from] { opacity: 1; t
 }
 
 @media (max-width: 900px) {
-  /* Avoid a screen-sized animated noise layer and blend/shadow compositing while scrolling. */
-  body[data-page='/servicios/']::after { content: none; animation: none; }
-  body[data-page='/servicios/'] .darkroom-light { box-shadow: none; mix-blend-mode: normal; }
   body[data-page='/servicios/'] .scroll-top svg { animation: none; filter: none; }
   .interior-page--services .hero-copy { animation: none; }
   .interior-page--services .hero-copy h1 { animation: rise-in .45s ease both; }
