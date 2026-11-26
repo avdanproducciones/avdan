@@ -12,7 +12,7 @@ interface Props {
 }
 
 const { title } = Astro.props;
-const currentPath = Astro.url.pathname;
+const currentPath = Astro.url.pathname.replace(/\/?$/, '/');
 const isServices = currentPath === '/servicios/';
 const description = Astro.props.description ?? pageDescriptions[currentPath] ?? pageDescriptions['/'];
 const noindex = Astro.props.noindex || isPreview;
@@ -29,7 +29,6 @@ const navigation = [
   { href: "/servicios/", label: "Servicios" },
   { href: "/sobre/", label: "Acerca de" },
   { href: "/contacto/", label: "Contacto" },
-  { href: "/policy/", label: "Politica" },
 ];
 ---
 
@@ -381,7 +380,15 @@ const navigation = [
       menu.querySelector<HTMLElement>("summary")?.focus();
     }
   });
+  function removeObsoleteServicesHash() {
+    if (/^\/servicios\/?$/.test(location.pathname) && location.hash === '#servicios-lista') {
+      history.replaceState(history.state, '', location.pathname + location.search);
+    }
+  }
+
+  window.addEventListener("hashchange", removeObsoleteServicesHash);
   document.addEventListener("astro:page-load", () => {
+    removeObsoleteServicesHash();
     syncHeaderHeight();
     lastScrollY = window.scrollY;
     scrollAnchor = lastScrollY;
