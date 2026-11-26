@@ -11,7 +11,7 @@ import Layout from '../layouts/Layout.astro';
           <h1 class="about-title">
             <span class="about-title__block"><span class="idea-highlight">Tu ide<span data-bulb-impact="first">a</span></span><span class="about-title__baseline" aria-hidden="true"></span></span>
             <span class="about-title__block">merece</span>
-            <span class="about-title__block">una gran</span>
+            <span class="about-title__block">una <span class="idea-highlight">gran</span></span>
             <span class="about-title__block"><span class="about-title__last-word">ejecuci<span data-bulb-impact="second">o</span><span data-bulb-impact="last">n</span><span class="about-title__baseline" aria-hidden="true"></span><span class="bulb about-title__bulb" aria-hidden="true"></span></span></span>
           </h1>
           <span class="about-hero__logo-position"><img class="about-hero__logo" src="/logo-avdan.svg" width="320" height="226" alt="" aria-hidden="true" /></span>
@@ -25,7 +25,7 @@ import Layout from '../layouts/Layout.astro';
     <div class="about-story" id="acerca-historia">
       <div class="about-story__copy">
         <p class="about-story__lead" data-reveal>En <span class="idea-highlight">AVDAN</span> creemos que cada historia merece una mirada única. Combinamos creatividad, fotografía y producción audiovisual para transformar tus ideas en imágenes que dejan huella.</p>
-        <p data-reveal>Por eso, nuestro trabajo comienza escuchando <span class="idea-highlight">tus ideas</span>, comprendiendo tus objetivos y encontrando la mejor manera de llevarlos a la realidad a través de la fotografía y la producción audiovisual.</p>
+        <p data-reveal>Por eso, nuestro trabajo comienza escuchando <span class="idea-highlight">tus ideas</span>, comprendiendo <span class="idea-highlight">tus objetivos</span> y encontrando la mejor manera de llevarlos a la realidad a través de la fotografía y la producción audiovisual.</p>
         <p data-reveal>Nos involucramos en cada etapa del proceso, desde la planificación hasta la entrega final, cuidando los detalles y buscando siempre un resultado que responda a tus <span class="idea-highlight">expectativas</span>. Trabajamos con compromiso, creatividad y profesionalismo, adaptándonos a las <span class="idea-highlight">necesidades</span> de cada cliente para crear contenido visual que comunique, emocione y destaque.</p>
       </div>
     </div>
@@ -33,7 +33,7 @@ import Layout from '../layouts/Layout.astro';
 
   <section class="page about-closing">
     <div class="about-closing__content" data-reveal>
-      <p><span class="idea-highlight">Tu idea</span> es el comienzo. En AVDAN, nos encargamos de darle vida.</p>
+      <p><span class="idea-highlight">Tu idea</span> es el comienzo. En <span class="idea-highlight">AVDAN</span>, nos encargamos de darle vida.</p>
       <a class="editorial-link" href="/contacto/"><span>Hablemos de <span class="idea-highlight">tu idea</span></span> <span aria-hidden="true">↗</span></a>
     </div>
   </section>
@@ -75,12 +75,10 @@ import Layout from '../layouts/Layout.astro';
     bulbSound.preload = 'auto';
     const revealAnimations: Animation[] = [];
 
-    const onBulbLight = (event: AnimationEvent) => {
-      if (event.animationName !== 'about-bulb-light' || event.pseudoElement !== '::after' ||
-          event.elapsedTime * 1000 >= flickerDuration) return;
-      if (!active || reducedMotion.matches) return;
-      // Omite el silencio inicial para que el sonido coincida con el primer destello.
-      bulbSound.currentTime = .128 + event.elapsedTime;
+    const playLandingSound = () => {
+      if (!active || !title.isConnected || reducedMotion.matches) return;
+      // Omite el silencio inicial para que el sonido coincida con el aterrizaje.
+      bulbSound.currentTime = .128;
       bulbSound.play().catch((error: unknown) => {
         if (error instanceof DOMException && error.name === 'NotAllowedError') {
           console.info('El navegador bloqueó la reproducción automática del sonido del foco.');
@@ -89,7 +87,6 @@ import Layout from '../layouts/Layout.astro';
         }
       });
     };
-    bulb.addEventListener('animationstart', onBulbLight);
 
     const positionBulb = () => {
       // Measure resting positions even while the title blocks are still falling.
@@ -187,6 +184,7 @@ import Layout from '../layouts/Layout.astro';
       bulb.style.setProperty('--bulb-light-delay', `${flightDuration + lightPause - elapsed}ms`);
       bulb.style.setProperty('--bulb-light-duration', `${flickerDuration}ms`);
       bulb.classList.add('is-animating');
+      flight.finished.then(playLandingSound, () => {});
       const flightStartTime = flight.startTime;
       [subtitle, logo].forEach((element) => {
         element.style.animation = 'none';
@@ -219,7 +217,6 @@ import Layout from '../layouts/Layout.astro';
       bulbSound.pause();
       flight?.cancel();
       revealAnimations.forEach((animation) => animation.cancel());
-      bulb.removeEventListener('animationstart', onBulbLight);
       resizeObserver.disconnect();
       reducedMotion.removeEventListener('change', handleMotionChange);
     }, { once: true });
