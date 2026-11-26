@@ -2,8 +2,12 @@
 import '../styles/views.css';
 import Layout from "../layouts/Layout.astro";
 import { Image } from 'astro:assets';
-import { thumbnail, thumbnailSet } from '../data/images';
+import { categoryThumbnail, categoryThumbnailSet, thumbnail, thumbnailSet } from '../data/images';
 import videoPoster from '../../public/media/video/hcbyyc0O8Ng.jpg';
+
+const filmstripPhotos = ['eventos-08', 'matrimonios-14', 'sesiones-01'].map(
+  (name) => `/media/projects/${name}.webp`,
+);
 
 const instagramPhotos = ['01', '07', '10', '06', '03', '05'].map(
   (number) => `/media/projects/seleccion-${number}.webp`,
@@ -14,11 +18,24 @@ const instagramPhotos = ['01', '07', '10', '06', '03', '05'].map(
   <section class="page interior-page contact-page interior-page--contact">
     <div class="interior-hero">
       <div class="hero-copy contact-hero">
-        <h1 class="contact-title">
-          <span class="contact-title__block idea-highlight">Tu idea</span>
-          <span class="contact-title__block">comienza</span>
-          <span class="contact-title__block">aqui</span>
-        </h1>
+        <div class="contact-hero__heading">
+          <h1 class="contact-title">
+            <span class="contact-title__block idea-highlight">Tu idea</span>
+            <span class="contact-title__block">comienza</span>
+            <span class="contact-title__block">aqui</span>
+          </h1>
+          <div class="contact-filmstrip" aria-hidden="true">
+            {filmstripPhotos.map((src) => (
+              <img
+                src={categoryThumbnail(src, 360)}
+                srcset={categoryThumbnailSet(src)}
+                sizes="(max-width: 500px) 30vw, (max-width: 900px) 190px, 210px"
+                alt=""
+                decoding="async"
+              />
+            ))}
+          </div>
+        </div>
         <p class="intro">
           Cuéntanos qué tienes en mente. En <span class="idea-highlight">AVDAN</span> transformamos ideas en fotografías y producciones audiovisuales que conectan, emocionan y cuentan historias.
         </p>
